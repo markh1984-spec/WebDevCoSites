@@ -1,0 +1,53 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure Pages
+        # Pages has to be switched on once by hand, in
+        # Settings -> Pages -> Build and deployment -> Source -> GitHub Actions,
+        # the first time this repo deploys. enablement only works for tokens
+        # allowed to create a Pages site, and the default Actions token isn't
+        # ("Resource not accessible by integration"). Kept here so this step
+        # is a no-op once Pages exists, and still works on repos where the
+        # token does have rights.
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        # Single-site repo — the whole repo is the site, no subpath copying
+        # needed. A CNAME file in the root (see README) sets the custom
+        # domain automatically; delete it to serve from the default
+        # <owner>.github.io/<repo>/ address instead.
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
