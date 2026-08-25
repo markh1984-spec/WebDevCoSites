@@ -1,33 +1,25 @@
 /* ==========================================================
-   Community site template — nurseries, halls, small schools
-
-   Built to be reskinned in minutes: every colour is a token at
-   the top of this file, and every editable list of content lives
-   in assets/js/content.js, not in this CSS or the HTML.
-
-   Palette: warm off-white ground, warm charcoal ink, sage green
-   accent — civic and calm rather than corporate or twee. Sage
-   appears as TWO values on purpose:
-     --sage      bright, for hairlines, rules, decorative fills
-     --sage-ink  deep, for anything that has to be READ
-   The bright sage is only 3.2:1 on paper, below the 4.5:1 text
-   bar, so it never carries a button label or body text.
+   Thatcham Catholic Hall — concept design
+   Reskin of the WebDevCo community-site template. Wine/burgundy
+   accent in place of the template's sage green — contrast-checked
+   the same way: bright wine for hairlines/fills, deep wine-ink for
+   anything read as text.
    ========================================================== */
 
 :root {
   --paper:   #F8F6F0;
-  --cream:   #EFE9DC;   /* alternating band */
+  --cream:   #EFE9DC;
   --white:   #FFFFFF;
-  --ink:     #2A271F;   /* warm charcoal, not pure black */
-  --muted:   #6E6759;   /* warm grey */
+  --ink:     #2A271F;
+  --muted:   #6E6759;
 
-  --sage:      #6E9277;
-  --sage-ink:  #3E5C46;
-  --sage-lift: #4E7058;   /* button hover — still dark enough for white text */
-  --sage-tint: rgba(110, 146, 119, .14);
+  --wine:      #A8433A;
+  --wine-ink:  #6B2A24;
+  --wine-lift: #7D332C;
+  --wine-tint: rgba(168, 67, 58, .13);
 
   --line:      #E4DDCC;
-  --line-sage: rgba(110, 146, 119, .38);
+  --line-wine: rgba(168, 67, 58, .38);
 
   --radius:    12px;
   --radius-lg: 20px;
@@ -43,7 +35,7 @@
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  *, *::before, *::as { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
 
 body {
@@ -70,7 +62,7 @@ h1 { font-size: clamp(2.5rem, 5.6vw, 4rem); }
 h2 { font-size: clamp(1.9rem, 3.6vw, 2.6rem); }
 h3 { font-size: 1.2rem; font-family: var(--sans); font-weight: 700; }
 p  { margin: 0 0 1em; }
-a  { color: var(--sage-ink); }
+a  { color: var(--wine-ink); }
 
 .wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
 
@@ -79,7 +71,7 @@ a  { color: var(--sage-ink); }
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--sage-ink);
+  color: var(--wine-ink);
   margin: 0 0 .8rem;
 }
 
@@ -89,7 +81,15 @@ a  { color: var(--sage-ink); }
   padding: .75rem 1.25rem; font-weight: 600; z-index: 200;
 }
 .skip-link:focus { left: 0; top: 0; }
-:focus-visible { outline: 3px solid var(--sage-ink); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 3px solid var(--wine-ink); outline-offset: 3px; border-radius: 4px; }
+
+/* ── Concept banner ────────────────────────────────────── */
+.concept-flag {
+  background: var(--ink); color: var(--paper);
+  text-align: center; font-size: .82rem; font-weight: 600;
+  letter-spacing: .02em; padding: .55rem 1rem;
+  position: relative; z-index: 210;
+}
 
 /* ── Buttons ───────────────────────────────────────────── */
 .btn {
@@ -102,10 +102,10 @@ a  { color: var(--sage-ink); }
   text-decoration: none; cursor: pointer;
   transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
 }
-.btn-primary { background: var(--sage-ink); color: var(--white); }
-.btn-primary:hover { background: var(--sage-lift); transform: translateY(-2px); }
+.btn-primary { background: var(--wine-ink); color: var(--white); }
+.btn-primary:hover { background: var(--wine-lift); transform: translateY(-2px); }
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-.btn-ghost:hover { border-color: var(--sage-ink); transform: translateY(-2px); }
+.btn-ghost:hover { border-color: var(--wine-ink); transform: translateY(-2px); }
 .btn-block { width: 100%; }
 
 /* ── Header ────────────────────────────────────────────── */
@@ -123,16 +123,16 @@ a  { color: var(--sage-ink); }
   width: 38px; height: 38px; flex: none;
   display: grid; place-items: center;
   border-radius: 50%;
-  background: var(--sage-ink); color: var(--white);
+  background: var(--wine-ink); color: var(--white);
   font-family: var(--serif); font-size: 1.15rem; line-height: 1;
 }
 .brand-text { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; line-height: 1.1; }
 
 .site-nav { display: flex; align-items: center; gap: 1.6rem; }
 .site-nav a { color: var(--ink); text-decoration: none; font-size: .95rem; font-weight: 500; }
-.site-nav a:not(.nav-cta):hover { color: var(--sage-ink); }
-.nav-cta { background: var(--sage-ink); color: var(--white) !important; padding: .55rem 1.15rem; border-radius: 999px; }
-.nav-cta:hover { background: var(--sage-lift); }
+.site-nav a:not(.nav-cta):hover { color: var(--wine-ink); }
+.nav-cta { background: var(--wine-ink); color: var(--white) !important; padding: .55rem 1.15rem; border-radius: 999px; }
+.nav-cta:hover { background: var(--wine-lift); }
 
 .nav-toggle {
   display: none; width: 44px; height: 44px;
@@ -168,7 +168,7 @@ a  { color: var(--sage-ink); }
 
 .ticks { list-style: none; margin: 1.3rem 0 0; padding: 0; display: grid; gap: .55rem; }
 .ticks li { position: relative; padding-left: 1.7rem; color: var(--muted); }
-.ticks li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--sage-ink); font-weight: 700; }
+.ticks li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--wine-ink); font-weight: 700; }
 
 /* ── Cards (offerings) ─────────────────────────────────── */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.3rem; }
@@ -178,7 +178,7 @@ a  { color: var(--sage-ink); }
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(42, 39, 31, .1); }
-.card-mark { width: 40px; height: 40px; border-radius: 10px; background: var(--sage-tint); color: var(--sage-ink); display: grid; place-items: center; font-family: var(--serif); font-weight: 600; margin-bottom: .9rem; }
+.card-mark { width: 40px; height: 40px; border-radius: 10px; background: var(--wine-tint); color: var(--wine-ink); display: grid; place-items: center; font-family: var(--serif); font-weight: 600; margin-bottom: .9rem; }
 .card p { color: var(--muted); font-size: .95rem; margin: 0; }
 
 /* ── Gallery ───────────────────────────────────────────── */
@@ -207,19 +207,14 @@ a  { color: var(--sage-ink); }
 .info-table dt { color: var(--ink); font-weight: 600; }
 .info-table dd { margin: 0; color: var(--muted); text-align: right; }
 
-/* ── Quotes ────────────────────────────────────────────── */
-.quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.3rem; }
-.quote { margin: 0; background: var(--cream); border-radius: var(--radius-lg); padding: 1.75rem 1.5rem; }
-.quote p:not(.quote-name) { font-family: var(--serif); font-size: 1.08rem; line-height: 1.5; }
-.quote-name { color: var(--muted); font-size: .88rem; margin: 0; }
-
 /* ── Contact ───────────────────────────────────────────── */
 .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
 .contact-copy p { color: var(--muted); }
 .contact-list { margin: 1.5rem 0 0; display: grid; gap: .85rem; }
 .contact-list > div { display: grid; grid-template-columns: 6.5rem 1fr; align-items: baseline; }
-.contact-list dt { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--sage-ink); }
+.contact-list dt { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--wine-ink); }
 .contact-list dd { margin: 0; }
+.contact-note { color: var(--muted); font-size: .85rem; }
 
 .enquire-form {
   background: var(--white); border: 1px solid var(--line);
@@ -236,24 +231,24 @@ a  { color: var(--sage-ink); }
   transition: border-color .18s ease, background .18s ease;
 }
 .field textarea { resize: vertical; }
-.field input:focus, .field textarea:focus { border-color: var(--sage-ink); background: var(--white); outline: none; }
+.field input:focus, .field textarea:focus { border-color: var(--wine-ink); background: var(--white); outline: none; }
 .field input[aria-invalid="true"] { border-color: #B5453B; }
 .form-status { margin: 0; font-size: .92rem; min-height: 1.4em; }
-.form-status.is-ok { color: var(--sage-ink); }
+.form-status.is-ok { color: var(--wine-ink); }
 .form-status.is-error { color: #B5453B; }
 
 /* ── Footer ────────────────────────────────────────────── */
 .site-footer { background: var(--ink); color: var(--paper); padding: clamp(2.25rem, 5vw, 3.5rem) 0 1.5rem; }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; padding-bottom: 1.75rem; border-bottom: 1px solid rgba(248, 246, 240, .15); }
 .brand-footer { color: var(--paper); }
-.brand-footer .brand-mark { background: var(--sage); color: var(--ink); }
+.brand-footer .brand-mark { background: var(--wine); color: var(--ink); }
 .footer-note { color: rgba(248, 246, 240, .65); font-size: .92rem; margin: .7rem 0 0; }
 .footer-nav { display: flex; flex-wrap: wrap; gap: 1.4rem; align-items: center; }
 .footer-nav a { color: var(--paper); text-decoration: none; font-size: .94rem; }
-.footer-nav a:hover { color: var(--sage); }
+.footer-nav a:hover { color: var(--wine); }
 .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; padding-top: 1.4rem; font-size: .84rem; color: rgba(248, 246, 240, .6); }
 .footer-base p { margin: 0; }
-.footer-base a { color: var(--sage); }
+.footer-base a { color: var(--wine); }
 
 /* ── Lightbox ──────────────────────────────────────────── */
 .lightbox { position: fixed; inset: 0; z-index: 300; background: rgba(20, 18, 13, .93); display: flex; align-items: center; justify-content: center; padding: clamp(1rem, 5vw, 3rem); }
