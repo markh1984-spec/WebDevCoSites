@@ -10,3 +10,9 @@ if the hall took the site on. The page is `noindex` so search engines skip it.
 
 Built from `templates/community-site/` in the WebDevCo repo; deployed by
 GitHub Actions to Pages on every push.
+
+## Also in this repo
+
+- [`magazine-mews/`](magazine-mews/): house-sale site for 1 Magazine Mews,
+  Shoeburyness. Self-contained and deployed separately on Vercel (Root
+  Directory `magazine-mews`). See its README.
