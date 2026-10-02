@@ -115,6 +115,10 @@ window.HOUSE = {
     // { src: "photos/02-living.jpg",  alt: "Living room",        caption: "Living room" },
   ],
 
+  // Walkthrough video: upload to YouTube as "Unlisted" (or to Vimeo) and
+  // paste the normal link here. It appears under the photos.
+  video: "",               // e.g. "https://youtu.be/abc123XYZ00"
+
   // Floorplan: an image (shown on the page) and/or a PDF (download link).
   floorplan: {
     image: "",             // e.g. "photos/floorplan.png"

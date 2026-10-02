@@ -194,6 +194,31 @@
     show("photos", true);
   });
 
+  /* ── Walkthrough video ───────────────────────────────── */
+  // Takes a normal YouTube or Vimeo link and turns it into an embed.
+  function embedUrl(link) {
+    var m = link.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
+    if (m) return { src: "https://www.youtube-nocookie.com/embed/" + m[1] + "?autoplay=1&rel=0", from: "YouTube" };
+    m = link.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/(\w+))?/);
+    if (m) return { src: "https://player.vimeo.com/video/" + m[1] + "?autoplay=1" + (m[2] ? "&h=" + m[2] : ""), from: "Vimeo" };
+    console.warn("[content.js] video should be a YouTube or Vimeo link: " + link);
+    return null;
+  }
+  var video = has(H.video) ? embedUrl(H.video.trim()) : null;
+  if (video) {
+    $("video-note").textContent = "Plays from " + video.from + " when you press play.";
+    // Like the map: nothing loads from YouTube/Vimeo until asked.
+    $("video-play").addEventListener("click", function () {
+      var frame = el("iframe", "video-frame");
+      frame.title = "Walkthrough video of 1 Magazine Mews";
+      frame.src = video.src;
+      frame.allow = "autoplay; fullscreen; picture-in-picture";
+      $("video").replaceChildren(frame);
+    });
+    show("video", true);
+    show("photos", true);
+  }
+
   var box = $("lightbox");
   var boxImg = $("lightbox-img");
   var boxCap = $("lightbox-caption");

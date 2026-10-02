@@ -57,6 +57,7 @@ so if one's missing, check the spelling matches exactly.
 - [ ] Key facts: type, bedrooms, bathrooms, parking, garden
 - [ ] Description (3–4 short paragraphs) and 4–6 highlights
 - [ ] Photos: front, living room, kitchen, each bedroom, bathroom, garden, the Garrison/beach nearby
+- [ ] Walkthrough video (optional): unlisted YouTube link in `video`
 - [ ] Floorplan (image and/or PDF)
 - [ ] Good to know: tenure, council tax band, EPC rating, any estate charge, heating, broadband, chain
 - [ ] Check the DRAFT area text and fill in walking distances

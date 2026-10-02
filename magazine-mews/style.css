@@ -469,6 +469,43 @@ p { margin: 0 0 1.1em; }
 }
 .photos-more { margin-top: 1.6rem; text-align: center; }
 
+.video {
+  margin-top: clamp(32px, 5vw, 56px);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--green-950);
+  box-shadow: var(--shadow);
+}
+.mosaic:empty + .photos-more + .video { margin-top: 0; }
+.video-poster {
+  width: 100%; height: 100%;
+  border: 0; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.9rem;
+  color: var(--cream);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(184, 147, 90, 0.16), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='48'%3E%3Cpath d='M0 .5H72M0 24.5H72M.5 0V24M36.5 24V48' stroke='%23F3EDE1' stroke-opacity='.045' fill='none'/%3E%3C/svg%3E"),
+    var(--green-900);
+}
+.video-play {
+  width: 84px; height: 84px; border-radius: 50%;
+  border: 1px solid var(--brass);
+  box-shadow: inset 0 0 0 5px var(--green-900), inset 0 0 0 6px rgba(184, 147, 90, 0.55);
+  position: relative;
+  transition: transform .25s;
+}
+.video-play::after {
+  content: ""; position: absolute; left: 34px; top: 26px;
+  border-style: solid; border-width: 16px 0 16px 26px;
+  border-color: transparent transparent transparent var(--brass-light);
+}
+.video-poster:hover .video-play { transform: scale(1.06); }
+.video-label { font: 600 1.7rem/1.2 var(--font-display); }
+.video-note { font-size: 0.82rem; color: rgba(243, 237, 225, 0.6); }
+.video-frame { width: 100%; height: 100%; border: 0; display: block; }
+
 /* ── Floorplan ─────────────────────────────────────────── */
 .floorplan {
   margin: 0;
@@ -711,7 +748,7 @@ h1, h2, h3, h4, .brand-mark, .crest text, .hero-price-amount, .fact dd, .open-da
 
 /* ── Print: a tidy one-pager of the details ────────────── */
 @media print {
-  .site-header, .status-banner, .typo-bar, .hero-actions, .map, .enquire-form,
+  .site-header, .status-banner, .typo-bar, .hero-actions, .map, .video, .enquire-form,
   .photos-more, .lightbox, .footer-nav, .brick-edge, .skip-link { display: none !important; }
   body { background: #fff; font-size: 11pt; }
   .hero, .section-green, .site-footer { background: #fff !important; color: var(--ink) !important; padding: 16pt 0 !important; }
