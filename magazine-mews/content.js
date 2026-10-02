@@ -74,7 +74,7 @@ window.HOUSE = {
      A few paragraphs, each in its own "quotes", separated by
      commas. Write it how you'd describe it to a friend:
      what it's like to live there, the light, the neighbours,
-     what Mum loves about it.                              */
+     what Mom loves about it.                              */
 
   description: [
     // "First paragraph…",
