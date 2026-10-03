@@ -110,11 +110,35 @@ to the full URL, e.g. `https://1-magazine-mews.vercel.app/og-image.jpg`.
 Facebook ignores relative paths. You can swap `og-image.jpg` for a real
 photo of the house (1200 × 630px) once there is one.
 
+### 4. Get it on Google (10 minutes, once it's live on Vercel)
+
+The site is already set up for search engines. It has a sitemap at
+`/sitemap.xml`, a `/robots.txt` that lets everyone in, and listing details
+(address, price, bedrooms, photos) in the format Google reads. Both files
+use whatever domain the site is on, so they don't need changing if a custom
+domain is added later. The steps below just tell Google it exists.
+
+1. Go to [Google Search Console](https://search.google.com/search-console)
+   → **Add property** → **URL prefix** → paste the site's address.
+2. Choose **HTML tag**, copy the `<meta name="google-site-verification" …>`
+   line, and paste it into `index.html` where the comment says to. Commit,
+   wait for Vercel to redeploy, then press **Verify**.
+3. **Sitemaps** → enter `sitemap.xml` → Submit.
+4. **URL inspection** → paste the homepage address → **Request indexing**.
+
+Google usually picks it up within a few days. Links to the site from
+Facebook posts, the Instagram bio and so on help it get found sooner.
+Optional: [Bing Webmaster Tools](https://www.bing.com/webmasters) can
+import everything from Search Console in one click, which covers Bing,
+DuckDuckGo and Yahoo.
+
 ---
 
 ## Notes
 
 - **Public from day one** (no `noindex`). Search engines can list it.
+- The enquiry form asks "How did you hear about it?", so enquiries show
+  which channel (Rightmove, Facebook, Instagram…) is working.
 - The map is click-to-load, so Google isn't contacted (and sets no
   cookies) unless a visitor asks for the map.
 - The footer carries a standard "details are a guide, not part of any

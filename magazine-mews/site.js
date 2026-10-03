@@ -399,12 +399,37 @@
       "Email: " + email,
       "Phone: " + form.elements.phone.value.trim(),
       "Position: " + form.elements.position.value,
+      "Heard about it via: " + form.elements.heard_via.value,
       "",
       form.elements.message.value.trim(),
     ].join("\n");
     location.href = "mailto:" + fallback + "?subject=" + encodeURIComponent("Enquiry: " + (A.line1 || "1 Magazine Mews")) + "&body=" + encodeURIComponent(body);
     setStatus("Your email app should open with the message ready to send.", "ok");
   });
+
+  /* ── Structured data for search engines ─────────────── */
+  // Fills in the JSON-LD block in index.html with whatever content.js
+  // has so far. Google reads the page after this runs.
+  (function () {
+    var tag = $("listing-data");
+    var data;
+    try { data = JSON.parse(tag.textContent); } catch (e) { return; }
+    var home = data.about || (data.about = {});
+    var fact = function (label) {
+      var row = facts.filter(function (f) { return f.label.toLowerCase() === label; })[0];
+      var n = row && parseInt(String(row.value).replace(/[^\d]/g, ""), 10);
+      return n > 0 ? n : null;
+    };
+    if (fact("bedrooms")) home.numberOfBedrooms = fact("bedrooms");
+    if (fact("bathrooms")) home.numberOfBathroomsTotal = fact("bathrooms");
+    var lead = [H.headline].concat(description).filter(has)[0];
+    if (lead) data.description = lead;
+    var price = H.price && parseInt(String(H.price.amount).replace(/[^\d]/g, ""), 10);
+    if (price > 0) data.offers = { "@type": "Offer", price: price, priceCurrency: "GBP" };
+    var images = photos.map(function (p) { return new URL(p.src, location.href).href; });
+    if (images.length) data.image = images.slice(0, 10);
+    tag.textContent = JSON.stringify(data, null, 2);
+  })();
 
   /* ── Hide nav links for sections that aren't showing ─── */
   function syncNav() {

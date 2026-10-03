@@ -18,6 +18,33 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 
+<!-- Google Search Console: paste the verification tag it gives you on the
+     line below (Settings → Ownership verification → HTML tag). -->
+
+<!-- What search engines read about the listing. site.js adds the price,
+     bedrooms and photos from content.js once they're filled in. -->
+<script type="application/ld+json" id="listing-data">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  "name": "1 Magazine Mews, Shoebury Garrison, Shoeburyness SS3 9QB for sale",
+  "description": "A home for sale privately in the historic Shoebury Garrison conservation area, Shoeburyness, Essex, close to East Beach.",
+  "about": {
+    "@type": "Accommodation",
+    "name": "1 Magazine Mews",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1 Magazine Mews",
+      "addressLocality": "Shoeburyness",
+      "addressRegion": "Essex",
+      "postalCode": "SS3 9QB",
+      "addressCountry": "GB"
+    },
+    "containedInPlace": { "@type": "Place", "name": "Shoebury Garrison, Shoeburyness" }
+  }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -277,6 +304,19 @@
             <option>Property to sell, already on the market</option>
             <option>Property to sell, not yet on the market</option>
             <option>Cash buyer</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-heard">How did you hear about it?</label>
+          <select id="f-heard" name="heard_via">
+            <option value="">Choose one (optional)</option>
+            <option>Rightmove / Zoopla</option>
+            <option>Facebook</option>
+            <option>Instagram</option>
+            <option>Google search</option>
+            <option>Friend or family</option>
+            <option>Walking or driving past</option>
             <option>Other</option>
           </select>
         </div>
