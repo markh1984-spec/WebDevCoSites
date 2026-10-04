@@ -1,0 +1,767 @@
+<title>FamCo Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a conversation on the left, the brief and its matches on the right.
+   One question at a time narrows thousands of listings to a handful. */
+:root {
+  --bg: #EEF2F0;
+  --surface: #FFFFFF;
+  --surface-2: #E4EAE7;
+  --ink: #13201C;
+  --muted: #586964;
+  --line: #D3DCD8;
+  --accent: #0B6E5F;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #D5ECE6;
+  --met: #0B6E5F;
+  --partial: #A86A12;
+  --miss: #B13F38;
+  --shadow: 0 1px 2px rgba(19, 32, 28, .06), 0 8px 24px -16px rgba(19, 32, 28, .25);
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1614; --surface: #16211E; --surface-2: #1D2A26; --ink: #E5EEEB; --muted: #98ADA7;
+    --line: #2A3A35; --accent: #46C4A8; --accent-ink: #052620; --accent-soft: #15382F;
+    --met: #46C4A8; --partial: #E2AA4D; --miss: #E9786F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 28px -18px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1614; --surface: #16211E; --surface-2: #1D2A26; --ink: #E5EEEB; --muted: #98ADA7;
+  --line: #2A3A35; --accent: #46C4A8; --accent-ink: #052620; --accent-soft: #15382F;
+  --met: #46C4A8; --partial: #E2AA4D; --miss: #E9786F;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 28px -18px rgba(0, 0, 0, .7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 400 15px/1.5 var(--font-body);
+  padding-inline: 16px;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ── Header ─────────────────────────────── */
+.top {
+  max-width: 1240px; margin: 0 auto; padding-block: 18px 14px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand svg { flex: none; }
+.brand h1 { font-size: 22px; line-height: 1; }
+.brand p { margin: 3px 0 0; color: var(--muted); font-size: 13.5px; }
+.price-chip {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 13.5px; color: var(--muted);
+}
+.price-chip strong { color: var(--ink); font-weight: 600; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 999px;
+  padding: 3px 10px; font-size: 12px; font-weight: 600; letter-spacing: .02em;
+  background: var(--surface-2); color: var(--muted);
+}
+
+/* ── Main grid ──────────────────────────── */
+.app {
+  max-width: 1240px; margin: 0 auto; padding-block: 0 28px;
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr); gap: 20px; align-items: start;
+}
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); min-width: 0; }
+
+.tabs { display: none; }
+
+/* ── Chat ───────────────────────────────── */
+.chat {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px);
+  display: flex; flex-direction: column;
+  height: min(780px, calc(100dvh - 110px)); min-height: 460px;
+}
+.chat-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.chat-head h2 { font-size: 16px; }
+.chat-head .actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.btn-quiet {
+  border: 1px solid var(--line); background: transparent; border-radius: 999px;
+  padding: 5px 12px; font-size: 13px; font-weight: 500; color: var(--ink);
+}
+.btn-quiet:hover { background: var(--surface-2); }
+.log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; overscroll-behavior: contain; }
+.msg { max-width: 88%; padding: 10px 13px; border-radius: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg.ai { background: var(--surface-2); border-bottom-left-radius: 4px; align-self: flex-start; }
+.msg.me { background: var(--accent-soft); border-bottom-right-radius: 4px; align-self: flex-end; }
+.msg.thinking { color: var(--muted); font-style: italic; }
+.note { align-self: center; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; text-align: center; }
+.note .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.example-tag { align-self: flex-start; }
+.composer { border-top: 1px solid var(--line); padding: 12px; display: grid; gap: 8px; }
+.composer-row { display: flex; gap: 8px; align-items: flex-end; }
+.composer textarea {
+  flex: 1; min-width: 0; resize: none; max-height: 140px; min-height: 44px;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--bg); padding: 10px 12px; line-height: 1.4;
+}
+.composer textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.btn {
+  border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 600;
+  background: var(--accent); color: var(--accent-ink);
+}
+.btn:hover { filter: brightness(1.06); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.composer small { color: var(--muted); font-size: 12px; }
+
+/* ── Results column ─────────────────────── */
+.results { display: grid; gap: 16px; min-width: 0; }
+.brief { padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.brief-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brief-head h2 { font-size: 16px; }
+.brief-summary { margin: 0; font-size: 15px; }
+.brief-empty { margin: 0; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: stretch; gap: 0; border: 1px solid var(--line); border-radius: 16px;
+  background: var(--bg); font-size: 13.5px; overflow: hidden; max-width: 100%; min-width: 0;
+}
+.chip .chip-label { padding: 5px 6px 5px 12px; min-width: 0; overflow-wrap: anywhere; align-self: center; }
+.chip .weight {
+  border: 0; border-left: 1px solid var(--line); background: transparent; padding: 5px 10px;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
+}
+.chip .weight[data-w="must"] { color: var(--accent); }
+.chip .x { border: 0; border-left: 1px solid var(--line); background: transparent; padding: 5px 10px; color: var(--muted); }
+.chip .weight:hover, .chip .x:hover { background: var(--surface-2); color: var(--ink); }
+.brief-hint { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+.list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 2px 2px 0; }
+.list-head h2 { font-size: 20px; }
+.list-head .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.sort { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 4px 8px; font-size: 13px; }
+.cards { display: grid; gap: 12px; }
+
+.card { padding: 16px; display: grid; gap: 12px; }
+.card-top { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+.glyph { width: 56px; height: 56px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.card h3 { font-size: 17px; line-height: 1.25; }
+.card .where { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; }
+.price { text-align: right; }
+.price .amount { font-size: 17px; }
+.price .psf { display: block; font-size: 12px; color: var(--muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; color: var(--muted); align-items: center; }
+.facts b { color: var(--ink); font-weight: 600; }
+.epc { display: inline-grid; place-items: center; width: 22px; height: 18px; border-radius: 3px; font: 600 11.5px/1 var(--font-mono); color: #102018; margin-left: 4px; }
+.epc[data-r="A"] { background: #008054; color: #fff; } .epc[data-r="B"] { background: #19B459; color: #fff; }
+.epc[data-r="C"] { background: #8DCE46; } .epc[data-r="D"] { background: #FFD500; }
+.epc[data-r="E"] { background: #FCAA65; } .epc[data-r="F"] { background: #EF8023; } .epc[data-r="G"] { background: #E9153B; color: #fff; }
+.blurb { margin: 0; font-size: 14px; }
+
+.fit { display: grid; gap: 8px; }
+.fit-head { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.fit-head .score { font: 600 15px/1 var(--font-mono); color: var(--ink); }
+.bar { flex: 1; display: flex; gap: 2px; height: 8px; border-radius: 4px; overflow: hidden; min-width: 80px; }
+.bar span { display: block; height: 100%; }
+.bar .met { background: var(--met); } .bar .partial { background: var(--partial); } .bar .miss { background: color-mix(in srgb, var(--miss) 55%, transparent); }
+.why { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; font-size: 13.5px; }
+.why li { display: flex; gap: 7px; align-items: baseline; min-width: 0; }
+.why li::before { flex: none; font: 600 12px/1 var(--font-mono); width: 12px; text-align: center; }
+.why li.met::before { content: "✓"; color: var(--met); }
+.why li.partial::before { content: "~"; color: var(--partial); }
+.why li.miss::before { content: "×"; color: var(--miss); }
+.why li.miss { color: var(--muted); }
+
+.card-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.react { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 500; }
+.react:hover { background: var(--surface-2); }
+.react[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.reasons { display: flex; flex-wrap: wrap; gap: 6px; }
+.reasons[hidden] { display: none; }
+.agent { margin-left: auto; font-size: 12.5px; color: var(--muted); }
+
+.locked { padding: 14px 16px; display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.locked .glyph { opacity: .6; }
+.locked .blur { color: transparent; text-shadow: 0 0 9px color-mix(in srgb, var(--ink) 60%, transparent); user-select: none; }
+.locked h3 { font-size: 15.5px; }
+.locked .where { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+
+.unlock { padding: 18px; display: grid; gap: 10px; text-align: center; justify-items: center; background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.unlock h3 { font-size: 18px; }
+.unlock p { margin: 0; max-width: 46ch; }
+.unlock small { color: var(--muted); }
+.hidden-note { font-size: 13px; color: var(--muted); }
+.hidden-note button { border: 0; background: none; color: var(--accent); font-weight: 600; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
+.empty { padding: 28px 20px; text-align: center; color: var(--muted); display: grid; gap: 6px; }
+.empty h3 { color: var(--ink); font-size: 17px; }
+.foot { max-width: 1240px; margin: 0 auto; padding-block: 0 24px; color: var(--muted); font-size: 12.5px; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .tabs {
+    display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2);
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; max-width: 1240px; margin: 0 auto 12px;
+  }
+  .tabs button { flex: 1; border: 0; background: transparent; border-radius: 9px; padding: 8px; font-weight: 600; color: var(--muted); }
+  .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+  .chat { position: static; height: calc(100dvh - 150px); min-height: 420px; }
+  .app[data-view="chat"] .results, .app[data-view="matches"] .chat { display: none; }
+  .card-top, .locked { grid-template-columns: 44px minmax(0, 1fr); }
+  .glyph { width: 44px; height: 44px; }
+  .price, .locked .price { grid-column: 2; text-align: left; }
+  .agent { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .msg { animation: rise .25s ease-out; }
+  @keyframes rise { from { transform: translateY(4px); opacity: .4; } to { transform: none; opacity: 1; } }
+}
+</style>
+
+<header class="top">
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+      <rect width="40" height="40" rx="10" fill="var(--accent)"/>
+      <path d="M11 20.5 20 12l9 8.5V29a1 1 0 0 1-1 1h-5.5v-6h-5v6H12a1 1 0 0 1-1-1z" fill="var(--accent-ink)"/>
+      <circle cx="29" cy="12" r="5.5" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+      <path d="m26.6 12 1.7 1.7 3.2-3.3" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <h1>FamCo Search</h1>
+      <p>Say what you want once. We find the homes that fit.</p>
+    </div>
+  </div>
+  <div class="price-chip">
+    <span>Chatting is free. <strong id="price-line">£9.99</strong> unlocks every match for 3 months.</span>
+    <span class="pill">Prototype</span>
+  </div>
+</header>
+
+<div class="tabs" role="tablist" aria-label="View">
+  <button role="tab" id="tab-chat" aria-selected="true" aria-controls="chat-panel">Chat</button>
+  <button role="tab" id="tab-matches" aria-selected="false" aria-controls="results-panel">Matches <span id="tab-count"></span></button>
+</div>
+
+<main class="app" id="app" data-view="chat">
+  <section class="panel chat" id="chat-panel" aria-label="Chat with the matchmaker">
+    <div class="chat-head">
+      <h2>Your matchmaker</h2>
+      <div class="actions">
+        <button class="btn-quiet" type="button" id="new-search">Start your own search</button>
+        <button class="btn-quiet" type="button" id="load-example" hidden>See the example</button>
+      </div>
+    </div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <form class="composer" id="composer">
+      <label class="sr" for="msg-input">Message the matchmaker</label>
+      <div class="composer-row">
+        <textarea id="msg-input" rows="1" placeholder="e.g. 3 beds near a station, under £500k"></textarea>
+        <button class="btn" type="submit" id="send-btn">Send</button>
+      </div>
+      <small id="composer-note">Your first message asks you to allow Claude, which uses your own Claude account.</small>
+    </form>
+  </section>
+
+  <section class="results" id="results-panel" aria-label="Your brief and matches">
+    <div class="panel brief" id="brief"></div>
+    <div class="list-head">
+      <h2 id="match-title">Matches</h2>
+      <div class="meta">
+        <span class="pill" title="These homes are made up for the prototype">Sample homes</span>
+        <label class="sr" for="sort">Sort matches</label>
+        <select class="sort" id="sort">
+          <option value="fit">Best fit</option>
+          <option value="price">Lowest price</option>
+        </select>
+      </div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+</main>
+<p class="foot">FamCo Search prototype. Every home here is a made-up sample around Southend-on-Sea, and no payment is taken. Stations and train lines are real.</p>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ── Pricing (one place to change it) ─────────────────── */
+  var PRICE = { amount: "£9.99", period: "3 months" };
+
+  /* ── Vocabulary the matchmaker and the matcher share ──── */
+  var AREAS = ["Leigh-on-Sea", "Chalkwell", "Westcliff-on-Sea", "Southend-on-Sea", "Thorpe Bay", "Shoeburyness",
+    "Rochford", "Hockley", "Rayleigh", "Hadleigh", "Benfleet"];
+  var TYPES = ["flat", "terraced", "semi-detached", "detached", "bungalow"];
+  var LINES = ["c2c", "Greater Anglia"];
+  var FEATURES = {
+    garden: "Garden", south_garden: "South-facing garden", parking: "Off-street parking", garage: "Garage",
+    period: "Period features", new_build: "New build", sea_view: "Sea view", home_office: "Home office",
+    annex: "Annex", open_plan: "Open-plan kitchen", en_suite: "En-suite", conservatory: "Conservatory",
+    loft: "Loft conversion", balcony: "Balcony", ev_charger: "EV charger", chain_free: "No onward chain",
+    needs_work: "Needs updating"
+  };
+  var WEIGHTS = { must: 4, high: 3, medium: 2, nice: 1 };
+  var WEIGHT_LABEL = { must: "Must", high: "Important", medium: "Helpful", nice: "Bonus" };
+  var WEIGHT_CYCLE = ["must", "high", "medium", "nice"];
+
+  /* ── Sample homes (made up; stations and lines are real) ─ */
+  function H(id, area, title, type, beds, baths, price, sqft, station, walk, line, features, epc, tenure, tax, blurb) {
+    return { id: id, area: area, title: title, type: type, beds: beds, baths: baths, price: price, sqft: sqft,
+      station: station, walk: walk, line: line, features: features, epc: epc, tenure: tenure, tax: tax, blurb: blurb };
+  }
+  var HOMES = [
+    H("L1", "Leigh-on-Sea", "Edwardian terrace off the Broadway", "terraced", 3, 1, 525000, 1150, "Chalkwell", 9, "c2c", ["garden", "period", "loft"], "D", "Freehold", "C", "Bay-fronted terrace with original fireplaces and a 60ft garden."),
+    H("L2", "Leigh-on-Sea", "Extended 1930s house near the cliffs", "detached", 4, 2, 795000, 1720, "Chalkwell", 14, "c2c", ["garden", "south_garden", "parking", "garage", "en_suite", "home_office"], "C", "Freehold", "F", "South-facing garden, a proper study and space for everyone."),
+    H("L3", "Leigh-on-Sea", "Top-floor flat above the Broadway", "flat", 2, 1, 285000, 690, "Leigh-on-Sea", 16, "c2c", ["balcony", "open_plan"], "C", "Leasehold, 112 years", "B", "Bright flat with a balcony over the cafés and shops."),
+    H("L4", "Leigh-on-Sea", "Semi with a garage by Belfairs Woods", "semi-detached", 3, 1, 465000, 1050, "Leigh-on-Sea", 30, "c2c", ["garden", "parking", "garage", "conservatory"], "D", "Freehold", "D", "Quiet road a few minutes from the woods and golf course."),
+    H("L5", "Leigh-on-Sea", "Character cottage near the Old Town", "terraced", 2, 1, 450000, 760, "Leigh-on-Sea", 6, "c2c", ["period", "sea_view"], "E", "Freehold", "C", "Tiny, full of charm, and a short walk down to the cockle sheds."),
+    H("L6", "Leigh-on-Sea", "Four-bed with a self-contained annex", "detached", 4, 3, 875000, 2050, "Leigh-on-Sea", 18, "c2c", ["garden", "parking", "annex", "en_suite", "home_office", "ev_charger"], "B", "Freehold", "G", "Annex suits a parent, a teenager or a home business."),
+    H("L7", "Leigh-on-Sea", "Bungalow with estuary views", "bungalow", 3, 1, 535000, 980, "Leigh-on-Sea", 11, "c2c", ["garden", "parking", "sea_view", "chain_free", "needs_work"], "E", "Freehold", "D", "Needs updating, but the view over the estuary does not."),
+    H("W1", "Westcliff-on-Sea", "Victorian terrace close to the station", "terraced", 3, 1, 410000, 1100, "Westcliff", 7, "c2c", ["garden", "period"], "D", "Freehold", "C", "High ceilings, original cornicing and a walled garden."),
+    H("W2", "Westcliff-on-Sea", "Three-bed semi near Westcliff Park", "semi-detached", 3, 2, 495000, 1180, "Westcliff", 13, "c2c", ["garden", "parking", "open_plan", "en_suite"], "C", "Freehold", "D", "Knocked-through kitchen and diner opening onto the garden."),
+    H("W3", "Westcliff-on-Sea", "Garden flat by Chalkwell Park", "flat", 2, 1, 265000, 720, "Chalkwell", 10, "c2c", ["garden", "period"], "D", "Share of freehold", "B", "Ground floor of a Victorian villa with its own garden."),
+    H("W4", "Westcliff-on-Sea", "Five-bed Edwardian on a wide road", "detached", 5, 2, 925000, 2400, "Westcliff", 9, "c2c", ["garden", "period", "parking", "home_office", "loft"], "D", "Freehold", "F", "A big family house with the period details still in place."),
+    H("W5", "Westcliff-on-Sea", "Seafront flat with a balcony", "flat", 2, 2, 325000, 820, "Westcliff", 6, "c2c", ["sea_view", "balcony", "parking", "en_suite"], "C", "Leasehold, 98 years", "C", "Watch the ships from the living room."),
+    H("W6", "Westcliff-on-Sea", "Terrace in need of modernising", "terraced", 3, 1, 335000, 1020, "Westcliff", 11, "c2c", ["garden", "needs_work", "chain_free"], "F", "Freehold", "B", "Sound bones, dated inside, priced for the work."),
+    H("C1", "Chalkwell", "Esplanade apartment over the beach", "flat", 3, 2, 595000, 1250, "Chalkwell", 4, "c2c", ["sea_view", "balcony", "parking", "en_suite"], "B", "Leasehold, 950 years", "E", "Wraparound balcony a minute from the station."),
+    H("C2", "Chalkwell", "Arts and Crafts family house", "detached", 4, 2, 1150000, 2600, "Chalkwell", 8, "c2c", ["garden", "south_garden", "period", "parking", "garage", "home_office"], "D", "Freehold", "G", "Leaded windows, oak panelling and a long south garden."),
+    H("C3", "Chalkwell", "Semi five minutes from the station", "semi-detached", 3, 1, 549000, 1200, "Chalkwell", 5, "c2c", ["garden", "parking", "period"], "D", "Freehold", "D", "1920s semi with a driveway and a deep rear garden."),
+    H("S1", "Southend-on-Sea", "One-bed flat by Victoria station", "flat", 1, 1, 175000, 480, "Southend Victoria", 4, "Greater Anglia", ["open_plan"], "C", "Leasehold, 120 years", "A", "Low-maintenance first buy right by the station."),
+    H("S2", "Southend-on-Sea", "New-build flat near the seafront", "flat", 2, 2, 299000, 760, "Southend Central", 6, "c2c", ["new_build", "balcony", "en_suite", "ev_charger"], "B", "Leasehold, 999 years", "B", "Two double bedrooms, two bathrooms and a 10-year warranty."),
+    H("S3", "Southend-on-Sea", "Family semi in Prittlewell", "semi-detached", 3, 1, 399000, 1000, "Prittlewell", 8, "Greater Anglia", ["garden", "parking"], "D", "Freehold", "C", "Ready to move into, with room to extend into the loft."),
+    H("S4", "Southend-on-Sea", "Victorian townhouse on four floors", "terraced", 4, 2, 449000, 1450, "Southend Central", 10, "c2c", ["garden", "period", "loft"], "E", "Freehold", "D", "Plenty of space for the money, close to the High Street."),
+    H("S5", "Southend-on-Sea", "Two-bed terrace near Southend East", "terraced", 2, 1, 300000, 780, "Southend East", 5, "c2c", ["garden"], "D", "Freehold", "B", "Neat starter house with a small sunny garden."),
+    H("T1", "Thorpe Bay", "Seafront detached with five bedrooms", "detached", 5, 3, 1250000, 2900, "Thorpe Bay", 12, "c2c", ["sea_view", "garden", "parking", "garage", "en_suite", "home_office"], "C", "Freehold", "G", "Sea views from most rooms and a double garage."),
+    H("T2", "Thorpe Bay", "Chalet bungalow with a south garden", "bungalow", 3, 2, 575000, 1150, "Thorpe Bay", 9, "c2c", ["garden", "south_garden", "parking", "garage"], "D", "Freehold", "E", "Two bedrooms down, one up, and a garden that gets the sun all day."),
+    H("T3", "Thorpe Bay", "1930s semi near the Broadway", "semi-detached", 4, 2, 625000, 1500, "Thorpe Bay", 7, "c2c", ["garden", "parking", "open_plan", "loft"], "C", "Freehold", "E", "Loft bedroom, big kitchen, and the beach at the end of the road."),
+    H("T4", "Thorpe Bay", "Modern detached on a quiet close", "detached", 4, 2, 745000, 1700, "Thorpe Bay", 15, "c2c", ["garden", "parking", "garage", "en_suite", "ev_charger"], "B", "Freehold", "F", "Built in 2012, efficient and easy to run."),
+    H("SH1", "Shoeburyness", "Townhouse on the old Garrison", "terraced", 3, 2, 425000, 1150, "Shoeburyness", 12, "c2c", ["garden", "parking"], "C", "Freehold", "D", "Part of the Garrison conservation area, near East Beach."),
+    H("SH2", "Shoeburyness", "Bungalow near East Beach", "bungalow", 2, 1, 385000, 800, "Shoeburyness", 14, "c2c", ["garden", "parking", "chain_free"], "D", "Freehold", "C", "Level living a short stroll from the beach."),
+    H("SH3", "Shoeburyness", "New-build semi with an EV charger", "semi-detached", 3, 2, 389000, 980, "Shoeburyness", 10, "c2c", ["new_build", "garden", "parking", "en_suite", "ev_charger"], "B", "Freehold", "C", "Low bills, a warranty and nothing to do but move in."),
+    H("SH4", "Shoeburyness", "Detached four-bed on the Garrison", "detached", 4, 2, 585000, 1600, "Shoeburyness", 13, "c2c", ["garden", "parking", "garage", "en_suite", "sea_view"], "C", "Freehold", "E", "Glimpses of the sea and the cricket green from upstairs."),
+    H("R1", "Rochford", "Cottage off Rochford Square", "terraced", 2, 1, 340000, 750, "Rochford", 4, "Greater Anglia", ["period", "garden"], "E", "Freehold", "B", "Exposed beams, a log burner and a cottage garden."),
+    H("R2", "Rochford", "Detached house backing onto fields", "detached", 4, 2, 650000, 1650, "Rochford", 20, "Greater Anglia", ["garden", "south_garden", "parking", "garage", "home_office"], "C", "Freehold", "F", "Open views at the back and a garden office."),
+    H("R3", "Rochford", "Three-bed semi with a conservatory", "semi-detached", 3, 1, 415000, 980, "Rochford", 12, "Greater Anglia", ["garden", "parking", "conservatory"], "D", "Freehold", "D", "Well kept, with a driveway and a garden for the kids."),
+    H("HO1", "Hockley", "Detached house by Hockley Woods", "detached", 4, 2, 725000, 1800, "Hockley", 16, "Greater Anglia", ["garden", "parking", "garage", "en_suite", "home_office"], "C", "Freehold", "F", "Ancient woodland at the end of the road."),
+    H("HO2", "Hockley", "Bungalow ready for a refresh", "bungalow", 3, 1, 465000, 1000, "Hockley", 10, "Greater Anglia", ["garden", "parking", "chain_free", "needs_work"], "E", "Freehold", "D", "A big plot, no chain, and plenty of potential."),
+    H("RA1", "Rayleigh", "Family semi near the High Street", "semi-detached", 3, 1, 445000, 1020, "Rayleigh", 9, "Greater Anglia", ["garden", "parking", "open_plan"], "C", "Freehold", "D", "Walk to the shops, schools and the station."),
+    H("RA2", "Rayleigh", "Detached chalet with a loft suite", "detached", 4, 2, 610000, 1500, "Rayleigh", 18, "Greater Anglia", ["garden", "parking", "garage", "loft", "en_suite"], "D", "Freehold", "E", "Main bedroom and en-suite take up the whole top floor."),
+    H("RA3", "Rayleigh", "Two-bed flat by the station", "flat", 2, 1, 235000, 650, "Rayleigh", 3, "Greater Anglia", ["parking"], "C", "Leasehold, 105 years", "B", "Three minutes to the platform, with allocated parking."),
+    H("HA1", "Hadleigh", "Semi near Hadleigh Castle", "semi-detached", 3, 1, 420000, 1000, "Leigh-on-Sea", 40, "c2c", ["garden", "parking", "garage"], "D", "Freehold", "D", "Country park on the doorstep; the station is a short drive."),
+    H("HA2", "Hadleigh", "Detached house with country-park views", "detached", 4, 2, 685000, 1700, "Leigh-on-Sea", 45, "c2c", ["garden", "south_garden", "parking", "garage", "home_office"], "C", "Freehold", "F", "Views across the marshes to the estuary."),
+    H("B1", "Benfleet", "Creekside house in South Benfleet", "detached", 3, 2, 520000, 1250, "Benfleet", 12, "c2c", ["garden", "parking", "open_plan", "en_suite"], "C", "Freehold", "E", "Watch the boats on the creek from the kitchen."),
+    H("B2", "Benfleet", "Three-bed semi in Thundersley", "semi-detached", 3, 1, 410000, 1000, "Benfleet", 25, "c2c", ["garden", "parking", "garage"], "D", "Freehold", "D", "Good schools nearby and a garage for the bikes.")
+  ];
+
+  /* ── State ─────────────────────────────────────────────── */
+  var STORE = "famco-search-v1";
+  var GREETING = "Hi, I'm your FamCo matchmaker. Tell me about the home you're after: where, roughly what budget, and what matters most. I'll find the homes that fit and keep refining as you go.";
+  function exampleState() {
+    return {
+      mode: "example",
+      turns: [
+        { role: "assistant", content: GREETING },
+        { role: "user", content: "We're a family of four moving out of London. I commute to Fenchurch Street three days a week. Ideally 3 bedrooms, a garden for the kids, somewhere like Leigh or Westcliff. Budget's around £550k." },
+        { role: "assistant", content: "That's a clear brief. I've set Leigh, Chalkwell and Westcliff, 3+ bedrooms, a house with a garden, and a short walk to a c2c station for Fenchurch Street. Is a home office a must, or a nice extra?" },
+        { role: "user", content: "Nice extra. Parking would help too." },
+        { role: "assistant", content: "Added. Parking counts a fair bit and a home office a little. Have a look at the matches and tell me what you think of them." }
+      ],
+      brief: {
+        summary: "3-bed house with a garden near a c2c station in Leigh, Chalkwell or Westcliff, up to £550k",
+        budgetMax: 550000,
+        criteria: [
+          { type: "min_beds", value: 3, weight: "must" },
+          { type: "property_type", value: ["terraced", "semi-detached", "detached"], weight: "must" },
+          { type: "feature", value: "garden", weight: "must" },
+          { type: "area", value: ["Leigh-on-Sea", "Chalkwell", "Westcliff-on-Sea"], weight: "high" },
+          { type: "max_station_walk", value: 15, weight: "high" },
+          { type: "line", value: "c2c", weight: "high" },
+          { type: "feature", value: "parking", weight: "medium" },
+          { type: "feature", value: "home_office", weight: "nice" }
+        ]
+      },
+      dismissed: {}, loved: {}, unlocked: false
+    };
+  }
+  function freshState() {
+    return { mode: "own", turns: [{ role: "assistant", content: GREETING }], brief: { summary: "", budgetMax: null, criteria: [] },
+      dismissed: {}, loved: {}, unlocked: false };
+  }
+  var state;
+  try { state = JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { state = null; }
+  if (!state || !state.brief || !Array.isArray(state.turns)) state = exampleState();
+  function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+
+  var notes = [];      // chat notes shown between messages, not sent to Claude: {after: turnIndex, text}
+  var busy = false, ctl = null, sample = null, sampleChecked = false, view = "chat", sortBy = "fit";
+
+  /* ── Helpers ───────────────────────────────────────────── */
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function gbp(n) { return "£" + Math.round(n).toLocaleString("en-GB"); }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function list(a) { return a.length <= 1 ? a.join("") : a.slice(0, -1).join(", ") + " or " + a[a.length - 1]; }
+
+  function glyph(type) {
+    var p = {
+      flat: '<rect x="9" y="5" width="18" height="26" rx="1.5"/><path d="M13 10h3M20 10h3M13 15h3M20 15h3M13 20h3M20 20h3M16 31v-5h4v5"/>',
+      terraced: '<path d="M4 15 10 9l6 6 6-6 6 6 4 0"/><path d="M5 15v15h26V15M14 30v-6h4v6"/>',
+      "semi-detached": '<path d="M5 16 13 8l5 5 5-5 8 8"/><path d="M7 15v15h22V15M18 13v17M11 30v-5h3v5M22 30v-5h3v5"/>',
+      detached: '<path d="M5 17 18 6l13 11"/><path d="M8 15v15h20V15M15 30v-7h6v7"/>',
+      bungalow: '<path d="M3 19 18 10l15 9"/><path d="M6 18v12h24V18M15 30v-6h6v6"/>'
+    }[type] || "";
+    return '<svg width="30" height="30" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + "</svg>";
+  }
+
+  /* ── Brief: clean whatever comes back from Claude ──────── */
+  function matchArea(s) { s = String(s || "").toLowerCase().replace(/-on-sea/, "").trim(); for (var i = 0; i < AREAS.length; i++) { var a = AREAS[i].toLowerCase(); if (a === s || a.replace(/-on-sea/, "") === s) return AREAS[i]; } return null; }
+  function arr(v) { return Array.isArray(v) ? v : (v == null ? [] : [v]); }
+  function cleanBrief(b) {
+    b = b && typeof b === "object" ? b : {};
+    var out = { summary: typeof b.summary === "string" ? b.summary.slice(0, 200) : "", budgetMax: null, criteria: [] };
+    var budget = Number(String(b.budgetMax == null ? "" : b.budgetMax).replace(/[^\d.]/g, ""));
+    if (budget > 20000) out.budgetMax = Math.round(budget);
+    var seen = {};
+    arr(b.criteria).slice(0, 20).forEach(function (c) {
+      if (!c || typeof c !== "object") return;
+      var w = WEIGHTS[c.weight] ? c.weight : "medium", t = c.type, v = c.value, ok = null;
+      if (t === "min_beds" || t === "min_baths" || t === "max_station_walk" || t === "min_sqft") { v = Math.round(Number(v)); if (v > 0) ok = v; }
+      else if (t === "area" || t === "avoid_area") { v = arr(v).map(matchArea).filter(Boolean); if (v.length) ok = v; }
+      else if (t === "property_type") { v = arr(v).map(function (x) { return String(x).toLowerCase(); }).filter(function (x) { return TYPES.indexOf(x) >= 0; }); if (v.length) ok = v; }
+      else if (t === "feature" || t === "avoid_feature") { v = String(v); if (FEATURES[v]) ok = v; }
+      else if (t === "line") { v = LINES.filter(function (l) { return l.toLowerCase() === String(v).toLowerCase(); })[0]; if (v) ok = v; }
+      else if (t === "min_epc") { v = String(v).toUpperCase(); if (/^[A-G]$/.test(v)) ok = v; }
+      if (ok == null) return;
+      var key = t + ":" + (Array.isArray(ok) ? "" : ok);
+      if (seen[key]) return; seen[key] = 1;
+      out.criteria.push({ type: t, value: ok, weight: w });
+    });
+    return out;
+  }
+
+  function label(c) {
+    var v = c.value;
+    switch (c.type) {
+      case "min_beds": return v + "+ bedrooms";
+      case "min_baths": return v + "+ bathrooms";
+      case "area": return list(v);
+      case "avoid_area": return "Not " + list(v);
+      case "property_type": return list(v.map(cap));
+      case "max_station_walk": return "≤ " + v + " min walk to a station";
+      case "line": return v === "c2c" ? "c2c line (Fenchurch St)" : "Greater Anglia (Liverpool St)";
+      case "feature": return FEATURES[v];
+      case "avoid_feature": return "No " + FEATURES[v].toLowerCase();
+      case "min_sqft": return v.toLocaleString("en-GB") + "+ sq ft";
+      case "min_epc": return "EPC " + v + " or better";
+    }
+    return "";
+  }
+
+  /* ── Matching ──────────────────────────────────────────── */
+  function evaluate(h, brief) {
+    var rows = [], out = false;
+    if (brief.budgetMax) {
+      var over = h.price / brief.budgetMax - 1;
+      if (over > 0.05) out = true;
+      rows.push({ w: WEIGHTS.must, s: over <= 0 ? "met" : "partial",
+        text: over <= 0 ? gbp(h.price) + ", within budget" : gbp(h.price) + ", " + Math.ceil(over * 100) + "% over budget" });
+    }
+    brief.criteria.forEach(function (c) {
+      var v = c.value, s = "miss", text = "";
+      switch (c.type) {
+        case "min_beds": s = h.beds >= v ? "met" : h.beds === v - 1 ? "partial" : "miss"; text = h.beds + " bedrooms"; break;
+        case "min_baths": s = h.baths >= v ? "met" : "miss"; text = h.baths + (h.baths === 1 ? " bathroom" : " bathrooms"); break;
+        case "area": s = v.indexOf(h.area) >= 0 ? "met" : "miss"; text = s === "met" ? "In " + h.area : "In " + h.area + ", outside your areas"; break;
+        case "avoid_area": s = v.indexOf(h.area) < 0 ? "met" : "miss"; text = "In " + h.area; break;
+        case "property_type": s = v.indexOf(h.type) >= 0 ? "met" : "miss"; text = cap(h.type); break;
+        case "max_station_walk": s = h.walk <= v ? "met" : h.walk <= v + 5 ? "partial" : "miss";
+          text = h.walk + " min walk to " + h.station; break;
+        case "line": s = h.line === v ? "met" : "miss"; text = h.line + " line"; break;
+        case "feature": s = h.features.indexOf(v) >= 0 ? "met" : "miss"; text = s === "met" ? FEATURES[v] : "No " + FEATURES[v].toLowerCase(); break;
+        case "avoid_feature": s = h.features.indexOf(v) < 0 ? "met" : "miss"; text = s === "met" ? "No " + FEATURES[v].toLowerCase() : FEATURES[v]; break;
+        case "min_sqft": s = h.sqft >= v ? "met" : h.sqft >= v * 0.9 ? "partial" : "miss"; text = h.sqft.toLocaleString("en-GB") + " sq ft"; break;
+        case "min_epc": s = h.epc <= v ? "met" : h.epc.charCodeAt(0) - v.charCodeAt(0) === 1 ? "partial" : "miss"; text = "EPC " + h.epc; break;
+      }
+      if (c.weight === "must" && s !== "met") out = true;
+      rows.push({ w: WEIGHTS[c.weight], s: s, text: text });
+    });
+    var total = 0, got = 0;
+    rows.forEach(function (r) { total += r.w; got += r.w * (r.s === "met" ? 1 : r.s === "partial" ? 0.5 : 0); });
+    return { home: h, rows: rows, score: total ? Math.round(100 * got / total) : 0, out: out };
+  }
+  function matches() {
+    var b = state.brief;
+    if (!b.budgetMax && !b.criteria.length) return null;     // nothing to match on yet
+    var all = HOMES.map(function (h) { return evaluate(h, b); }).filter(function (m) { return !m.out; });
+    all.sort(sortBy === "price" ? function (a, b) { return a.home.price - b.home.price; }
+                                : function (a, b) { return b.score - a.score || a.home.price - b.home.price; });
+    return all;
+  }
+
+  /* ── Rendering: chat ───────────────────────────────────── */
+  function renderChat() {
+    var log = $("log");
+    log.replaceChildren();
+    if (state.mode === "example") log.appendChild(el("span", "pill example-tag", "Example search"));
+    state.turns.forEach(function (t, i) {
+      log.appendChild(el("div", "msg " + (t.role === "user" ? "me" : "ai"), t.content));
+      notes.filter(function (n) { return n.after === i; }).forEach(function (n) {
+        var p = el("p", "note"); p.appendChild(el("span", "dot")); p.appendChild(document.createTextNode(n.text)); log.appendChild(p);
+      });
+    });
+    if (busy) log.appendChild(el("div", "msg ai thinking", "Thinking…"));
+    log.scrollTop = log.scrollHeight;
+    $("new-search").hidden = state.mode === "own" && state.turns.length <= 1;
+    $("load-example").hidden = state.mode === "example";
+    $("send-btn").textContent = busy ? "Stop" : "Send";
+    $("send-btn").type = busy ? "button" : "submit";
+  }
+
+  /* ── Rendering: brief ──────────────────────────────────── */
+  function renderBrief() {
+    var box = $("brief"), b = state.brief;
+    box.replaceChildren();
+    var head = el("div", "brief-head");
+    head.appendChild(el("h2", null, "Your brief"));
+    if (b.budgetMax) head.appendChild(el("span", "mono", "Up to " + gbp(b.budgetMax)));
+    box.appendChild(head);
+    if (!b.criteria.length && !b.budgetMax) {
+      box.appendChild(el("p", "brief-empty", "Nothing yet. As you chat, what you tell the matchmaker shows up here, weighted by how much it matters."));
+      return;
+    }
+    if (b.summary) box.appendChild(el("p", "brief-summary", b.summary));
+    var chips = el("div", "chips");
+    b.criteria.forEach(function (c, i) {
+      var chip = el("span", "chip");
+      chip.appendChild(el("span", "chip-label", label(c)));
+      var w = el("button", "weight", WEIGHT_LABEL[c.weight]);
+      w.type = "button"; w.dataset.w = c.weight; w.title = "How much this matters. Tap to change.";
+      w.setAttribute("aria-label", label(c) + ": " + WEIGHT_LABEL[c.weight] + ". Change importance");
+      w.onclick = function () { c.weight = WEIGHT_CYCLE[(WEIGHT_CYCLE.indexOf(c.weight) + 1) % WEIGHT_CYCLE.length]; save(); renderBrief(); renderMatches(); };
+      chip.appendChild(w);
+      var x = el("button", "x", "×"); x.type = "button"; x.setAttribute("aria-label", "Remove " + label(c));
+      x.onclick = function () { b.criteria.splice(i, 1); save(); renderBrief(); renderMatches(); };
+      chip.appendChild(x);
+      chips.appendChild(chip);
+    });
+    box.appendChild(chips);
+    box.appendChild(el("p", "brief-hint", "Must = deal-breaker. Tap a weight to change how much it counts, or × to drop it."));
+  }
+
+  /* ── Rendering: matches ────────────────────────────────── */
+  function card(m, rank) {
+    var h = m.home, c = el("article", "panel card");
+    var top = el("div", "card-top");
+    var g = el("div", "glyph"); g.innerHTML = glyph(h.type); top.appendChild(g);
+    var t = el("div"); t.appendChild(el("h3", null, h.title));
+    t.appendChild(el("p", "where", h.area + " · " + cap(h.type))); top.appendChild(t);
+    var p = el("div", "price"); p.appendChild(el("span", "amount mono", gbp(h.price)));
+    p.appendChild(el("span", "psf mono", gbp(h.price / h.sqft) + "/sq ft")); top.appendChild(p);
+    c.appendChild(top);
+
+    var f = el("div", "facts");
+    [["", h.beds + " bed"], ["", h.baths + " bath"], ["", h.sqft.toLocaleString("en-GB") + " sq ft"]].forEach(function (x) { var s = el("span"); s.appendChild(el("b", null, x[1])); f.appendChild(s); });
+    var epc = el("span", null, "EPC"); var badge = el("span", "epc", h.epc); badge.dataset.r = h.epc; epc.appendChild(badge); f.appendChild(epc);
+    f.appendChild(el("span", null, "Council tax " + h.tax));
+    f.appendChild(el("span", null, h.walk + " min to " + h.station + " (" + h.line + ")"));
+    f.appendChild(el("span", null, h.tenure));
+    c.appendChild(f);
+    c.appendChild(el("p", "blurb", h.blurb));
+
+    var fit = el("div", "fit"), fh = el("div", "fit-head");
+    fh.appendChild(el("span", "score", m.score + "%")); fh.appendChild(el("span", null, "fit"));
+    var bar = el("div", "bar"); bar.setAttribute("aria-hidden", "true");
+    m.rows.forEach(function (r) { var s = el("span", r.s); s.style.flex = String(r.w); bar.appendChild(s); });
+    fh.appendChild(bar); fit.appendChild(fh);
+    var why = el("ul", "why");
+    m.rows.forEach(function (r) { why.appendChild(el("li", r.s, r.text)); });
+    fit.appendChild(why); c.appendChild(fit);
+
+    var act = el("div", "card-actions");
+    var love = el("button", "react", state.loved[h.id] ? "Loved" : "Love it"); love.type = "button";
+    love.setAttribute("aria-pressed", state.loved[h.id] ? "true" : "false");
+    love.onclick = function () {
+      if (state.loved[h.id]) return;
+      state.loved[h.id] = 1; save(); renderMatches();
+      var liked = m.rows.filter(function (r) { return r.s === "met"; }).map(function (r) { return r.text.toLowerCase(); }).slice(0, 4);
+      send("I really like \"" + h.title + "\" in " + h.area + " (" + gbp(h.price) + ")." + (liked.length ? " What I like: " + liked.join(", ") + "." : "") + " Find me more like it.", true);
+    };
+    var nope = el("button", "react", "Not for me"); nope.type = "button"; nope.setAttribute("aria-expanded", "false");
+    var reasons = el("div", "reasons"); reasons.hidden = true;
+    ["Too expensive", "Wrong area", "Too small", "Too far from the station", "Needs too much work", "Just not my style"].forEach(function (why) {
+      var b = el("button", "react", why); b.type = "button";
+      b.onclick = function () {
+        state.dismissed[h.id] = 1; save(); renderMatches();
+        send("Not for me: \"" + h.title + "\" in " + h.area + " (" + gbp(h.price) + "). Reason: " + why.toLowerCase() + ".", true);
+      };
+      reasons.appendChild(b);
+    });
+    nope.onclick = function () { reasons.hidden = !reasons.hidden; nope.setAttribute("aria-expanded", String(!reasons.hidden)); };
+    act.appendChild(love); act.appendChild(nope);
+    act.appendChild(el("span", "agent", "Listed by Sample Estate Agents"));
+    c.appendChild(act); c.appendChild(reasons);
+    return c;
+  }
+
+  function lockedRow(m) {
+    var h = m.home, r = el("article", "panel locked");
+    var g = el("div", "glyph"); g.innerHTML = glyph(h.type); r.appendChild(g);
+    var t = el("div");
+    t.appendChild(el("h3", null, h.beds + "-bed " + h.type + " · " + m.score + "% fit"));
+    var w = el("p", "where"); w.appendChild(el("span", "blur", h.area + " · " + h.title)); t.appendChild(w);
+    r.appendChild(t);
+    var band = Math.floor(h.price / 50000) * 50000;
+    r.appendChild(el("div", "price mono", gbp(band) + "–" + gbp(band + 50000).replace("£", "")));
+    return r;
+  }
+
+  function renderMatches() {
+    var box = $("cards"), all = matches();
+    box.replaceChildren();
+    if (!all) {
+      $("match-title").textContent = "Matches";
+      $("tab-count").textContent = "";
+      var e = el("div", "panel empty"); e.appendChild(el("h3", null, "Your matches appear here"));
+      e.appendChild(el("p", null, "Tell the matchmaker what you're looking for, and every sample home that fits shows up here, best fit first."));
+      box.appendChild(e); return;
+    }
+    var shown = all.filter(function (m) { return !state.dismissed[m.home.id]; });
+    var hidden = all.length - shown.length;
+    $("match-title").textContent = shown.length === 1 ? "1 home matches" : shown.length + " homes match";
+    $("tab-count").textContent = "(" + shown.length + ")";
+    if (!shown.length) {
+      var n = el("div", "panel empty"); n.appendChild(el("h3", null, "Nothing fits every must-have"));
+      n.appendChild(el("p", null, "Try turning a Must into Important in your brief, or tell the matchmaker what you'd compromise on."));
+      box.appendChild(n);
+    }
+    var freeCount = state.unlocked ? shown.length : 1;
+    shown.forEach(function (m, i) { if (i < freeCount) box.appendChild(card(m, i)); });
+    if (!state.unlocked && shown.length > 1) {
+      shown.slice(1, 4).forEach(function (m) { box.appendChild(lockedRow(m)); });
+      var u = el("div", "panel unlock");
+      u.appendChild(el("h3", null, "Unlock all " + shown.length + " matches"));
+      u.appendChild(el("p", null, "See every home that fits, with the agent's details, and get new matches as they come up. " + PRICE.amount + " for " + PRICE.period + ", no subscription."));
+      var b = el("button", "btn", "Unlock for " + PRICE.amount); b.type = "button";
+      b.onclick = function () { state.unlocked = true; save(); renderMatches(); };
+      u.appendChild(b);
+      u.appendChild(el("small", null, "Prototype: nothing is charged. This shows where payment would go."));
+      box.appendChild(u);
+    }
+    if (hidden) {
+      var hn = el("p", "hidden-note"); hn.appendChild(document.createTextNode(hidden + (hidden === 1 ? " home" : " homes") + " you passed on are hidden. "));
+      var sb = el("button", null, "Show them"); sb.type = "button";
+      sb.onclick = function () { state.dismissed = {}; save(); renderMatches(); };
+      hn.appendChild(sb); box.appendChild(hn);
+    }
+  }
+
+  function renderAll() { renderChat(); renderBrief(); renderMatches(); }
+
+  /* ── Talking to Claude ─────────────────────────────────── */
+  var RULES = [
+    "You are the matchmaker for FamCo Search, a paid service that saves house-hunters from trawling the property portals. The buyer chats with you; you keep a structured brief of what they want; the page matches it against FamCo's database of homes for sale and shows the results beside the chat.",
+    "",
+    "How to talk: warm, plain British English, short (under 70 words). Confirm what you understood in a few words, then ask at most ONE question that would most improve the matches (budget, area, bedrooms, commute, must-haves, deal-breakers). Never invent homes, prices or numbers of matches: the page shows those. When the buyer reacts to a home, say briefly what you've adjusted.",
+    "",
+    "How to keep the brief: start from the current brief you're given and change only what the buyer's latest message changes. Use weight \"must\" only for clear deal-breakers (\"has to\", \"essential\", \"won't consider\"), \"high\" for strong preferences, \"medium\" for helpful extras, \"nice\" for minor bonuses. If they reject a home for a reason, strengthen the matching criterion or add one (e.g. \"too far from the station\" -> tighten max_station_walk). If they love a home, raise the weights of what they liked. \"House\" means terraced, semi-detached and detached.",
+    "",
+    "Criterion types (use only these, with these values):",
+    "- min_beds, min_baths, min_sqft, max_station_walk (minutes): a number",
+    "- area, avoid_area: a list from " + JSON.stringify(AREAS),
+    "- property_type: a list from " + JSON.stringify(TYPES),
+    "- line: \"c2c\" (to London Fenchurch Street) or \"Greater Anglia\" (to London Liverpool Street)",
+    "- feature, avoid_feature: one key from " + JSON.stringify(Object.keys(FEATURES)),
+    "- min_epc: a letter A-G",
+    "",
+    "Reply with ONLY a JSON object, no other text:",
+    '{"reply": "what you say to the buyer", "brief": {"summary": "one line describing what they want", "budgetMax": 550000 or null, "criteria": [{"type": "min_beds", "value": 3, "weight": "must"}]}}'
+  ].join("\n");
+
+  function copyFor(code) {
+    return {
+      not_granted: "Claude wasn't allowed for this page, so the chat can't reply. You can still adjust your brief on the right.",
+      sampling_disabled: "Claude isn't available on this account, so the chat can't reply. You can still adjust your brief.",
+      rate_limited: "That's a lot of messages in a short time. Wait a minute, then try again.",
+      session_expired: "You've been signed out of Claude. Sign in again, then resend your message.",
+      invalid_json: "The matchmaker's reply came back garbled. Send your message again.",
+      refused: "The matchmaker couldn't help with that message. Try putting it another way.",
+      prompt_too_large: "The conversation has got too long. Start a new search to carry on."
+    }[code] || "Something went wrong reaching the matchmaker. Try sending your message again.";
+  }
+
+  function send(text, fromReaction) {
+    text = String(text || "").trim();
+    if (!text || busy) return;
+    if (!sample) {
+      notes.push({ after: state.turns.length - 1, text: sampleChecked ? "The chat needs Claude, which isn't available in this view. You can still change your brief on the right." : "Connecting to Claude… try again in a moment." });
+      renderChat(); return;
+    }
+    if (state.mode === "example") state.mode = "own";
+    state.turns.push({ role: "user", content: text });
+    save();
+    busy = true; renderChat();
+    if (fromReaction && view === "matches") setView("chat");
+
+    var before = (matches() || []).length;
+    var history = state.turns.slice(-14);
+    if (history[0].role === "assistant") history = history.slice(1);
+    var input = [{ role: "user", content: RULES }].concat(history.slice(0, -1));
+    var last = history[history.length - 1];
+    input.push({ role: "user", content: last.content + "\n\n[Page data, not from the buyer] Current brief: " + JSON.stringify(state.brief) + ". Homes matching it right now: " + before + "." });
+
+    ctl = new AbortController();
+    sample.json(input, { modelTier: "quick", cache: false, signal: ctl.signal }).then(function (res) {
+      var reply = res && typeof res.reply === "string" ? res.reply.trim() : "";
+      if (!reply) throw { code: "invalid_json" };
+      if (res.brief) state.brief = cleanBrief(res.brief);
+      state.turns.push({ role: "assistant", content: reply });
+      var now = (matches() || []).filter(function (m) { return !state.dismissed[m.home.id]; }).length;
+      notes.push({ after: state.turns.length - 1, text: "Brief updated · " + (now === 1 ? "1 home matches" : now + " homes match") });
+    }).catch(function (e) {
+      if (e && e.code === "cancelled") { notes.push({ after: state.turns.length - 1, text: "Stopped." }); return; }
+      notes.push({ after: state.turns.length - 1, text: copyFor(e && e.code) });
+      if (e && (e.code === "not_granted" || e.code === "sampling_disabled")) { sample = null; sampleChecked = true; }
+    }).then(function () {
+      busy = false; ctl = null; save(); renderAll();
+    });
+  }
+
+  /* ── Wiring ────────────────────────────────────────────── */
+  var input = $("msg-input");
+  $("composer").addEventListener("submit", function (e) { e.preventDefault(); var t = input.value; input.value = ""; autosize(); send(t); });
+  $("send-btn").addEventListener("click", function () { if (busy && ctl) ctl.abort(); });
+  input.addEventListener("keydown", function (e) { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("composer").requestSubmit(); } });
+  function autosize() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 140) + "px"; }
+  input.addEventListener("input", autosize);
+  $("new-search").onclick = function () { if (busy && ctl) ctl.abort(); state = freshState(); notes = []; save(); renderAll(); input.focus(); };
+  $("load-example").onclick = function () { if (busy && ctl) ctl.abort(); state = exampleState(); notes = []; save(); renderAll(); };
+  $("sort").onchange = function (e) { sortBy = e.target.value; renderMatches(); };
+
+  function setView(v) {
+    view = v; $("app").dataset.view = v;
+    $("tab-chat").setAttribute("aria-selected", String(v === "chat"));
+    $("tab-matches").setAttribute("aria-selected", String(v === "matches"));
+  }
+  $("tab-chat").onclick = function () { setView("chat"); };
+  $("tab-matches").onclick = function () { setView("matches"); };
+
+  $("price-line").textContent = PRICE.amount;
+  renderAll();
+
+  // Light up the chat once the viewer can reach Claude.
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("sample").then(function (s) {
+      sample = s; sampleChecked = true;
+      if (!s) $("composer-note").textContent = "The chat needs Claude, which isn't available in this view. You can still explore the example and change the brief.";
+    }, function () { sampleChecked = true; });
+  } else {
+    sampleChecked = true;
+    $("composer-note").textContent = "Open this page on claude.ai to chat. You can still explore the example and change the brief.";
+  }
+})();
+</script>
