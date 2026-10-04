@@ -13,6 +13,8 @@ GitHub Actions to Pages on every push.
 
 ## Also in this repo
 
-- [`magazine-mews/`](magazine-mews/): house-sale site for 1 Magazine Mews,
-  Shoeburyness. Self-contained and deployed separately on Vercel (Root
-  Directory `magazine-mews`). See its README.
+- [`famco/`](famco/): FamCo Properties' house-website system. One template
+  builds a site for every house it sells. See its README.
+- [`magazine-mews/`](magazine-mews/): house #1, 1 Magazine Mews,
+  Shoeburyness. Live at https://1magazinemews.vercel.app (Vercel Root
+  Directory `magazine-mews`).

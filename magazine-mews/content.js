@@ -3,7 +3,8 @@
    ----------------------------------------------------------
    This is the only file you need to edit to change what the
    website says. You never need to touch index.html, site.js
-   or style.css.
+   or style.css: they're generated from famco/template by
+   famco/build.mjs, which FamCo uses for every house.
 
    HOW IT WORKS
    • Anything left as "" (empty quotes) is simply hidden on
@@ -18,6 +19,10 @@
      thing you changed.
    • Photos go in the  photos/  folder. Then list them below
      by filename, e.g. "photos/kitchen.jpg".
+   • After changing the address, site, seo, crest or theme
+     sections, run  node famco/build.mjs  so the page's
+     Google and link-preview details update too. Everything
+     else updates as soon as this file is saved.
 
    Sections marked DRAFT were written from public sources
    (Southend Council's conservation-area page, Historic
@@ -36,6 +41,18 @@ window.HOUSE = {
     postcode: "SS3 9QB",
   },
 
+  // The live web address. Used for Google, the sitemap and link previews.
+  site: {
+    url: "https://1magazinemews.vercel.app/",
+    googleVerification: "",// the content="…" part of Google Search Console's HTML tag
+  },
+
+  // How the house appears in Google results and link previews.
+  seo: {
+    title: "1 Magazine Mews, Shoebury Garrison, Shoeburyness SS3 9QB — For sale",
+    summary: "A home in the historic Shoebury Garrison conservation area in Shoeburyness, Essex, just yards from East Beach.",
+  },
+
   // "For sale", "Under offer" or "Sold subject to contract".
   // Anything other than "For sale" shows a banner across the top.
   status: "For sale",
@@ -43,6 +60,7 @@ window.HOUSE = {
   // Short line under the address at the top of the page.
   // e.g. "A characterful two-bedroom home on the historic Garrison"
   headline: "",
+  tagline: "A home on the historic Shoebury Garrison, moments from the sea.",  // shown while headline is empty
 
   // Leave amount as "" to hide the price entirely.
   // label is usually "Guide price", "Offers over" or "Offers in the region of".
@@ -54,6 +72,16 @@ window.HOUSE = {
   // The big photo at the top. Leave "" and the top of the page
   // shows the Garrison crest instead. Landscape or portrait both work.
   heroPhoto: "",           // e.g. "photos/front.jpg"
+
+  // The round crest shown until there's a hero photo. The number and
+  // street name come from the address.
+  crest: {
+    ring: "SHOEBURY GARRISON · EST. 1849 · SHOEBURYNESS · ESSEX ·",
+  },
+
+  // Colours and fonts: {} is the standard FamCo look (Garrison green,
+  // brass and brick). See famco/template/content.example.js for options.
+  theme: {},
 
 
   /* ── Key facts (the strip near the top) ──────────────────
@@ -156,6 +184,7 @@ window.HOUSE = {
   /* ── The area (DRAFT — please check) ──────────────────────── */
 
   area: {
+    navLabel: "The Garrison",
     heading: "Living on the Garrison",
     paragraphs: [
       "Shoebury Garrison dates back to 1849, when the Board of Ordnance bought the land. During the Crimean War it became home to the Royal Artillery’s School of Gunnery, and for the next century it was where Britain trained its gunners and tested its guns.",
