@@ -81,6 +81,11 @@ When it sells, change `status` to `"Under offer"` or
    `1-magazine-mews.vercel.app`.
 5. Deploy.
 
+**Done 4 Oct 2026:** live at <https://1magazinemews.vercel.app> (Vercel
+project `1magazinemews`, root `magazine-mews`, production branch
+`claude/fervent-knuth-kux8rt` — a push there goes live), and the share
+picture below already points at it.
+
 Vercel publishes the repo's **production branch** (normally `main`). Every
 other branch gets its own preview link, which is handy for checking changes
 before they go live. If the site lives on a different branch, set it under
