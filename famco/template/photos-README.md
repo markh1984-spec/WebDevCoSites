@@ -10,3 +10,5 @@
 
 `heroPhoto` in content.js is the big photo at the top of the page. It can be
 one of these photos too.
+The arched frame crops the sides of a landscape photo; if it cuts off the
+bit you want, set `heroFocus` (e.g. `"70% 50%"` shifts it right).

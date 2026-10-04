@@ -71,7 +71,10 @@ window.HOUSE = {
 
   // The big photo at the top. Leave "" and the top of the page
   // shows the Garrison crest instead. Landscape or portrait both work.
-  heroPhoto: "",           // e.g. "photos/front.jpg"
+  heroPhoto: "photos/hero-front.jpg",
+  // The frame is taller than a landscape photo, so the sides get cropped.
+  // "92% 50%" keeps the front door and the lamp post in view.
+  heroFocus: "92% 50%",
 
   // The round crest shown until there's a hero photo. The number and
   // street name come from the address.
@@ -139,8 +142,29 @@ window.HOUSE = {
      longest side and under 1MB each keeps the site fast.   */
 
   photos: [
-    // { src: "photos/01-front.jpg",   alt: "Front of the house", caption: "" },
-    // { src: "photos/02-living.jpg",  alt: "Living room",        caption: "Living room" },
+    // The first five make the grid; the rest open in the gallery.
+    { src: "photos/01-garden.jpg",               alt: "The back of the house, with the folding doors open onto the decking", caption: "Garden" },
+    { src: "photos/02-living-room.jpg",          alt: "Open-plan living room and kitchen, with folding doors onto the garden", caption: "Living room" },
+    { src: "photos/03-kitchen.jpg",              alt: "Pink fitted kitchen with grey worktops and a built-in oven", caption: "Kitchen" },
+    { src: "photos/04-bedroom.jpg",              alt: "Bedroom with a bird and flower mural wall", caption: "Bedroom" },
+    { src: "photos/05-garden-studio.jpg",        alt: "Timber garden studio on decking, next to the house", caption: "Garden studio" },
+    { src: "photos/06-front.jpg",                alt: "Front of the house on the mews, with the planted front garden and lamp post", caption: "Front of the house" },
+    { src: "photos/07-front-door.jpg",           alt: "Front door and front garden", caption: "Front of the house" },
+    { src: "photos/08-the-mews.jpg",             alt: "The mews courtyard and neighbouring Garrison houses", caption: "The mews" },
+    { src: "photos/09-living-room-windows.jpg",  alt: "Living room, looking towards the sash windows", caption: "Living room" },
+    { src: "photos/10-guest-bedroom.jpg",        alt: "Guest bedroom with mirrored wardrobes and a door to the guest toilet", caption: "Guest bedroom" },
+    { src: "photos/11-guest-toilet.jpg",         alt: "Guest toilet with an illuminated mirror and a gold basin", caption: "Guest toilet" },
+    { src: "photos/12-guest-toilet-detail.jpg",  alt: "Marble-effect shelf and patterned tiles in the guest toilet", caption: "Guest toilet" },
+    { src: "photos/13-garden-lawn.jpg",          alt: "Garden lawn with planted borders and brick walls", caption: "Garden" },
+    { src: "photos/14-garden-studio-doors.jpg",  alt: "Garden studio with its doors open onto the decking", caption: "Garden studio" },
+    { src: "photos/15-garden-studio-inside.jpg", alt: "Inside the garden studio, with a door out to the garden", caption: "Garden studio" },
+    { src: "photos/16-garage-studio.jpg",        alt: "Garage studio with French doors and a climbing creeper", caption: "Garage studio" },
+    { src: "photos/17-garage-studio-shower.jpg", alt: "Shower room in the garage studio, with palm-print walls", caption: "Garage studio shower room" },
+    { src: "photos/18-en-suite.jpg",             alt: "En suite with a walk-in shower and gold fittings", caption: "En suite" },
+    { src: "photos/19-en-suite-shower.jpg",      alt: "Walk-in shower with a gold rainfall shower head", caption: "En suite" },
+    { src: "photos/20-bedroom-mural.jpg",        alt: "The bird and flower mural in the bedroom", caption: "Bedroom" },
+    { src: "photos/21-back-garden-seating.jpg",  alt: "Seating area in the back garden", caption: "Back garden" },
+    { src: "photos/22-back-garden.jpg",          alt: "Back garden with a greenhouse and a garden shed", caption: "Back garden" },
   ],
 
   // Walkthrough video: upload to YouTube as "Unlisted" (or to Vimeo) and

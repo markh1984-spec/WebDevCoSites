@@ -65,6 +65,10 @@ window.HOUSE = {
   // The big photo at the top. Leave "" and the top of the page
   // shows the crest instead. Landscape or portrait both work.
   heroPhoto: "",           // e.g. "photos/01-front.jpg"
+  // The frame is taller than a landscape photo, so the sides get cropped.
+  // Set this to keep a different part in view: "50% 50%" is the middle,
+  // "70% 50%" shifts it towards the right of the photo.
+  heroFocus: "",
 
   // The round crest shown until there's a hero photo, and the small
   // badge in the header. Leave any of these "" to work it out from

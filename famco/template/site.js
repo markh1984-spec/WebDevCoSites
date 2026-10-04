@@ -95,6 +95,7 @@
       if (!ok) return;
       var img = $("hero-photo");
       img.src = H.heroPhoto;
+      if (has(H.heroFocus)) img.style.objectPosition = H.heroFocus;
       img.alt = A.line1 || "";
       img.hidden = false;
       $("hero-crest").hidden = true;
