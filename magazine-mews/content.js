@@ -44,7 +44,7 @@ window.HOUSE = {
   // The live web address. Used for Google, the sitemap and link previews.
   site: {
     url: "https://1magazinemews.vercel.app/",
-    googleVerification: "",// the content="…" part of Google Search Console's HTML tag
+    googleVerification: "zmd6ReFNTt3OxQNvTfdMj5IiZa0VN6V8VgRn3NjYvOA", // the content="…" part of Google Search Console's HTML tag
   },
 
   // How the house appears in Google results and link previews.
