@@ -745,7 +745,8 @@ p { margin: 0 0 1.1em; }
 /* Cormorant's default old-style "1" reads as a capital I, which matters
    when the house is number 1. Lining figures everywhere. (Kept down here
    because the font shorthand above resets it.) */
-h1, h2, h3, h4, .brand-mark, .crest text, .hero-price-amount, .fact dd, .open-days li, .map-address, .room-name {
+h1, h2, h3, h4, .brand-mark, .crest text, .hero-price-amount, .fact dd, .open-days li, .map-address, .room-name,
+.prose p:first-child::first-letter {
   font-variant-numeric: lining-nums;
   font-feature-settings: "lnum" 1;
 }
