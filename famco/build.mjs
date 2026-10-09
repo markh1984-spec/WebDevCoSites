@@ -30,6 +30,10 @@ const THEME_VARS = {
   dark: "--green-900", darker: "--green-950", mid: "--green-800", midLight: "--green-700",
   accent: "--brass", accentLight: "--brass-light", warm: "--brick", warmDark: "--brick-dark",
   paper: "--paper", cream: "--cream", ink: "--ink",
+  // the pale fill behind a photo while it loads, the mortar between the
+  // bricks, and the hairlines on light sections — still green and beige
+  // under any other colour scheme until a house could set them
+  tint: "--green-100", mortar: "--mortar", line: "--line",
 };
 
 const has = (v) => (typeof v === "string" ? v.trim() !== "" : !!v);
