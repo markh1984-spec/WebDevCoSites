@@ -55,3 +55,30 @@
 @media print {
   .look-soft .hero::after, #details::before, #enquire::before { display: none; }
 }
+
+/* The Garrison at dusk, behind the plum section: a fainter second row of
+   rooftops and trees behind the skyline, a crescent moon and a scatter of
+   stars (walls/make-dusk.py). The front skyline comes from the shared
+   "soft" look; it's a touch stronger here. */
+.look-soft .section-green::before {
+  content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: var(--brass-light);
+  -webkit-mask:
+    url("walls/dusk-moon.svg") right 6% top 96px / 58px 58px no-repeat,
+    url("walls/dusk-sky.svg") 0 0 / 1200px 460px repeat-x,
+    url("walls/dusk-back.svg") 0 100% / 640px 150px repeat-x;
+          mask:
+    url("walls/dusk-moon.svg") right 6% top 96px / 58px 58px no-repeat,
+    url("walls/dusk-sky.svg") 0 0 / 1200px 460px repeat-x,
+    url("walls/dusk-back.svg") 0 100% / 640px 150px repeat-x;
+  opacity: 0.09;
+}
+.look-soft .section-green::after { opacity: 0.13; }
+@media (max-width: 700px) {
+  .look-soft .section-green::before {
+    -webkit-mask-size: 40px 40px, 900px 345px, 480px 112px;
+            mask-size: 40px 40px, 900px 345px, 480px 112px;
+    -webkit-mask-position: right 8% top 22px, 0 0, 0 100%;
+            mask-position: right 8% top 22px, 0 0, 0 100%;
+  }
+}
