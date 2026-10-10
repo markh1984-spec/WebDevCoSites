@@ -86,12 +86,16 @@ window.HOUSE = {
   //   accent, accentLight   brass trim, highlights and the crest
   //   warm, warmDark    small headings, drop caps and the brick edging
   //   paper, cream, ink page backgrounds and text
+  //   muted             quieter text: captions, notes, the hero's intro line
   //   tint, mortar, line   photo placeholder fill, the mortar between the
   //                     bricks, and hairlines — set these too when the
   //                     colours move away from green and brass
   //   displayFont, bodyFont, fontsUrl   fonts; fontsUrl is the embed link
   //                     from fonts.google.com for those two fonts
   //   brickEdges        false hides the brick strips between sections
+  //   look              "soft" swaps the arched, brick-edged Victorian look
+  //                     for a light header and hero, pill-shaped buttons and
+  //                     rounded photos and cards (pairs well with brickEdges: false)
   theme: {},
 
 

@@ -84,22 +84,29 @@ window.HOUSE = {
 
   // Colours and fonts: {} is the standard FamCo look (Garrison green,
   // brass and brick). See famco/template/content.example.js for options.
-  // Purples, pinks and lilacs — Mark, 9 October 2026.
+  // Plum and rose, Fraunces and DM Sans, pill-shaped buttons: the look Mum
+  // liked on the September prototype — Mark, 10 October 2026.
   theme: {
-    dark: "#2B1838",        // deep aubergine: header, hero, dark sections
-    darker: "#1D0F28",      // footer
-    mid: "#45285C",         // buttons
-    midLight: "#5C3878",    // button hover
-    accent: "#E58BB8",      // rose pink: crest, trim, the main button
-    accentLight: "#F3C4DD", // pale pink: small text on the dark sections
-    warm: "#A8396F",        // berry: small headings, drop caps, the bricks
-    warmDark: "#7E2A55",
-    paper: "#FBF7FD",       // lilac white
-    cream: "#F3EAF7",       // lilac
-    ink: "#251B2C",
-    tint: "#EDE2F4",
-    mortar: "#E7D9F0",
-    line: "#E4D6EC",
+    look: "soft",           // light header and hero, pill buttons, rounded photos
+    brickEdges: false,
+    dark: "#4A1F3D",        // plum: headings, the area section
+    darker: "#2E1428",      // footer
+    mid: "#4A1F3D",
+    midLight: "#6B2350",
+    accent: "#A83D6C",      // rose: the main buttons, trim
+    accentLight: "#F1DCE6", // pale pink: small text on the plum section
+    warm: "#8E2F5A",        // berry: links, small headings, drop caps
+    warmDark: "#5E1F48",
+    paper: "#FBF4F6",       // blush white: the page
+    cream: "#F3DEE7",       // blush pink: alternate sections
+    ink: "#2E1428",
+    muted: "#5A3A50",
+    tint: "#F3DEE7",
+    mortar: "#EBD5DE",
+    line: "#EBD5DE",
+    displayFont: "Fraunces",
+    bodyFont: "DM Sans",
+    fontsUrl: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=DM+Sans:wght@400;500;600;700&display=swap",
   },
 
 

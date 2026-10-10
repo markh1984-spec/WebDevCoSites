@@ -29,7 +29,7 @@ const DEFAULT_COLOURS = { dark: "#17291F", accent: "#B8935A", accentLight: "#D9B
 const THEME_VARS = {
   dark: "--green-900", darker: "--green-950", mid: "--green-800", midLight: "--green-700",
   accent: "--brass", accentLight: "--brass-light", warm: "--brick", warmDark: "--brick-dark",
-  paper: "--paper", cream: "--cream", ink: "--ink",
+  paper: "--paper", cream: "--cream", ink: "--ink", muted: "--muted",
   // the pale fill behind a photo while it loads, the mortar between the
   // bricks, and the hairlines on light sections — still green and beige
   // under any other colour scheme until a house could set them
@@ -176,7 +176,11 @@ function values(H, AG, dir) {
     JSON_LD: JSON.stringify(ld, null, 2).replace(/</g, "\\u003c"),
     FONTS_URL: trim(theme.fontsUrl) || DEFAULT_FONTS,
     THEME_STYLE: vars.length ? `<style>\n  /* This house's theme, from content.js */\n  :root {\n    ${vars.join("\n    ")}\n  }\n</style>` : "",
-    BODY_CLASS: theme.brickEdges === false ? "no-brick" : "",
+    BODY_CLASS: [
+      theme.brickEdges === false && "no-brick",
+      // "soft": light header and hero, pill buttons, rounded photos (style.css)
+      /^[a-z]+$/.test(trim(theme.look)) && `look-${trim(theme.look)}`,
+    ].filter(Boolean).join(" "),
     LINE1: line1,
     BRAND_MARK: numeral,
     BRAND_NAME: street,
