@@ -1,0 +1,57 @@
+/* ==========================================================
+   1 Magazine Mews — wallpaper from the house's own walls
+   ----------------------------------------------------------
+   Faint line drawings in the spirit of the rooms, drawn for
+   this site (walls/make-walls.py), not copies of the papers:
+   • top of the page: reeds, herons, blossom and trailing
+     wisteria, after the bird-and-flower mural in the bedroom
+   • Good to know: star tiles, after the guest toilet
+   • Viewings & enquiries: palm fronds, after the garage
+     studio's shower room
+   The photos section stays flat pink, like the living room.
+   They're masks, so they take the theme's plum.
+   ========================================================== */
+
+.look-soft .hero::before,
+.look-soft .hero::after {
+  display: block;
+  background: var(--green-900);
+  opacity: 0.07;
+}
+.look-soft .hero::before {
+  z-index: -2;
+  -webkit-mask: url("walls/mural.svg") 50% 100% / 1200px 420px repeat-x;
+          mask: url("walls/mural.svg") 50% 100% / 1200px 420px repeat-x;
+}
+.look-soft .hero::after {
+  z-index: -1;
+  opacity: 0.055;
+  -webkit-mask: url("walls/wisteria.svg") 0 0 / 600px 170px repeat-x;
+          mask: url("walls/wisteria.svg") 0 0 / 600px 170px repeat-x;
+}
+
+#details, #enquire { isolation: isolate; }
+#details::before, #enquire::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--green-900);
+}
+#details::before {
+  -webkit-mask: url("walls/stars.svg") 0 0 / 80px 80px repeat;
+          mask: url("walls/stars.svg") 0 0 / 80px 80px repeat;
+  opacity: 0.045;
+}
+#enquire::before {
+  -webkit-mask: url("walls/palm.svg") 0 0 / 360px 360px repeat;
+          mask: url("walls/palm.svg") 0 0 / 360px 360px repeat;
+  opacity: 0.05;
+}
+
+@media (max-width: 700px) {
+  .look-soft .hero::before { -webkit-mask-size: 720px 252px; mask-size: 720px 252px; }
+  .look-soft .hero::after { -webkit-mask-size: 420px 119px; mask-size: 420px 119px; }
+  #enquire::before { -webkit-mask-size: 270px 270px; mask-size: 270px 270px; }
+}
+
+@media print {
+  .look-soft .hero::after, #details::before, #enquire::before { display: none; }
+}

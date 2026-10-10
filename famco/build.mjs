@@ -175,6 +175,8 @@ function values(H, AG, dir) {
     VERIFICATION_TAG: verification,
     JSON_LD: JSON.stringify(ld, null, 2).replace(/</g, "\\u003c"),
     FONTS_URL: trim(theme.fontsUrl) || DEFAULT_FONTS,
+    // A house's own extra styles (its wallpaper, say), if it has a house.css
+    HOUSE_CSS: fs.existsSync(path.join(dir, "house.css")) ? '<link rel="stylesheet" href="house.css">' : "",
     THEME_STYLE: vars.length ? `<style>\n  /* This house's theme, from content.js */\n  :root {\n    ${vars.join("\n    ")}\n  }\n</style>` : "",
     BODY_CLASS: [
       theme.brickEdges === false && "no-brick",

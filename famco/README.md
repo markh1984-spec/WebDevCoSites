@@ -17,7 +17,9 @@ houses/<name>/           ← every house after that
 ```
 
 **What belongs to a house** (edit freely): `content.js`, `photos/`,
-`og-image.jpg` (optional share picture) and its README.
+`og-image.jpg` (optional share picture), its README, and optionally
+`house.css` for styles only that house has (Magazine Mews keeps its
+wallpaper there, with the drawings in `walls/`).
 
 **What's generated** (don't edit in the house folder; it gets overwritten):
 `index.html`, `site.js`, `style.css`, `favicon.svg`, `agency.js`,
