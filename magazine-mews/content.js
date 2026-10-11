@@ -43,7 +43,7 @@ window.HOUSE = {
 
   // The live web address. Used for Google, the sitemap and link previews.
   site: {
-    url: "https://1magazinemews.vercel.app/",
+    url: "https://www.magazinemews.co.uk/",   // live from 11 Oct 2026; 1magazinemews.vercel.app still works
     googleVerification: "zmd6ReFNTt3OxQNvTfdMj5IiZa0VN6V8VgRn3NjYvOA", // the content="…" part of Google Search Console's HTML tag
   },
 

@@ -1,11 +1,6 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
-- **Sign in to Namecheap in Chrome** (since 11 Oct 2026): magazinemews.co.uk
-  is available and sitting in the cart (£5.28 for the first year, nothing else
-  added). Once signed in, the order is confirmed with Mark and placed. The
-  domain becomes the web address and the email address that sends "confirm
-  your email" and receives buyers' details; the "See inside" form waits on it.
 - **Facebook Page rename to "Magazine Mews"** (since 11 Oct 2026): the
   confirm box is open in Chrome. It needs Mark's password, then Request Change.
 - **Instagram account** (since 11 Oct 2026): create it, then the next session
@@ -21,13 +16,17 @@
 - Walkthrough video link and floorplan, if they're coming from the shoot.
 
 ## Next up
-1. Once the domain is bought: add it to the Vercel project, do the DNS, and
-   set up its email address.
-2. Build "See inside": buyer leaves details, confirms by email, then sees
+1. Build "See inside": buyer leaves details, confirms by email, then sees
    the private photos. The photos live in a private store, not this public
    repo (copies are in Mark's "Magazine Mews private photos" folder).
-3. Swap the top photo for the clean drone shot when Hendricks sends it.
-4. Instagram profile and posts; ads in the Housing category; Meta pixel.
+2. Swap the top photo for the clean drone shot when Hendricks sends it.
+3. Instagram profile and posts; ads in the Housing category; Meta pixel.
+
+## Done 11 Oct 2026
+- magazinemews.co.uk bought (Namecheap, renews 11 Oct 2027). The site is live
+  on www.magazinemews.co.uk (the bare domain redirects there; DNS: A @ and
+  CNAME www at Namecheap). viewings@magazinemews.co.uk forwards to the
+  family inbox (Namecheap email forwarding).
 
 ## Updated
 11 Oct 2026 — front photo only on the public site, with a short description,
