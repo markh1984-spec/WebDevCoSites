@@ -33,6 +33,7 @@
   and sees all 22 inside photos from the private store. The first time a
   link is opened, viewings@ gets their details. Tested end to end.
 - The enquiry form sends to viewings@ through the site's own function.
+  Phone is required there too (page and server).
 - Sending: Resend (Mark's account, Pro), magazinemews.co.uk verified
   (Ireland). DNS at Namecheap: DKIM TXT, rsend and send CNAMEs, DMARC
   p=none. The key reaches Vercel through Resend's Vercel integration,
@@ -45,6 +46,6 @@
 11 Oct 2026 — email sending switched on; "See inside" and the enquiry form
 are live and tested. Walking times now sit on their own line under each
 nearby photo, lined up across the row. Phone number is now required on
-the See inside form. (Vercel is slow to pick up pushes
+both forms (See inside and Arrange a viewing). (Vercel is slow to pick up pushes
 right now; if a push doesn't show within a few minutes, use Deployments →
 … → Create Deployment on the branch.)

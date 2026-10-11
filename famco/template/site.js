@@ -453,6 +453,13 @@
   var formspree = formspreeRaw.trim().replace(/^.*\/f\//, "");
   var fallback = ([E.fallbackEmail, AE.fallbackEmail].filter(has)[0] || "").trim();
   var endpoint = has(E.endpoint) ? E.endpoint.trim() : "";
+  // phoneRequired: true in content.js makes the phone number a must here too.
+  var phoneNeeded = E.phoneRequired === true;
+  if (phoneNeeded) {
+    form.elements.phone.required = true;
+    var fOpt = form.querySelector('label[for="f-phone"] .optional');
+    if (fOpt) fOpt.remove();
+  }
 
   if (!formspree && !fallback && !endpoint) {
     // No way to deliver messages yet. Say so rather than eat them.
@@ -475,6 +482,12 @@
       (!name ? form.elements.name : form.elements.email).focus();
       return;
     }
+    var phoneDigits = form.elements.phone.value.replace(/\D/g, "").length;
+    if (phoneNeeded && (phoneDigits < 10 || phoneDigits > 15)) {
+      setStatus("Please add your phone number so we can arrange the viewing.", "error");
+      form.elements.phone.focus();
+      return;
+    }
 
     if (endpoint) {
       submit.disabled = true;
@@ -484,9 +497,9 @@
         if (form.elements[k]) payload[k] = form.elements[k].value;
       });
       fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("HTTP " + r.status); }); })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || "HTTP " + r.status); }); })
         .then(function () { form.reset(); setStatus("Thank you, your message has been sent. We'll be in touch soon.", "ok"); })
-        .catch(function () { setStatus("Sorry, that didn't send. Please try again in a moment.", "error"); })
+        .catch(function (err) { setStatus(err && err.message && err.message.indexOf("HTTP") !== 0 ? err.message : "Sorry, that didn't send. Please try again in a moment.", "error"); })
         .then(function () { submit.disabled = false; });
       return;
     }

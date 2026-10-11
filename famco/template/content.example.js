@@ -158,6 +158,7 @@ window.HOUSE = {
   // insideGate: { title: "See inside", text: "…", button: "", href: "#enquire" },
   // With a sign-up form (needs the house's own api/see-inside.js):
   // insideGate: { …, endpoint: "/api/see-inside", note: "…", phoneRequired: true },
+  // enquiries also takes endpoint and phoneRequired: true.
 
   photos: [
     // { src: "photos/01-front.jpg",   alt: "Front of the house", caption: "" },

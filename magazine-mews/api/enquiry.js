@@ -1,4 +1,4 @@
-// POST /api/enquiry  { name, email, phone?, position?, heard_via?, message?, _gotcha? }
+// POST /api/enquiry  { name, email, phone, position?, heard_via?, message?, _gotcha? }
 // Sends the enquiry to viewings@, with Reply-To set to the person asking.
 const { INBOX, sendEmail, esc, clean, isEmail, readBody, json, wrap } = require("./_inside");
 
@@ -10,8 +10,12 @@ module.exports = async (req, res) => {
   const name = clean(b.name, 80);
   const email = clean(b.email, 200).toLowerCase();
   if (!name || !isEmail(email)) return json(res, 400, { ok: false, error: "Please add your name and a valid email address so we can reply." });
+  // Phone is required (11 Oct 2026): 10–15 digits.
+  const phone = clean(b.phone, 40);
+  const digits = phone.replace(/\D/g, "").length;
+  if (digits < 10 || digits > 15) return json(res, 400, { ok: false, error: "Please add your phone number so we can arrange the viewing." });
   const message = String(b.message || "").trim().slice(0, 4000);
-  const rows = [["Name", name], ["Email", email], ["Phone", clean(b.phone, 40) || "—"],
+  const rows = [["Name", name], ["Email", email], ["Phone", phone],
     ["Position", clean(b.position, 80) || "—"], ["Heard about it via", clean(b.heard_via, 80) || "—"]];
   try {
     await sendEmail({

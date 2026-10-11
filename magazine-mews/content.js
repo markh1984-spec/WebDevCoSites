@@ -287,6 +287,7 @@ window.HOUSE = {
     // Our own function (api/enquiry.js): sends the enquiry to
     // viewings@magazinemews.co.uk. When set, it wins over formspreeId.
     endpoint: "/api/enquiry",
+    phoneRequired: true,
     formspreeId: "",
     fallbackEmail: "",
     note: "Viewings are by appointment. We’ll reply as soon as we can, usually the same day.",
