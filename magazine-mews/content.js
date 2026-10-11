@@ -1,5 +1,5 @@
 /* ==========================================================
-   1 Magazine Mews — CONTENT FILE
+   Magazine Mews — CONTENT FILE
    ----------------------------------------------------------
    This is the only file you need to edit to change what the
    website says. You never need to touch index.html, site.js
@@ -35,10 +35,10 @@ window.HOUSE = {
   /* ── The basics ─────────────────────────────────────────── */
 
   address: {
-    line1: "1 Magazine Mews",
-    area: "Shoebury Garrison",
-    town: "Shoeburyness, Essex",
-    postcode: "SS3 9QB",
+    line1: "Magazine Mews",
+    area: "",
+    town: "Shoeburyness",
+    postcode: "",
   },
 
   // The live web address. Used for Google, the sitemap and link previews.
@@ -49,7 +49,7 @@ window.HOUSE = {
 
   // How the house appears in Google results and link previews.
   seo: {
-    title: "1 Magazine Mews, Shoebury Garrison, Shoeburyness SS3 9QB — For sale",
+    title: "Magazine Mews, Shoeburyness — For sale",
     summary: "A home in the historic Shoebury Garrison conservation area in Shoeburyness, Essex, just yards from East Beach.",
   },
 
@@ -79,6 +79,7 @@ window.HOUSE = {
   // The round crest shown until there's a hero photo. The number and
   // street name come from the address.
   crest: {
+    numeral: "M",   // the badge in the header and the browser tab (was the house number)
     ring: "SHOEBURY GARRISON · EST. 1849 · SHOEBURYNESS · ESSEX ·",
   },
 
