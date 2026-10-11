@@ -181,13 +181,13 @@ window.HOUSE = {
     { src: "photos/13-garden-lawn.jpg",          alt: "Garden lawn with planted borders and brick walls", caption: "Garden" },
     { src: "photos/14-garden-studio-doors.jpg",  alt: "Garden studio with its doors open onto the decking", caption: "Garden studio" },
     { src: "photos/15-garden-studio-inside.jpg", alt: "Inside the garden studio, with a door out to the garden", caption: "Garden studio" },
-    { src: "photos/16-garage-studio.jpg",        alt: "Garage studio with French doors and a climbing creeper", caption: "Garage studio" },
-    { src: "photos/17-garage-studio-shower.jpg", alt: "Shower room in the garage studio, with palm-print walls", caption: "Garage studio shower room" },
+    { src: "photos/16-garage-studio.jpg",        alt: "Laundry room with French doors and a climbing creeper", caption: "Laundry room" },
+    { src: "photos/17-garage-studio-shower.jpg", alt: "Shower in the laundry room, with palm-print walls", caption: "Laundry room shower" },
     { src: "photos/18-en-suite.jpg",             alt: "En suite with a walk-in shower and gold fittings", caption: "En suite" },
     { src: "photos/19-en-suite-shower.jpg",      alt: "Walk-in shower with a gold rainfall shower head", caption: "En suite" },
     { src: "photos/20-bedroom-mural.jpg",        alt: "The bird and flower mural in the bedroom", caption: "Bedroom" },
-    { src: "photos/21-back-garden-seating.jpg",  alt: "Seating area in the back garden", caption: "Back garden" },
-    { src: "photos/22-back-garden.jpg",          alt: "Back garden with a greenhouse and a garden shed", caption: "Back garden" },
+    { src: "photos/21-back-garden-seating.jpg",  alt: "Brick gable end with a door, and a seating area outside it", caption: "Seating area" },
+    { src: "photos/22-back-garden.jpg",          alt: "Greenhouse and garden shed", caption: "Greenhouse and shed" },
   ],
 
   // Walkthrough video: upload to YouTube as "Unlisted" (or to Vimeo) and
