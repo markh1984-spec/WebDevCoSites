@@ -42,4 +42,7 @@
 
 ## Updated
 11 Oct 2026 — email sending switched on; "See inside" and the enquiry form
-are live and tested.
+are live and tested. Walking times now sit on their own line under each
+nearby photo, lined up across the row. (Vercel is slow to pick up pushes
+right now; if a push doesn't show within a few minutes, use Deployments →
+… → Create Deployment on the branch.)
