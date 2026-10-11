@@ -364,7 +364,10 @@
     img.alt = g.alt || g.caption || "";
     img.loading = "lazy";
     fig.appendChild(img);
-    var cap = el("figcaption", null, g.caption || "");
+    var cap = el("figcaption");
+    cap.appendChild(el("span", "area-place", g.caption || ""));
+    // Walking time on its own line, so the lines match up across the row.
+    if (has(g.walk)) cap.appendChild(el("span", "area-walk", g.walk));
     if (has(g.credit)) {
       var cr = el("span", "area-credit", "Photo: ");
       var who = el("a", null, g.credit);

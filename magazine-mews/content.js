@@ -251,16 +251,16 @@ window.HOUSE = {
     // credited on the page as the licence asks). Swap for Rory's own any time.
     gallery: [
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg/960px-East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg",
-        caption: "East Beach · 16 min walk", alt: "East Beach, Shoeburyness, on a sunny day",
+        caption: "East Beach", walk: "16 min walk", alt: "East Beach, Shoeburyness, on a sunny day",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:East_Beach,_Shoeburyness_-_geograph.org.uk_-_7255870.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg/960px-Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg",
-        caption: "Gunners Park nature reserve · 5 min walk", alt: "Benches looking over the water at Gunners Park",
+        caption: "Gunners Park nature reserve", walk: "5 min walk", alt: "Benches looking over the water at Gunners Park",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg/960px-Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg",
-        caption: "Garrison cricket pavilion · 1 min walk", alt: "The Garrison cricket pavilion and green",
+        caption: "Garrison cricket pavilion", walk: "1 min walk", alt: "The Garrison cricket pavilion and green",
         credit: "Julian Osley", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoebury_Garrison_-_Cricket_Pavilion_(geograph_5857487).jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/3/38/Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg",
-        caption: "Shoeburyness station · 14 min walk", alt: "Shoeburyness railway station building",
+        caption: "Shoeburyness station", walk: "14 min walk", alt: "Shoeburyness railway station building",
         credit: "JThomas", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
     ],
     // How far to the places people commute to.
