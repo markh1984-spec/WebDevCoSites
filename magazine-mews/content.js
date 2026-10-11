@@ -50,7 +50,7 @@ window.HOUSE = {
   // How the house appears in Google results and link previews.
   seo: {
     title: "Magazine Mews, Shoeburyness — For sale",
-    summary: "A home in the historic Shoebury Garrison conservation area in Shoeburyness, Essex, just yards from East Beach.",
+    summary: "A home in the historic Shoebury Garrison conservation area in Shoeburyness, Essex, next to Gunners Park and a short walk from East Beach.",
   },
 
   // Replaces the standard "A private sale…" line by the enquiry form.
@@ -138,7 +138,7 @@ window.HOUSE = {
 
   // Facts from Hendricks' listing (11 Oct 2026); words our own.
   description: [
-    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, just yards from East Beach. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
+    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, with Gunners Park five minutes away and East Beach a short walk beyond. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
     "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room with its own shower, and allocated off-street parking.",
   ],
 
@@ -149,7 +149,7 @@ window.HOUSE = {
     "En suite and dressing area in the main bedroom",
     "Detached garden studio, ideal as a home office",
     "Gated garden, two outside spaces and allocated parking",
-    "In the Shoebury Garrison conservation area, yards from East Beach",
+    "In the Shoebury Garrison conservation area, five minutes from Gunners Park",
   ],
 
 
@@ -235,10 +235,11 @@ window.HOUSE = {
     ],
     // Things nearby. Fill in or delete "distance". Empty ones just show the name.
     nearby: [
-      { name: "East Beach",               distance: "" },  // e.g. "5 min walk"
-      { name: "Gunners Park nature reserve (Essex Wildlife Trust)", distance: "" },
-      { name: "Garrison cricket green & pavilion", distance: "" },
-      { name: "Shoeburyness station (c2c)", distance: "" },
+      // Walking times: Google Maps walking directions from Magazine Mews, 11 Oct 2026.
+      { name: "East Beach",               distance: "16 min walk" },
+      { name: "Gunners Park nature reserve (Essex Wildlife Trust)", distance: "5 min walk" },
+      { name: "Garrison cricket green & pavilion", distance: "1 min walk" },
+      { name: "Shoeburyness station (c2c)", distance: "14 min walk" },
       // { name: "Local primary school",   distance: "" },
       // { name: "Shops on the High Street", distance: "" },
     ],
@@ -246,16 +247,16 @@ window.HOUSE = {
     // credited on the page as the licence asks). Swap for Rory's own any time.
     gallery: [
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg/960px-East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg",
-        caption: "East Beach", alt: "East Beach, Shoeburyness, on a sunny day",
+        caption: "East Beach · 16 min walk", alt: "East Beach, Shoeburyness, on a sunny day",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:East_Beach,_Shoeburyness_-_geograph.org.uk_-_7255870.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg/960px-Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg",
-        caption: "Gunners Park nature reserve", alt: "Benches looking over the water at Gunners Park",
+        caption: "Gunners Park nature reserve · 5 min walk", alt: "Benches looking over the water at Gunners Park",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg/960px-Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg",
-        caption: "Garrison cricket pavilion", alt: "The Garrison cricket pavilion and green",
+        caption: "Garrison cricket pavilion · 1 min walk", alt: "The Garrison cricket pavilion and green",
         credit: "Julian Osley", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoebury_Garrison_-_Cricket_Pavilion_(geograph_5857487).jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/3/38/Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg",
-        caption: "Shoeburyness station", alt: "Shoeburyness railway station building",
+        caption: "Shoeburyness station · 14 min walk", alt: "Shoeburyness railway station building",
         credit: "JThomas", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
     ],
     // How far to the places people commute to.
