@@ -1,8 +1,12 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
-- **Facebook Page rename to "Magazine Mews"** (since 11 Oct 2026): the
-  confirm box is open in Chrome. It needs Mark's password, then Request Change.
+- **Check the two test emails reached Mum** (since 11 Oct 2026): "Confirmed:
+  Mark (test) has seen inside Magazine Mews" and "Viewing enquiry from Mark
+  (test)". Resend shows both delivered to viewings@; this confirms the
+  forwarding on to her inbox. If they're in spam, mark them "not spam".
+- **Facebook Page rename to "Magazine Mews"** (since 11 Oct 2026): needs
+  Mark's password, then Request Change.
 - **Instagram account** (since 11 Oct 2026): create it, then the next session
   fills in the profile and stages the posts.
 - **Facebook posts** (since 11 Oct 2026): ready. Each one is staged and Mark
@@ -16,20 +20,26 @@
 - Walkthrough video link and floorplan, if they're coming from the shoot.
 
 ## Next up
-1. Build "See inside": buyer leaves details, confirms by email, then sees
-   the private photos. The photos live in a private store, not this public
-   repo (copies are in Mark's "Magazine Mews private photos" folder).
-2. Swap the top photo for the clean drone shot when Hendricks sends it.
-3. Instagram profile and posts; ads in the Housing category; Meta pixel.
+1. Swap the top photo for the clean drone shot when Hendricks sends it.
+2. Instagram profile and posts; ads in the Housing category; Meta pixel.
+3. Search Console for www.magazinemews.co.uk; Facebook Page website field.
+4. Tidy-up: Vercel suggests saving RESEND_API_KEY as a "Secret" type
+   (re-run Resend's Vercel integration to make a fresh key, then delete
+   the old "Vercel Integration" key in Resend).
 
 ## Done 11 Oct 2026
+- "See inside" is live: a buyer leaves name and email, gets a 30-day link,
+  and sees all 22 inside photos from the private store. The first time a
+  link is opened, viewings@ gets their details. Tested end to end.
+- The enquiry form sends to viewings@ through the site's own function.
+- Sending: Resend (Mark's account, Pro), magazinemews.co.uk verified
+  (Ireland). DNS at Namecheap: DKIM TXT, rsend and send CNAMEs, DMARC
+  p=none. The key reaches Vercel through Resend's Vercel integration,
+  limited to the 1magazinemews project.
 - magazinemews.co.uk bought (Namecheap, renews 11 Oct 2027). The site is live
-  on www.magazinemews.co.uk (the bare domain redirects there; DNS: A @ and
-  CNAME www at Namecheap). viewings@magazinemews.co.uk forwards to the
-  family inbox (Namecheap email forwarding).
+  on www.magazinemews.co.uk (the bare domain redirects there).
+  viewings@magazinemews.co.uk forwards to the family inbox.
 
 ## Updated
-11 Oct 2026 — front photo only on the public site, with a short description,
-key facts, offers in the region of £675,000 (cash buyers from £665,000),
-EPC C, a mini gallery of the places nearby, and the legal-side line on the
-private sale.
+11 Oct 2026 — email sending switched on; "See inside" and the enquiry form
+are live and tested.
