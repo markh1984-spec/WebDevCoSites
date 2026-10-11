@@ -1,9 +1,11 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
-- **Buy magazinemews.co.uk** (since 11 Oct 2026). It becomes the web address
-  and the email address that sends "confirm your email" and receives buyers'
-  details. The "See inside" sign-up can't go live until it exists.
+- **Sign in to Namecheap in Chrome** (since 11 Oct 2026): magazinemews.co.uk
+  is available and sitting in the cart (£5.28 for the first year, nothing else
+  added). Once signed in, the order is confirmed with Mark and placed. The
+  domain becomes the web address and the email address that sends "confirm
+  your email" and receives buyers' details; the "See inside" form waits on it.
 - **Facebook Page rename to "Magazine Mews"** (since 11 Oct 2026): the
   confirm box is open in Chrome. It needs Mark's password, then Request Change.
 - **Instagram account** (since 11 Oct 2026): create it, then the next session
