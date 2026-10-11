@@ -60,6 +60,7 @@ window.HOUSE = {
   price: {
     label: "Guide price",
     amount: "",            // e.g. "£650,000"
+    note: "",              // optional small line under the price, e.g. "Cash buyers from £xxx"
   },
 
   // The big photo at the top. Leave "" and the top of the page

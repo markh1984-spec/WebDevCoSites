@@ -65,8 +65,9 @@ window.HOUSE = {
   // Leave amount as "" to hide the price entirely.
   // label is usually "Guide price", "Offers over" or "Offers in the region of".
   price: {
-    label: "Guide price",
-    amount: "",            // e.g. "£550,000"
+    label: "Offers in the region of",
+    amount: "£675,000",
+    note: "Cash buyers from £665,000",   // Mark, 11 Oct 2026
   },
 
   // The big photo at the top. Leave "" and the top of the page
@@ -178,7 +179,7 @@ window.HOUSE = {
 
   insideGate: {
     title: "See inside",
-    text: "The photos of the inside are shared once you've left your details and confirmed your email address. This opens very soon.",
+    text: "The photos of the inside are shared once you've left your details and confirmed your email address.",
     button: "",   // e.g. "Leave your details to see inside"
   },
 

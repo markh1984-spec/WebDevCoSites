@@ -284,6 +284,7 @@ p { margin: 0 0 1.1em; }
   color: var(--brass-light);
 }
 .hero-price-amount { font: 600 2.2rem/1.1 var(--font-display); color: var(--cream); }
+.hero-price-note { display: block; margin-top: .35rem; font-size: .9rem; opacity: .85; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
 
 /* the arched window: Victorian military brickwork */

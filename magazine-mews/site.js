@@ -88,6 +88,7 @@
   if (H.price && has(H.price.amount)) {
     $("hero-price-label").textContent = H.price.label || "";
     $("hero-price-amount").textContent = H.price.amount;
+    if (has(H.price.note)) { $("hero-price-note").textContent = H.price.note; show("hero-price-note", true); }
     show("hero-price", true);
   }
 
