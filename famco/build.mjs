@@ -145,7 +145,7 @@ function values(H, AG, dir) {
   const sellerBlock = live
     ? `<p class="private-sale">\n          <strong>Marketed by ${esc(AG.name)}.</strong> ${esc(trim(AG.blurb))}\n        </p>` +
       (contact ? `\n        <p class="private-sale agency-contact">${contact}</p>` : "")
-    : `<p class="private-sale">\n          <strong>A private sale.</strong> There's no estate agent in the\n          middle, so you'll be dealing directly with the family.\n        </p>`;
+    : `<p class="private-sale">\n          <strong>A private sale.</strong> ${has(H.privateSaleNote) ? esc(trim(H.privateSaleNote)) : "There's no estate agent in the\n          middle, so you'll be dealing directly with the family."}\n        </p>`;
 
   const company = AG.company || {};
   const companyLine = [

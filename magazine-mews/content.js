@@ -53,6 +53,9 @@ window.HOUSE = {
     summary: "A home in the historic Shoebury Garrison conservation area in Shoeburyness, Essex, just yards from East Beach.",
   },
 
+  // Replaces the standard "A private sale…" line by the enquiry form.
+  privateSaleNote: "There's no estate agent in the middle, so you'll be dealing directly with the family. The legal side is handled by professionals.",
+
   // "For sale", "Under offer" or "Sold subject to contract".
   // Anything other than "For sale" shows a banner across the top.
   status: "For sale",
@@ -238,6 +241,22 @@ window.HOUSE = {
       { name: "Shoeburyness station (c2c)", distance: "" },
       // { name: "Local primary school",   distance: "" },
       // { name: "Shops on the High Street", distance: "" },
+    ],
+    // Photos of the places above, from Wikimedia Commons (CC BY-SA 2.0,
+    // credited on the page as the licence asks). Swap for Rory's own any time.
+    gallery: [
+      { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg/960px-East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg",
+        caption: "East Beach", alt: "East Beach, Shoeburyness, on a sunny day",
+        credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:East_Beach,_Shoeburyness_-_geograph.org.uk_-_7255870.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
+      { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg/960px-Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg",
+        caption: "Gunners Park nature reserve", alt: "Benches looking over the water at Gunners Park",
+        credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
+      { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg/960px-Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg",
+        caption: "Garrison cricket pavilion", alt: "The Garrison cricket pavilion and green",
+        credit: "Julian Osley", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoebury_Garrison_-_Cricket_Pavilion_(geograph_5857487).jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
+      { src: "https://upload.wikimedia.org/wikipedia/commons/3/38/Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg",
+        caption: "Shoeburyness station", alt: "Shoeburyness railway station building",
+        credit: "JThomas", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
     ],
     // How far to the places people commute to.
     travel: [

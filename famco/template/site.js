@@ -324,6 +324,36 @@
   });
   show("nearby-block", nearby.length > 0);
 
+  // A few photos of the places nearby, each with its photographer's credit.
+  var areaPhotos = filled(area.gallery, "src");
+  areaPhotos.forEach(function (g) {
+    var fig = el("figure");
+    var img = el("img");
+    img.src = g.src;
+    img.alt = g.alt || g.caption || "";
+    img.loading = "lazy";
+    fig.appendChild(img);
+    var cap = el("figcaption", null, g.caption || "");
+    if (has(g.credit)) {
+      var cr = el("span", "area-credit", "Photo: ");
+      var who = el("a", null, g.credit);
+      who.href = g.creditUrl || "#"; who.target = "_blank"; who.rel = "noopener";
+      cr.appendChild(who);
+      if (has(g.license)) {
+        cr.appendChild(document.createTextNode(", "));
+        var lic = el("a", null, g.license);
+        lic.href = g.licenseUrl || "#"; lic.target = "_blank"; lic.rel = "noopener license";
+        cr.appendChild(lic);
+      }
+      cap.appendChild(cr);
+    }
+    fig.appendChild(cap);
+    var li = el("li");
+    li.appendChild(fig);
+    $("area-gallery").appendChild(li);
+  });
+  show("area-gallery-block", areaPhotos.length > 0);
+
   var travel = filled(area.travel, "to").filter(function (t) { return has(t.time); });
   travel.forEach(function (t) {
     var li = el("li");
