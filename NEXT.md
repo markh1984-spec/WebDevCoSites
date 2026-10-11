@@ -28,7 +28,8 @@
    the old "Vercel Integration" key in Resend).
 
 ## Done 11 Oct 2026
-- "See inside" is live: a buyer leaves name and email, gets a 30-day link,
+- "See inside" is live: a buyer leaves name, email and phone (phone is a
+  must, checked on the page and by the server), gets a 30-day link,
   and sees all 22 inside photos from the private store. The first time a
   link is opened, viewings@ gets their details. Tested end to end.
 - The enquiry form sends to viewings@ through the site's own function.
@@ -43,6 +44,7 @@
 ## Updated
 11 Oct 2026 — email sending switched on; "See inside" and the enquiry form
 are live and tested. Walking times now sit on their own line under each
-nearby photo, lined up across the row. (Vercel is slow to pick up pushes
+nearby photo, lined up across the row. Phone number is now required on
+the See inside form. (Vercel is slow to pick up pushes
 right now; if a push doesn't show within a few minutes, use Deployments →
 … → Create Deployment on the branch.)

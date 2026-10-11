@@ -187,6 +187,7 @@ window.HOUSE = {
     // The form posts here (api/see-inside.js), which emails the buyer a
     // 30-day link to /inside. Empty = no form, just the text above.
     endpoint: "/api/see-inside",
+    phoneRequired: true,
     note: "We'll only use your details about this house. The family sees your name and contact details when you open the photos.",
   },
 

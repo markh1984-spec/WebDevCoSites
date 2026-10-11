@@ -216,14 +216,27 @@
     if (has(G.endpoint)) {
       var gForm = $("inside-form"), gStatus = $("ig-status"), gSubmit = $("ig-submit");
       if (has(G.note)) { $("ig-note").textContent = G.note; show("ig-note", true); }
+      // phoneRequired: true in content.js makes the phone number a must.
+      var gPhoneNeeded = G.phoneRequired === true;
+      if (gPhoneNeeded) {
+        gForm.elements.phone.required = true;
+        var gOpt = gForm.querySelector('label[for="ig-phone"] .optional');
+        if (gOpt) gOpt.remove();
+      }
       gForm.hidden = false;
       var gSay = function (msg, kind) { gStatus.textContent = msg; gStatus.className = "form-status" + (kind ? " is-" + kind : ""); };
       gForm.addEventListener("submit", function (e) {
         e.preventDefault();
         var name = gForm.elements.name.value.trim(), email = gForm.elements.email.value.trim();
+        var phone = gForm.elements.phone.value.trim(), digits = phone.replace(/\D/g, "").length;
         if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           gSay("Please add your name and a valid email address.", "error");
           (!name ? gForm.elements.name : gForm.elements.email).focus();
+          return;
+        }
+        if (gPhoneNeeded && (digits < 10 || digits > 15)) {
+          gSay("Please add your phone number so the family can arrange a viewing.", "error");
+          gForm.elements.phone.focus();
           return;
         }
         gSubmit.disabled = true;
@@ -231,7 +244,7 @@
         fetch(G.endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name, email: email, phone: gForm.elements.phone.value.trim(), _gotcha: gForm.elements._gotcha.value }),
+          body: JSON.stringify({ name: name, email: email, phone: phone, _gotcha: gForm.elements._gotcha.value }),
         }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || "HTTP " + r.status); }); })
           .then(function () {
             gForm.reset();

@@ -1,4 +1,4 @@
-// POST /api/see-inside  { name, email, phone?, position?, _gotcha? }
+// POST /api/see-inside  { name, email, phone, position?, _gotcha? }
 // Emails the buyer a link that opens the inside photos once they've
 // confirmed their address. Nothing is stored: the link carries the details,
 // signed so they can't be altered.
@@ -14,6 +14,9 @@ module.exports = async (req, res) => {
   const phone = clean(b.phone, 40);
   const position = clean(b.position, 80);
   if (!name || !isEmail(email)) return json(res, 400, { ok: false, error: "Please add your name and a valid email address." });
+  // Phone is required (the family's wish, 11 Oct 2026): 10–15 digits.
+  const digits = phone.replace(/\D/g, "").length;
+  if (digits < 10 || digits > 15) return json(res, 400, { ok: false, error: "Please add your phone number so the family can arrange a viewing." });
 
   const token = sign({ n: name, e: email, p: phone, s: position, x: Date.now() + DAYS * 864e5 });
   const link = SITE + "/inside?t=" + encodeURIComponent(token);
