@@ -211,7 +211,7 @@ window.HOUSE = {
   details: [
     { label: "Tenure",            value: "Freehold" },   // "Freehold" or "Leasehold (xxx years remaining)"
     { label: "Council tax band",  value: "Band C" },   // Southend-on-Sea City Council, e.g. "Band D"
-    { label: "EPC rating",        value: "" },   // e.g. "C". Look it up at find-energy-certificate.service.gov.uk
+    { label: "EPC rating",        value: "C" },   // GOV.UK EPC register, valid until 4 Sep 2033   // e.g. "C". Look it up at find-energy-certificate.service.gov.uk
     { label: "Estate / service charge", value: "" }, // any Garrison estate management charge, e.g. "£xxx per year"
     { label: "Heating",           value: "Underfloor heating throughout" },   // e.g. "Gas central heating"
     { label: "Broadband",         value: "" },   // e.g. "Full fibre available"
