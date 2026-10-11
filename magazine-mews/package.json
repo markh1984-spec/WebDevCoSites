@@ -1,0 +1,8 @@
+{
+  "name": "magazine-mews",
+  "private": true,
+  "description": "Magazine Mews sale site. Static pages plus a few functions in api/.",
+  "dependencies": {
+    "@vercel/blob": "^2.3.0"
+  }
+}

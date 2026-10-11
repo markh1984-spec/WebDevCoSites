@@ -199,6 +199,29 @@
       <div class="inside-gate" id="inside-gate" hidden>
         <p id="inside-gate-text"></p>
         <a class="btn btn-green" id="inside-gate-btn" href="#enquire" hidden></a>
+        <form class="enquire-form inside-form" id="inside-form" novalidate hidden>
+          <div class="hp" aria-hidden="true">
+            <label for="ig-hp">Leave this empty</label>
+            <input id="ig-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="ig-name">Your name</label>
+              <input id="ig-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="ig-email">Email</label>
+              <input id="ig-email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="ig-phone">Phone <span class="optional">(optional)</span></label>
+            <input id="ig-phone" name="phone" type="tel" autocomplete="tel">
+          </div>
+          <button class="btn btn-green btn-block" type="submit" id="ig-submit">Email me the link</button>
+          <p class="form-status" id="ig-status" role="status" aria-live="polite"></p>
+          <p class="inside-note" id="ig-note" hidden></p>
+        </form>
       </div>
       <div class="mosaic" id="mosaic"></div>
       <div class="photos-more">

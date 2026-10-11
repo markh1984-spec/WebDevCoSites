@@ -212,6 +212,36 @@
     }
     show("inside-gate", true);
     show("photos", true);
+
+    // The sign-up form: sends the buyer a link that opens the private photos.
+    if (has(G.endpoint)) {
+      var gForm = $("inside-form"), gStatus = $("ig-status"), gSubmit = $("ig-submit");
+      if (has(G.note)) { $("ig-note").textContent = G.note; show("ig-note", true); }
+      gForm.hidden = false;
+      var gSay = function (msg, kind) { gStatus.textContent = msg; gStatus.className = "form-status" + (kind ? " is-" + kind : ""); };
+      gForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = gForm.elements.name.value.trim(), email = gForm.elements.email.value.trim();
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          gSay("Please add your name and a valid email address.", "error");
+          (!name ? gForm.elements.name : gForm.elements.email).focus();
+          return;
+        }
+        gSubmit.disabled = true;
+        gSay("Sending…");
+        fetch(G.endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name, email: email, phone: gForm.elements.phone.value.trim(), _gotcha: gForm.elements._gotcha.value }),
+        }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || "HTTP " + r.status); }); })
+          .then(function () {
+            gForm.reset();
+            gSay("Check your inbox: we've sent the link to " + email + ". If it hasn't arrived in a few minutes, look in your spam folder.", "ok");
+          })
+          .catch(function (err) { gSay(err && err.message && err.message.indexOf("HTTP") !== 0 ? err.message : "Sorry, that didn't send. Please try again in a moment.", "error"); })
+          .then(function () { gSubmit.disabled = false; });
+      });
+    }
   }
 
   /* ── Walkthrough video ───────────────────────────────── */
@@ -407,8 +437,9 @@
   var formspreeRaw = [E.formspreeId, AE.formspreeId].filter(has)[0] || "";
   var formspree = formspreeRaw.trim().replace(/^.*\/f\//, "");
   var fallback = ([E.fallbackEmail, AE.fallbackEmail].filter(has)[0] || "").trim();
+  var endpoint = has(E.endpoint) ? E.endpoint.trim() : "";
 
-  if (!formspree && !fallback) {
+  if (!formspree && !fallback && !endpoint) {
     // No way to deliver messages yet. Say so rather than eat them.
     Array.prototype.forEach.call(form.elements, function (f) { f.disabled = true; });
     form.classList.add("is-disabled");
@@ -427,6 +458,21 @@
     if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setStatus("Please add your name and a valid email address so we can reply.", "error");
       (!name ? form.elements.name : form.elements.email).focus();
+      return;
+    }
+
+    if (endpoint) {
+      submit.disabled = true;
+      setStatus("Sending…");
+      var payload = {};
+      ["name", "email", "phone", "position", "heard_via", "message", "_gotcha"].forEach(function (k) {
+        if (form.elements[k]) payload[k] = form.elements[k].value;
+      });
+      fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error("HTTP " + r.status); }); })
+        .then(function () { form.reset(); setStatus("Thank you, your message has been sent. We'll be in touch soon.", "ok"); })
+        .catch(function () { setStatus("Sorry, that didn't send. Please try again in a moment.", "error"); })
+        .then(function () { submit.disabled = false; });
       return;
     }
 
