@@ -184,6 +184,10 @@ window.HOUSE = {
     title: "See inside",
     text: "The photos of the inside are shared once you've left your details and confirmed your email address.",
     button: "",   // e.g. "Leave your details to see inside"
+    // The form posts here (api/see-inside.js), which emails the buyer a
+    // 30-day link to /inside. Empty = no form, just the text above.
+    endpoint: "/api/see-inside",
+    note: "We'll only use your details about this house. The family sees your name and contact details when you open the photos.",
   },
 
   // Walkthrough video: upload to YouTube as "Unlisted" (or to Vimeo) and
@@ -279,6 +283,9 @@ window.HOUSE = {
      both empty and the form says enquiries open soon.      */
 
   enquiries: {
+    // Our own function (api/enquiry.js): sends the enquiry to
+    // viewings@magazinemews.co.uk. When set, it wins over formspreeId.
+    endpoint: "/api/enquiry",
     formspreeId: "",
     fallbackEmail: "",
     note: "Viewings are by appointment. We’ll reply as soon as we can, usually the same day.",
