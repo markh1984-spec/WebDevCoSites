@@ -116,12 +116,13 @@ window.HOUSE = {
      delete rows or add more in the same format.            */
 
   keyFacts: [
-    { label: "Property type", value: "" },   // e.g. "Semi-detached house"
-    { label: "Bedrooms",      value: "" },   // e.g. "2"
-    { label: "Bathrooms",     value: "" },
+    // From Hendricks' listing of the house (checked 11 Oct 2026).
+    { label: "Property type", value: "Semi-detached bungalow" },
+    { label: "Bedrooms",      value: "2" },
+    { label: "Bathrooms",     value: "2" },
     { label: "Reception rooms", value: "" },
-    { label: "Parking",       value: "" },   // e.g. "Garage + driveway"
-    { label: "Garden",        value: "" },   // e.g. "Walled rear garden"
+    { label: "Parking",       value: "Allocated off-street parking" },
+    { label: "Garden",        value: "Gated garden, two outside spaces" },
   ],
 
 
@@ -131,15 +132,20 @@ window.HOUSE = {
      what it's like to live there, the light, the neighbours,
      what Mom loves about it.                              */
 
+  // Facts from Hendricks' listing (11 Oct 2026); words our own.
   description: [
-    // "First paragraph…",
-    // "Second paragraph…",
+    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, just yards from East Beach. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
+    "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room with its own shower, and allocated off-street parking.",
   ],
 
   // Short bullet points: the things a buyer should remember.
   highlights: [
-    // "Quiet cul-de-sac in the Garrison conservation area",
-    // "Moments from East Beach",
+    "No onward chain",
+    "Renovated throughout, with underfloor heating",
+    "En suite and dressing area in the main bedroom",
+    "Detached garden studio, ideal as a home office",
+    "Gated garden, two outside spaces and allocated parking",
+    "In the Shoebury Garrison conservation area, yards from East Beach",
   ],
 
 
@@ -165,31 +171,16 @@ window.HOUSE = {
      Resize photos before uploading. Around 2000px on the
      longest side and under 1MB each keeps the site fast.   */
 
-  photos: [
-    // The first five make the grid; the rest open in the gallery.
-    { src: "photos/01-garden.jpg",               alt: "The back of the house, with the folding doors open onto the decking", caption: "Garden" },
-    { src: "photos/02-living-room.jpg",          alt: "Open-plan living room and kitchen, with folding doors onto the garden", caption: "Living room" },
-    { src: "photos/03-kitchen.jpg",              alt: "Pink fitted kitchen with grey worktops and a built-in oven", caption: "Kitchen" },
-    { src: "photos/04-bedroom.jpg",              alt: "Bedroom with a bird and flower mural wall", caption: "Bedroom" },
-    { src: "photos/05-garden-studio.jpg",        alt: "Timber garden studio on decking, next to the house", caption: "Garden studio" },
-    { src: "photos/06-front.jpg",                alt: "Front of the house on the mews, with the planted front garden and lamp post", caption: "Front of the house" },
-    { src: "photos/07-front-door.jpg",           alt: "Front door and front garden", caption: "Front of the house" },
-    { src: "photos/08-the-mews.jpg",             alt: "The mews courtyard and neighbouring Garrison houses", caption: "The mews" },
-    { src: "photos/09-living-room-windows.jpg",  alt: "Living room, looking towards the sash windows", caption: "Living room" },
-    { src: "photos/10-guest-bedroom.jpg",        alt: "Guest bedroom with mirrored wardrobes and a door to the guest toilet", caption: "Guest bedroom" },
-    { src: "photos/11-guest-toilet.jpg",         alt: "Guest toilet with an illuminated mirror and a gold basin", caption: "Guest toilet" },
-    { src: "photos/12-guest-toilet-detail.jpg",  alt: "Marble-effect shelf and patterned tiles in the guest toilet", caption: "Guest toilet" },
-    { src: "photos/13-garden-lawn.jpg",          alt: "Garden lawn with planted borders and brick walls", caption: "Garden" },
-    { src: "photos/14-garden-studio-doors.jpg",  alt: "Garden studio with its doors open onto the decking", caption: "Garden studio" },
-    { src: "photos/15-garden-studio-inside.jpg", alt: "Inside the garden studio, with a door out to the garden", caption: "Garden studio" },
-    { src: "photos/16-garage-studio.jpg",        alt: "Laundry room with French doors and a climbing creeper", caption: "Laundry room" },
-    { src: "photos/17-garage-studio-shower.jpg", alt: "Shower in the laundry room, with palm-print walls", caption: "Laundry room shower" },
-    { src: "photos/18-en-suite.jpg",             alt: "En suite with a walk-in shower and gold fittings", caption: "En suite" },
-    { src: "photos/19-en-suite-shower.jpg",      alt: "Walk-in shower with a gold rainfall shower head", caption: "En suite" },
-    { src: "photos/20-bedroom-mural.jpg",        alt: "The bird and flower mural in the bedroom", caption: "Bedroom" },
-    { src: "photos/21-back-garden-seating.jpg",  alt: "Brick gable end with a door, and a seating area outside it", caption: "Seating area" },
-    { src: "photos/22-back-garden.jpg",          alt: "Greenhouse and garden shed", caption: "Greenhouse and shed" },
-  ],
+  // Only the front photo (heroPhoto) is public. The rest are kept off the
+  // public site and shown to buyers once they've confirmed their email
+  // (Mum's wish, 11 Oct 2026). See insideGate below.
+  photos: [],
+
+  insideGate: {
+    title: "See inside",
+    text: "The photos of the inside are shared once you've left your details and confirmed your email address. This opens very soon.",
+    button: "",   // e.g. "Leave your details to see inside"
+  },
 
   // Walkthrough video: upload to YouTube as "Unlisted" (or to Vimeo) and
   // paste the normal link here. It appears under the photos.
@@ -218,14 +209,14 @@ window.HOUSE = {
      a lot of back-and-forth. Empty ones are hidden.        */
 
   details: [
-    { label: "Tenure",            value: "" },   // "Freehold" or "Leasehold (xxx years remaining)"
-    { label: "Council tax band",  value: "" },   // Southend-on-Sea City Council, e.g. "Band D"
+    { label: "Tenure",            value: "Freehold" },   // "Freehold" or "Leasehold (xxx years remaining)"
+    { label: "Council tax band",  value: "Band C" },   // Southend-on-Sea City Council, e.g. "Band D"
     { label: "EPC rating",        value: "" },   // e.g. "C". Look it up at find-energy-certificate.service.gov.uk
     { label: "Estate / service charge", value: "" }, // any Garrison estate management charge, e.g. "£xxx per year"
-    { label: "Heating",           value: "" },   // e.g. "Gas central heating"
+    { label: "Heating",           value: "Underfloor heating throughout" },   // e.g. "Gas central heating"
     { label: "Broadband",         value: "" },   // e.g. "Full fibre available"
     { label: "Conservation area", value: "Yes, Shoebury Garrison Conservation Area" },
-    { label: "Chain",             value: "" },   // e.g. "No onward chain"
+    { label: "Chain",             value: "No onward chain" },   // e.g. "No onward chain"
   ],
 
 

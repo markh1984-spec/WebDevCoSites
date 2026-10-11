@@ -431,6 +431,8 @@ p { margin: 0 0 1.1em; }
 }
 
 /* ── Photos ────────────────────────────────────────────── */
+.inside-gate { max-width: 40rem; }
+.inside-gate p { margin: 0 0 1.4rem; font-size: 1.05rem; }
 .mosaic { display: grid; gap: 10px; }
 .mosaic-item {
   position: relative; overflow: hidden;

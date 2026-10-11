@@ -197,6 +197,21 @@
     show("photos", true);
   });
 
+  /* ── Photos kept private until a buyer confirms their email ── */
+  var G = H.insideGate || {};
+  if (has(G.text)) {
+    if (has(G.title)) $("photos").querySelector("h2").textContent = G.title;
+    $("inside-gate-text").textContent = G.text;
+    if (has(G.button)) {
+      var gateBtn = $("inside-gate-btn");
+      gateBtn.textContent = G.button;
+      if (has(G.href)) gateBtn.href = G.href;
+      gateBtn.hidden = false;
+    }
+    show("inside-gate", true);
+    show("photos", true);
+  }
+
   /* ── Walkthrough video ───────────────────────────────── */
   // Takes a normal YouTube or Vimeo link and turns it into an embed.
   function embedUrl(link) {

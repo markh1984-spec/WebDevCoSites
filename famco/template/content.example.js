@@ -151,6 +151,11 @@ window.HOUSE = {
      Resize photos before adding them. Around 2000px on the
      longest side and under 1MB each keeps the site fast.   */
 
+  // Optional: keep the photos off the public page and show a short note in
+  // their place instead (e.g. inside photos shared once a buyer has left
+  // their details). Leave text "" to show the photos as normal.
+  // insideGate: { title: "See inside", text: "…", button: "", href: "#enquire" },
+
   photos: [
     // { src: "photos/01-front.jpg",   alt: "Front of the house", caption: "" },
   ],
