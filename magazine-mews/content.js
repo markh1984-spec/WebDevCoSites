@@ -138,7 +138,7 @@ window.HOUSE = {
 
   // Facts from Hendricks' listing (11 Oct 2026); words our own.
   description: [
-    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, with Gunners Park five minutes away and East Beach a short walk beyond. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
+    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, with Gunners Park five minutes' walk away and East Beach about a quarter of an hour. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
     "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room with its own shower, and allocated off-street parking.",
   ],
 
