@@ -136,6 +136,12 @@ function values(H, AG, dir) {
 
   // While FamCo isn't live, don't offer "FamCo Properties website" as an answer.
   const heard = (AG.heardVia || []).filter((o) => live || !String(o).includes(AG.name));
+  // A house can add its own local answers (a local paper, say); they go in before "Other".
+  const extraHeard = ((H.enquiries || {}).heardVia || []).filter(has).map(trim);
+  if (extraHeard.length) {
+    const at = heard.indexOf("Other");
+    heard.splice(at === -1 ? heard.length : at, 0, ...extraHeard);
+  }
   const heardOptions = (heard.length ? heard : ["Other"]).map((o) => `            <option>${esc(o)}</option>`).join("\n");
 
   const contact = [

@@ -234,6 +234,7 @@
     </div>
 
     <div class="wrap" id="area-gallery-block" hidden>
+      <h3 class="area-subhead area-gallery-head" id="area-gallery-heading" hidden></h3>
       <ul class="area-gallery" id="area-gallery"></ul>
     </div>
 
@@ -242,7 +243,7 @@
         <div class="map-placeholder" id="map-placeholder">
           <p class="map-address">{{MAP_ADDRESS}}</p>
           <div class="map-actions">
-            <button class="btn btn-brass" type="button" id="map-load">Show map</button>
+            <button class="btn btn-brass" type="button" id="map-load" aria-controls="map">Show map</button>
             <a class="btn btn-outline-light" id="map-link" href="{{MAP_LINK}}" target="_blank" rel="noopener">Open in Google Maps</a>
           </div>
           <p class="map-note">The map loads from Google when you press the button.</p>
@@ -270,8 +271,7 @@
   <section class="section section-alt" id="enquire">
     <div class="wrap enquire-inner">
       <div class="enquire-copy">
-        <p class="eyebrow">Viewings &amp; enquiries</p>
-        <h2>Come and see it</h2>
+        <h2>Viewings and enquiries</h2>
         <p id="enquire-note"></p>
 
         <div class="open-days" id="open-days" hidden>

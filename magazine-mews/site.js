@@ -370,6 +370,10 @@
 
   // A few photos of the places nearby, each with its photographer's credit.
   var areaPhotos = filled(area.gallery, "src");
+  if (has(area.galleryHeading)) {
+    $("area-gallery-heading").textContent = area.galleryHeading;
+    show("area-gallery-heading", true);
+  }
   areaPhotos.forEach(function (g) {
     var fig = el("figure");
     var img = el("img");
@@ -415,14 +419,32 @@
   // Map loads only on request, so Google isn't contacted (and sets no
   // cookies) unless the visitor asks for it.
   var mapQuery = encodeURIComponent([A.line1, A.town, A.postcode].filter(has).join(", "));
+  // Once open, "Hide map" folds it away again; showing it a second time
+  // reuses the same map rather than loading it again.
+  var mapFrame = null, mapHide = null;
+  function setMapOpen(open) {
+    $("map-placeholder").hidden = open;
+    mapFrame.hidden = !open;
+    mapHide.hidden = !open;
+    $("map").classList.toggle("is-loaded", open);
+    $("map-load").setAttribute("aria-expanded", String(open));
+    if (open) mapHide.focus(); else $("map-load").focus();
+  }
   $("map-load").addEventListener("click", function () {
-    var frame = el("iframe", "map-frame");
-    frame.title = "Map showing " + [A.line1, A.town].filter(has).join(", ");
-    frame.src = "https://maps.google.com/maps?q=" + mapQuery + "&z=16&output=embed";
-    frame.loading = "lazy";
-    frame.referrerPolicy = "no-referrer-when-downgrade";
-    $("map").replaceChildren(frame);
-    $("map").classList.add("is-loaded");
+    if (!mapFrame) {
+      mapFrame = el("iframe", "map-frame");
+      mapFrame.title = "Map showing " + [A.line1, A.town].filter(has).join(", ");
+      mapFrame.src = "https://maps.google.com/maps?q=" + mapQuery + "&z=16&output=embed";
+      mapFrame.loading = "lazy";
+      mapFrame.referrerPolicy = "no-referrer-when-downgrade";
+      mapHide = el("button", "btn map-hide", "Hide map");
+      mapHide.type = "button";
+      mapHide.setAttribute("aria-controls", "map");
+      mapHide.addEventListener("click", function () { setMapOpen(false); });
+      $("map").appendChild(mapFrame);
+      $("map").appendChild(mapHide);
+    }
+    setMapOpen(true);
   });
 
   /* ── Good to know ────────────────────────────────────── */

@@ -223,6 +223,7 @@ window.HOUSE = {
      needs its enquiries to go somewhere different.         */
 
   enquiries: {
+    heardVia: [],          // extra "How did you hear about it?" answers for this house, e.g. ["Leigh Times"]
     formspreeId: "",
     fallbackEmail: "",
     note: "Viewings are by appointment. We’ll reply as soon as we can, usually the same day.",

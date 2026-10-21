@@ -1,7 +1,7 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
-- **Check the two test emails reached Mum** (since 11 Oct 2026): "Confirmed:
+- **Check the two test emails reached Mom** (since 11 Oct 2026): "Confirmed:
   Mark (test) has seen inside Magazine Mews" and "Viewing enquiry from Mark
   (test)". Resend shows both delivered to viewings@; this confirms the
   forwarding on to her inbox. If they're in spam, mark them "not spam".

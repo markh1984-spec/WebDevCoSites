@@ -43,7 +43,7 @@ window.HOUSE = {
 
   // The live web address. Used for Google, the sitemap and link previews.
   site: {
-    url: "https://www.magazinemews.co.uk/",   // live from 11 Oct 2026; 1magazinemews.vercel.app still works
+    url: "https://magazinemews.co.uk/",   // live from 11 Oct 2026; www. and 1magazinemews.vercel.app still work
     googleVerification: "zmd6ReFNTt3OxQNvTfdMj5IiZa0VN6V8VgRn3NjYvOA", // the content="…" part of Google Search Console's HTML tag
   },
 
@@ -89,7 +89,7 @@ window.HOUSE = {
 
   // Colours and fonts: {} is the standard FamCo look (Garrison green,
   // brass and brick). See famco/template/content.example.js for options.
-  // Plum and rose, Fraunces and DM Sans, pill-shaped buttons: the look Mum
+  // Plum and rose, Fraunces and DM Sans, pill-shaped buttons: the look Mom
   // liked on the September prototype — Mark, 10 October 2026.
   theme: {
     look: "soft",           // light header and hero, pill buttons, rounded photos
@@ -121,7 +121,7 @@ window.HOUSE = {
 
   keyFacts: [
     // From Hendricks' listing of the house (checked 11 Oct 2026).
-    { label: "Property type", value: "Semi-detached bungalow" },
+    { label: "Property type", value: "Bungalow" },
     { label: "Bedrooms",      value: "2" },
     { label: "Bathrooms",     value: "2" },
     { label: "Reception rooms", value: "" },
@@ -138,8 +138,8 @@ window.HOUSE = {
 
   // Facts from Hendricks' listing (11 Oct 2026); words our own.
   description: [
-    "A beautifully renovated two-bedroom semi-detached bungalow in the heart of the historic Shoebury Garrison, with Gunners Park five minutes' walk away and East Beach about a quarter of an hour. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
-    "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room with its own shower, and allocated off-street parking.",
+    "A beautifully renovated two-bedroom bungalow in the heart of the historic Shoebury Garrison, with Gunners Park and East Beach a short walk away. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
+    "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room, and allocated off-street parking.",
   ],
 
   // Short bullet points: the things a buyer should remember.
@@ -177,7 +177,7 @@ window.HOUSE = {
 
   // Only the front photo (heroPhoto) is public. The rest are kept off the
   // public site and shown to buyers once they've confirmed their email
-  // (Mum's wish, 11 Oct 2026). See insideGate below.
+  // (Mom's wish, 11 Oct 2026). See insideGate below.
   photos: [],
 
   insideGate: {
@@ -241,32 +241,36 @@ window.HOUSE = {
     // Things nearby. Fill in or delete "distance". Empty ones just show the name.
     nearby: [
       // Walking times: Google Maps walking directions from Magazine Mews, 11 Oct 2026.
-      { name: "East Beach",               distance: "16 min walk" },
+      { name: "East Beach",               distance: "A short walk" },
       { name: "Gunners Park nature reserve (Essex Wildlife Trust)", distance: "5 min walk" },
       { name: "Garrison cricket green & pavilion", distance: "1 min walk" },
-      { name: "Shoeburyness station (c2c)", distance: "14 min walk" },
+      { name: "Shoeburyness station (c2c), for trains to London Fenchurch Street and Liverpool Street", distance: "A short walk" },
       // { name: "Local primary school",   distance: "" },
       // { name: "Shops on the High Street", distance: "" },
     ],
+    // Heading over the photos of the places nearby.
+    galleryHeading: "A short walk away",
     // Photos of the places above, from Wikimedia Commons (CC BY-SA 2.0,
     // credited on the page as the licence asks). Swap for Rory's own any time.
     gallery: [
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg/960px-East_Beach%2C_Shoeburyness_-_geograph.org.uk_-_7255870.jpg",
-        caption: "East Beach", walk: "16 min walk", alt: "East Beach, Shoeburyness, on a sunny day",
+        caption: "East Beach", walk: "", alt: "East Beach, Shoeburyness, on a sunny day",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:East_Beach,_Shoeburyness_-_geograph.org.uk_-_7255870.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg/960px-Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg",
-        caption: "Gunners Park nature reserve", walk: "5 min walk", alt: "Benches looking over the water at Gunners Park",
+        caption: "Gunners Park nature reserve", walk: "", alt: "Benches looking over the water at Gunners Park",
         credit: "Stephen McKay", creditUrl: "https://commons.wikimedia.org/wiki/File:Gunners%27_Park_-_geograph.org.uk_-_7259903.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg/960px-Shoebury_Garrison_-_Cricket_Pavilion_%28geograph_5857487%29.jpg",
-        caption: "Garrison cricket pavilion", walk: "1 min walk", alt: "The Garrison cricket pavilion and green",
+        caption: "Garrison cricket pavilion", walk: "", alt: "The Garrison cricket pavilion and green",
         credit: "Julian Osley", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoebury_Garrison_-_Cricket_Pavilion_(geograph_5857487).jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
       { src: "https://upload.wikimedia.org/wikipedia/commons/3/38/Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg",
-        caption: "Shoeburyness station", walk: "14 min walk", alt: "Shoeburyness railway station building",
+        caption: "Shoeburyness station", walk: "For trains to London Fenchurch Street and Liverpool Street", alt: "Shoeburyness railway station building",
         credit: "JThomas", creditUrl: "https://commons.wikimedia.org/wiki/File:Shoeburyness_Railway_Station_-_geograph.org.uk_-_7271255.jpg", license: "CC BY-SA 2.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/" },
     ],
     // How far to the places people commute to.
     travel: [
       { to: "London Fenchurch Street", how: "c2c train from Shoeburyness", time: "about 1 hr 5 min" },
+      // c2c runs some weekend trains to Liverpool Street via Stratford (c2c-online.co.uk, checked 21 Oct 2026).
+      { to: "London Liverpool Street", how: "c2c train from Shoeburyness, weekends, via Stratford", time: "about 1 hr 20 min" },
       // { to: "Southend seafront",     how: "by car",                     time: "" },
       // { to: "London Southend Airport", how: "by car",                   time: "" },
     ],
@@ -288,6 +292,8 @@ window.HOUSE = {
     // viewings@magazinemews.co.uk. When set, it wins over formspreeId.
     endpoint: "/api/enquiry",
     phoneRequired: true,
+    // Extra "How did you hear about it?" answers, shown before "Other".
+    heardVia: ["The Oracle"],
     formspreeId: "",
     fallbackEmail: "",
     note: "Viewings are by appointment. We’ll reply as soon as we can, usually the same day.",

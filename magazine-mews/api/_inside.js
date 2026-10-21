@@ -2,7 +2,7 @@
 // Not a route: Vercel ignores files in api/ that start with "_".
 const crypto = require("crypto");
 
-const SITE = "https://www.magazinemews.co.uk";
+const SITE = "https://magazinemews.co.uk";
 const FROM = "Magazine Mews <viewings@magazinemews.co.uk>";
 const INBOX = "viewings@magazinemews.co.uk";
 const DAYS = 30; // how long a "see inside" link keeps working

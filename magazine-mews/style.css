@@ -432,9 +432,14 @@ p { margin: 0 0 1.1em; }
 }
 
 /* ── Photos ────────────────────────────────────────────── */
-.inside-gate { max-width: 40rem; }
-.inside-gate > p { margin: 0 0 1.4rem; font-size: 1.05rem; }
+.inside-gate > p { margin: 0 0 1.4rem; font-size: 1.05rem; max-width: 64ch; }
 .inside-form { margin-top: .4rem; }
+/* Wide screens: the form fills the width, with name, email and phone on one row. */
+@media (min-width: 900px) {
+  .inside-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 14px; }
+  .inside-form .field-row { display: contents; }
+  .inside-form > .btn, .inside-form > .form-status, .inside-form > .inside-note { grid-column: 1 / -1; }
+}
 .inside-note { margin: .8rem 0 0; font-size: .85rem; color: var(--muted); }
 .mosaic { display: grid; gap: 10px; }
 .mosaic-item {
@@ -603,7 +608,16 @@ p { margin: 0 0 1.1em; }
   display: flex; flex-direction: column;
   background: var(--green-950);
 }
+.map { position: relative; }
 .map.is-loaded { height: clamp(300px, 42vw, 440px); }
+.map-hide {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  background: #fff; color: var(--ink); border: 1px solid var(--line);
+  box-shadow: 0 4px 14px -6px rgba(0,0,0,.35);
+}
+.map-hide:hover { background: var(--paper); }
+.area-gallery-head { margin: 2.8rem 0 0; }
+.area-gallery-head + .area-gallery { margin-top: 1.2rem; }
 .map-placeholder {
   flex: 1;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
