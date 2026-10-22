@@ -92,10 +92,22 @@
     show("hero-price", true);
   }
 
-  if (has(H.heroPhoto)) {
+  // The build puts the top photo in the page (famco/build.mjs, 22 Oct 2026).
+  // Only when content.js names a different one since the last build does
+  // this swap it, as before.
+  var builtHero = $("hero-photo").getAttribute("data-hero") || "";
+  if (builtHero && builtHero !== (H.heroPhoto || "").trim()) {
+    var built = $("hero-photo");
+    built.removeAttribute("srcset");
+    built.hidden = true;
+    $("hero-crest").hidden = false;
+    $("hero-arch").classList.remove("has-photo");
+  }
+  if (has(H.heroPhoto) && builtHero !== H.heroPhoto.trim()) {
     probe(H.heroPhoto).then(function (ok) {
       if (!ok) return;
       var img = $("hero-photo");
+      img.removeAttribute("srcset");
       img.src = H.heroPhoto;
       if (has(H.heroFocus)) img.style.objectPosition = H.heroFocus;
       img.alt = A.line1 || "";

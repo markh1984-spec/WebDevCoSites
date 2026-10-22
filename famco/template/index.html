@@ -92,11 +92,11 @@
       </div>
 
       <div class="hero-visual">
-        <div class="arch" id="hero-arch">
+        <div class="arch{{ARCH_CLASS}}" id="hero-arch">
           <span class="arch-ribbon" id="arch-ribbon" hidden></span>
-          <img id="hero-photo" alt="" hidden>
+          {{{HERO_IMG}}}
           <!-- Shown until a hero photo is set in content.js -->
-          <div class="crest" id="hero-crest" aria-hidden="true">
+          <div class="crest" id="hero-crest" aria-hidden="true"{{{CREST_HIDDEN}}}>
             <svg viewBox="0 0 320 320" role="presentation">
               <defs>
                 <path id="crest-ring" d="M160,160 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/>

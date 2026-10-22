@@ -167,6 +167,25 @@ function values(H, AG, dir) {
       ].filter(Boolean).join("\n")
     : "    <p>\n      For sale privately by the owner. These details are given in good faith\n      as a general guide. They don't form part of any offer or contract.\n      Measurements are approximate, and no services or appliances have been\n      tested. Please check anything that matters to you before committing.\n    </p>";
 
+  // THE TOP PHOTO IN THE PAGE ITSELF — 22 Oct 2026. It used to be set by
+  // site.js after both scripts had run and the photo had been loaded once to
+  // check it existed, so the biggest thing on the page (what Google times as
+  // "largest paint") couldn't start downloading until everything else had.
+  // Now it's in the HTML with its size and high priority, and where the
+  // photos folder has <name>-800.webp and <name>-1200.webp next to it, each
+  // screen gets the lighter one that fits. site.js still follows content.js
+  // if heroPhoto is changed there without a rebuild.
+  const hero = trim(H.heroPhoto);
+  const heroFile = hero && !/^https?:/i.test(hero) ? path.join(dir, hero) : "";
+  const heroThere = !!hero && (!heroFile || fs.existsSync(heroFile));
+  const stem = hero.replace(/\.[a-z0-9]+$/i, "");
+  const variants = heroFile ? [800, 1200].filter((w) => fs.existsSync(path.join(dir, `${stem}-${w}.webp`))) : [];
+  const focus = has(H.heroFocus) ? ` style="object-position: ${esc(trim(H.heroFocus))}"` : "";
+  const srcset = variants.length ? ` srcset="${variants.map((w) => `${esc(`${stem}-${w}.webp`)} ${w}w`).join(", ")}" sizes="(max-width: 820px) 100vw, 480px"` : "";
+  const heroImg = heroThere
+    ? `<img id="hero-photo" data-hero="${esc(hero)}" src="${esc(variants.length ? `${stem}-${variants[variants.length - 1]}.webp` : hero)}"${srcset} alt="${esc(line1)}" width="1200" height="900" fetchpriority="high"${focus}>`
+    : `<img id="hero-photo" alt="" hidden>`;
+
   const mapQuery = encodeURIComponent([line1, townName, postcode].filter(has).join(", ")).replace(/%20/g, "+");
 
   return {
@@ -200,6 +219,9 @@ function values(H, AG, dir) {
     CREST_NAME: crestName,
     AREA_NAV: trim((H.area || {}).navLabel) || "The area",
     AREA_HEADING: trim((H.area || {}).heading) || "The area",
+    ARCH_CLASS: heroThere ? " has-photo" : "",
+    HERO_IMG: heroImg,
+    CREST_HIDDEN: heroThere ? " hidden" : "",
     MAP_ADDRESS: [street, [townName, pc].filter(has).join(" ")].filter(has).join(", "),
     MAP_LINK: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`,
     HEARD_OPTIONS: heardOptions,
@@ -211,7 +233,11 @@ function values(H, AG, dir) {
     ACCENT: colour("accent"),
     ACCENT_LIGHT: colour("accentLight"),
     MARK_SIZE: numeral.length <= 2 ? "34" : numeral.length === 3 ? "26" : "20",
-    _warnings: [!url && "site.url is empty, so link previews and Google won't have the full address"].filter(Boolean),
+    _warnings: [
+      !url && "site.url is empty, so link previews and Google won't have the full address",
+      hero && !heroThere && `heroPhoto ${hero} isn't in the folder, so the crest shows instead`,
+      heroFile && heroThere && variants.length < 2 && `the top photo has no ${stem}-800.webp and ${stem}-1200.webp beside it, so phones download the full photo (make them at squoosh.app: WebP, 800 and 1200 wide)`,
+    ].filter(Boolean),
   };
 }
 

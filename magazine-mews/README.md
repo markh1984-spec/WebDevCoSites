@@ -52,6 +52,14 @@ comma has gone missing in the last edit. Undo it or check that line.
    Use names like `01-front.jpg`, `02-kitchen.jpg` (lowercase, no spaces).
 3. List them in the `photos:` section of `content.js`, in display order.
    Set `heroPhoto` to the best exterior shot.
+4. **For the top photo only**, also upload two lighter copies with the same
+   name plus `-800` and `-1200`, saved as WebP at 800 and 1200 pixels wide
+   (squoosh.app does both): e.g. `hero-front.jpg` → `hero-front-800.webp`
+   and `hero-front-1200.webp`. Then ask a Claude session to run
+   `node famco/build.mjs magazine-mews`, which puts the photo straight into
+   the page so it loads first. Until then the new photo still shows, just
+   more slowly (22 Oct 2026: the page loaded in 6.6s on a slow phone with
+   the photo loaded by script; 2.2–2.8s with it in the page).
 
 A photo with a mistyped filename is just skipped (it won't show as broken),
 so if one's missing, check the spelling matches exactly.

@@ -20,12 +20,22 @@
 - Walkthrough video link and floorplan, if they're coming from the shoot.
 
 ## Next up
-1. Swap the top photo for the clean drone shot when Hendricks sends it.
+1. Swap the top photo for the clean drone shot when Hendricks sends it (with
+   its -800/-1200 WebP copies, then rebuild).
 2. Instagram profile and posts; ads in the Housing category; Meta pixel.
 3. Search Console for www.magazinemews.co.uk; Facebook Page website field.
 4. Tidy-up: Vercel suggests saving RESEND_API_KEY as a "Secret" type
    (re-run Resend's Vercel integration to make a fresh key, then delete
    the old "Vercel Integration" key in Resend).
+
+## Done 22 Oct 2026
+- The top photo loads first: it's now in the page itself (it used to wait
+  for the scripts), with 92KB and 203KB WebP copies for phones and
+  desktops instead of the 631KB original. Tested on a slow-phone setting:
+  loading 6.6s → 2.2–2.8s, page weight 878KB → 339KB. Done in the shared
+  template, so every future house gets it.
+- When the drone shot replaces it, make its -800 and -1200 WebP copies and
+  rebuild (README, "Adding photos").
 
 ## Done 11 Oct 2026
 - "See inside" is live: a buyer leaves name, email and phone (phone is a
