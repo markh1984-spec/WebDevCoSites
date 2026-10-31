@@ -48,7 +48,7 @@
   laundry room out of the plot list, new paragraph about the 2010 build,
   and two paragraphs about the community in "Living on the Garrison".
 - Family shortcut into the inside photos: magazinemews.co.uk/inside?k=…
-  opens all 22 photos with no sign-up and sends no email. The link was
+  opens all the inside photos with no sign-up and sends no email. The link was
   given to Mark in chat; it isn't written down here. To change it, make a
   new key and update FAMILY_KEY_SHA256 in magazine-mews/api/_inside.js.
 - The family's number, 07984 111375, "call or text": under "Viewings and
