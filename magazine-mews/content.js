@@ -136,10 +136,13 @@ window.HOUSE = {
      what it's like to live there, the light, the neighbours,
      what Mom loves about it.                              */
 
-  // Facts from Hendricks' listing (11 Oct 2026); words our own.
+  // Facts from Hendricks' listing (11 Oct 2026); words our own. Mom's edits
+  // 31 Oct 2026: separate guest WC (no family bathroom), laundry room out,
+  // and the third paragraph about the 2010 build (her words).
   description: [
     "A beautifully renovated two-bedroom bungalow in the heart of the historic Shoebury Garrison, with Gunners Park and East Beach a short walk away. Finished to a high standard throughout, with underfloor heating, it's ready to move straight into, and it's offered with no onward chain.",
-    "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and a family bathroom. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, a laundry room, and allocated off-street parking.",
+    "An open-plan living room and kitchen opens through folding doors onto the decking. The main bedroom has an en suite and a dressing area, and there's a second bedroom and separate guest WC. The plot is unusually generous for a home of this kind: two separate outside spaces, a gated garden, a detached garden studio that makes an ideal home office, and allocated off-street parking.",
+    "Although in the traditional Garrison style, the property was constructed circa 2010 and therefore benefits from a modern construction with excellent insulation and double glazing throughout.",
   ],
 
   // Short bullet points: the things a buyer should remember.
@@ -237,6 +240,9 @@ window.HOUSE = {
     paragraphs: [
       "Shoebury Garrison dates back to 1849, when the Board of Ordnance bought the land. During the Crimean War it became home to the Royal Artillery’s School of Gunnery, and for the next century it was where Britain trained its gunners and tested its guns.",
       "Its Victorian buildings, including the unique Horseshoe Barracks and two Grade II listed powder magazines from the 1850s on Magazine Road, now sit within a conservation area. After the army left, the Garrison was gradually turned into homes from 2004 onwards. Today it is a village of old and new buildings set around green space, just yards from East Beach.",
+      // Mom's words, 31 Oct 2026.
+      "It's a highly desirable, unique community, served by two good pub restaurants, several cafés, a nearby parade of shops and children's play areas.",
+      "Magazine Mews is a close-knit community with its own WhatsApp group, and the wider Garrison has a Facebook page run by the Garrison Residents Association.",
     ],
     // Things nearby. Fill in or delete "distance". Empty ones just show the name.
     nearby: [

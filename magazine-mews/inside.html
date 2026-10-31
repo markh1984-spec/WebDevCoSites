@@ -33,6 +33,13 @@
   .in-grid img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 18px; background: var(--cream); }
   .in-grid figcaption { margin-top: .5rem; font-size: .92rem; color: var(--muted); }
   .in-grid figure { margin: 0; }
+  .in-grid .in-size { display: block; margin-top: .15rem; font-size: .85rem; color: var(--brick); }
+  .in-rooms { margin: 0 0 3rem; max-width: 36rem; }
+  .in-rooms h2 { font-family: var(--font-display); color: var(--green-900); font-size: 1.6rem; margin: 0 0 .8rem; }
+  .in-rooms table { width: 100%; border-collapse: collapse; font-size: .98rem; }
+  .in-rooms td { padding: .55rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .in-rooms td + td { text-align: right; white-space: nowrap; padding-left: 1rem; }
+  .in-rooms small { display: block; color: var(--muted); font-size: .82rem; }
   .in-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0 0 4rem; }
   .in-msg { padding: 4rem 0; max-width: 36rem; }
   .in-msg h1 { font-family: var(--font-display); color: var(--green-900); }
@@ -73,6 +80,10 @@
       <p id="in-hello"></p>
     </div>
     <ul class="in-grid" id="in-grid"></ul>
+    <div class="in-rooms" id="in-rooms" hidden>
+      <h2>Room sizes</h2>
+      <table><tbody id="in-rooms-list"></tbody></table>
+    </div>
     <div class="in-cta">
       <a class="btn btn-green" href="/#enquire">Arrange a viewing</a>
       <span class="in-or">or call or text <a href="tel:07984111375">07984 111375</a><span id="in-or-email">, or reply to the email we sent you</span>.</span>
@@ -130,9 +141,24 @@
         b.addEventListener("click", function () { open(i); });
         var cap = document.createElement("figcaption");
         cap.textContent = p.caption;
+        if (p.size) {
+          var sz = document.createElement("span");
+          sz.className = "in-size";
+          sz.textContent = p.size;
+          cap.appendChild(sz);
+        }
         fig.appendChild(b); fig.appendChild(cap); li.appendChild(fig);
         $("in-grid").appendChild(li);
       });
+      (j.rooms || []).forEach(function (r) {
+        var tr = document.createElement("tr");
+        var name = document.createElement("td"); name.textContent = r[0];
+        var size = document.createElement("td"); size.textContent = r[1];
+        if (r[2]) { var ft = document.createElement("small"); ft.textContent = r[2]; size.appendChild(ft); }
+        tr.appendChild(name); tr.appendChild(size);
+        $("in-rooms-list").appendChild(tr);
+      });
+      $("in-rooms").hidden = !(j.rooms || []).length;
       $("in-loading").hidden = true;
       $("in-content").hidden = false;
     })
@@ -142,7 +168,7 @@
     current = (i + photos.length) % photos.length;
     $("in-box-img").src = photos[current].src;
     $("in-box-img").alt = photos[current].alt || "";
-    $("in-box-cap").textContent = photos[current].caption + " · " + (current + 1) + " of " + photos.length;
+    $("in-box-cap").textContent = photos[current].caption + (photos[current].size ? " · " + photos[current].size : "") + " · " + (current + 1) + " of " + photos.length;
   }
   function open(i) { show(i); $("in-box").hidden = false; $("in-close").focus(); }
   function close() { $("in-box").hidden = true; }

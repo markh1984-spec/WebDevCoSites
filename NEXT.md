@@ -1,6 +1,12 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
+- **Room sizes still to come from Mom** (since 31 Oct 2026): entrance
+  hallway, second bedroom and WC. They go in ROOMS (and under the matching
+  photos) in magazine-mews/api/inside.js.
+- **Key facts say "Bathrooms: 2"** (since 31 Oct 2026): the text now says
+  there's no family bathroom, just the en suite and a guest WC. Check
+  whether that figure should change.
 - **Check the two test emails reached Mom** (since 11 Oct 2026): "Confirmed:
   Mark (test) has seen inside Magazine Mews" and "Viewing enquiry from Mark
   (test)". Resend shows both delivered to viewings@; this confirms the
@@ -29,6 +35,18 @@
    the old "Vercel Integration" key in Resend).
 
 ## Done 31 Oct 2026
+- Photos 2, 3, 4, 5 and 9 (living room x2, kitchen, bedroom, guest
+  bedroom) softened a lot, at Mom's request: colour cut, brightness and
+  detail untouched. New files are in the private store and Mark's "Magazine
+  Mews private photos" folder; the old ones are in its "before softening
+  31 Oct" subfolder. Uploaded through the Vercel dashboard's Blob page
+  (Upload, inside/ folder), using the file staged from the Mac.
+- Inside page: laundry room photo and the mews photo taken out (20 photos
+  now), the laundry shower photo captioned "Laundry", room sizes under the
+  matching photos, and a "Room sizes" list (metric and feet) under the grid.
+- Text: "a second bedroom and separate guest WC" (no family bathroom),
+  laundry room out of the plot list, new paragraph about the 2010 build,
+  and two paragraphs about the community in "Living on the Garrison".
 - Family shortcut into the inside photos: magazinemews.co.uk/inside?k=…
   opens all 22 photos with no sign-up and sends no email. The link was
   given to Mark in chat; it isn't written down here. To change it, make a
@@ -61,7 +79,8 @@
   viewings@magazinemews.co.uk forwards to the family inbox.
 
 ## Updated
-31 Oct 2026 — family shortcut into the inside photos, and the family's
-number added to the site and the buyer email. (If Vercel doesn't pick up
-a push within a few minutes, use Deployments → … → Create Deployment on
-the branch.)
+31 Oct 2026 — Mom's edits: softer colours on five inside photos, two
+photos out, room sizes, new text about the build and the community, plus
+the family shortcut and the family's number. (If Vercel doesn't pick up a
+push within a few minutes, use Deployments → … → Create Deployment on the
+branch.)
