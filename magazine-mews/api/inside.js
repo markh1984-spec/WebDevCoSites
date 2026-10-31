@@ -25,7 +25,7 @@ const PHOTOS = [
   ["15-garden-studio-inside", "Garden studio", "Inside the garden studio, with a door out to the garden"],
   ["17-garage-studio-shower", "Laundry", "The laundry, with palm-print walls"],
   ["13-garden-lawn", "Garden", "Garden lawn with planted borders and brick walls"],
-  ["21-back-garden-seating", "Seating area", "Brick gable end with a door, and a seating area outside it"],
+  ["21-back-garden-seating", "South facing rear garden", "The south-facing rear garden, with a seating area by the brick gable end"],
   ["22-back-garden", "Greenhouse and shed", "Greenhouse and garden shed"],
   ["06-front", "Front of the house", "Front of the house on the mews, with the planted front garden and lamp post"],
   ["07-front-door", "Front of the house", "Front door and front garden"],

@@ -44,6 +44,8 @@
 - Inside page: laundry room photo and the mews photo taken out (20 photos
   now), the laundry shower photo captioned "Laundry", room sizes under the
   matching photos, and a "Room sizes" list (metric and feet) under the grid.
+- "Seating area" photo re-captioned "South facing rear garden" (Mom, 31 Oct).
+  She's happy with the softened colours.
 - Text: "a second bedroom and separate guest WC" (no family bathroom),
   laundry room out of the plot list, new paragraph about the 2010 build,
   and two paragraphs about the community in "Living on the Garrison".
