@@ -153,6 +153,13 @@ function values(H, AG, dir) {
       (contact ? `\n        <p class="private-sale agency-contact">${contact}</p>` : "")
     : `<p class="private-sale">\n          <strong>A private sale.</strong> ${has(H.privateSaleNote) ? esc(trim(H.privateSaleNote)) : "There's no estate agent in the\n          middle, so you'll be dealing directly with the family."}\n        </p>`;
 
+  // A private seller's own number under "Viewings and enquiries"
+  // (enquiries.phone, with enquiries.phoneLabel, e.g. "Call or text").
+  const sellerPhone = !live && has((H.enquiries || {}).phone) ? trim(H.enquiries.phone) : "";
+  const enquirePhone = sellerPhone
+    ? `<p class="enquire-phone">${esc(trim(H.enquiries.phoneLabel) || "Call")} <a href="tel:${esc(sellerPhone.replace(/[^\d+]/g, ""))}">${esc(sellerPhone)}</a></p>`
+    : "";
+
   const company = AG.company || {};
   const companyLine = [
     trim(company.legalName),
@@ -226,6 +233,7 @@ function values(H, AG, dir) {
     MAP_LINK: `https://www.google.com/maps/search/?api=1&query=${mapQuery}`,
     HEARD_OPTIONS: heardOptions,
     SELLER_BLOCK: sellerBlock,
+    ENQUIRE_PHONE: enquirePhone,
     FOOTER_ADDRESS: esc(`${line1}${area ? ", " + area : ""},`) + "<br>" + esc([town, pc].filter(has).join(" ")),
     FOOTER_LEGAL: footerLegal,
     // favicon.svg

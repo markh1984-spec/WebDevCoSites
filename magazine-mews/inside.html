@@ -75,7 +75,7 @@
     <ul class="in-grid" id="in-grid"></ul>
     <div class="in-cta">
       <a class="btn btn-green" href="/#enquire">Arrange a viewing</a>
-      <span class="in-or">or reply to the email we sent you.</span>
+      <span class="in-or">or call or text <a href="tel:07984111375">07984 111375</a><span id="in-or-email">, or reply to the email we sent you</span>.</span>
     </div>
   </div>
 </main>
@@ -91,7 +91,10 @@
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var t = new URLSearchParams(location.search).get("t") || "";
+  var q = new URLSearchParams(location.search);
+  var t = q.get("t") || "";
+  // The family's own shortcut: /inside?k=<family key>. No sign-up, no email.
+  var k = q.get("k") || "";
   var photos = [], current = 0;
 
   function fail(msg) {
@@ -99,18 +102,22 @@
     if (msg) $("in-error-text").textContent = msg;
     $("in-error").hidden = false;
   }
-  if (!t) return fail("This page needs the link from your email.");
+  if (!t && !k) return fail("This page needs the link from your email.");
 
   // Tell the family only the first time this link is opened in this browser.
   var key = "mm-seen-" + t.slice(-16), first = "1";
   try { if (localStorage.getItem(key)) first = "0"; } catch (e) {}
 
-  fetch("/api/inside?t=" + encodeURIComponent(t) + "&first=" + first, { cache: "no-store" })
+  var api = k ? "/api/inside?k=" + encodeURIComponent(k) : "/api/inside?t=" + encodeURIComponent(t) + "&first=" + first;
+  fetch(api, { cache: "no-store" })
     .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || ""); return j; }); })
     .then(function (j) {
-      try { localStorage.setItem(key, "1"); } catch (e) {}
+      if (!k) { try { localStorage.setItem(key, "1"); } catch (e) {} }
       photos = j.photos || [];
-      $("in-hello").textContent = "Hi " + j.name + ", here are all the photos of the house. Tap any of them to see it bigger.";
+      $("in-hello").textContent = j.family
+        ? "Here are all the photos of the house. Tap any of them to see it bigger."
+        : "Hi " + j.name + ", here are all the photos of the house. Tap any of them to see it bigger.";
+      if (j.family) $("in-or-email").hidden = true;
       photos.forEach(function (p, i) {
         var li = document.createElement("li");
         var fig = document.createElement("figure");

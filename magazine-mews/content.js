@@ -292,6 +292,9 @@ window.HOUSE = {
     // viewings@magazinemews.co.uk. When set, it wins over formspreeId.
     endpoint: "/api/enquiry",
     phoneRequired: true,
+    // Shown under "Viewings and enquiries" (the family's number, 31 Oct 2026).
+    phone: "07984 111375",
+    phoneLabel: "Prefer to talk? Call or text",
     // Extra "How did you hear about it?" answers, shown before "Other".
     heardVia: ["The Oracle"],
     formspreeId: "",

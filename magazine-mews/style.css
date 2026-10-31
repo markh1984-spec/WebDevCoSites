@@ -680,6 +680,9 @@ p { margin: 0 0 1.1em; }
   color: var(--muted); font-size: 0.98rem;
 }
 .private-sale strong { color: var(--green-900); }
+.enquire-phone { margin: .4rem 0 1.2rem; font-size: 1.05rem; color: var(--ink); }
+.enquire-phone a { color: var(--brick); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.enquire-phone a:hover { text-decoration: underline; }
 
 .enquire-form {
   background: var(--paper);

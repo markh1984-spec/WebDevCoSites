@@ -1,8 +1,9 @@
-// GET /api/inside?t=<token>[&first=1]
+// GET /api/inside?t=<token>[&first=1]   or   GET /api/inside?k=<family key>
 // Checks the signed link from the "see inside" email and, if it's good,
 // returns the list of private photos (each served by /api/inside-photo). On the first open (first=1) it tells the
-// family who has confirmed.
-const { INBOX, verify, sendEmail, esc, json, wrap } = require("./_inside");
+// family who has confirmed. The family's own key opens the same photos with
+// no email sent, using a fresh one-day token for the photo links.
+const { INBOX, sign, verify, familyOk, sendEmail, esc, json, wrap } = require("./_inside");
 // Captions and descriptions, keyed by file name in the private photo store
 // (Vercel Blob store magazine-mews-inside, folder inside/).
 const PHOTOS = [
@@ -32,13 +33,25 @@ const PHOTOS = [
 
 module.exports = async (req, res) => {
   const url = new URL(req.url, "http://x");
+  res.setHeader("X-Robots-Tag", "noindex");
+
+  if (url.searchParams.has("k")) {
+    if (!familyOk(url.searchParams.get("k"))) return json(res, 403, { ok: false, error: "This family link isn't right. Please check you have the whole link." });
+    let token;
+    try { token = sign({ n: "Family", e: INBOX, p: "", s: "", fam: 1, x: Date.now() + 864e5 }); }
+    catch (e) { return json(res, 503, { ok: false, error: "Not ready yet. Please try again shortly." }); }
+    const ft = encodeURIComponent(token);
+    const photos = PHOTOS.map(([f, caption, alt]) => ({ src: "/api/inside-photo?f=" + f + "&t=" + ft, caption, alt }));
+    return json(res, 200, { ok: true, name: "", family: true, photos });
+  }
+
   const data = verify(url.searchParams.get("t"));
   if (!data) return json(res, 403, { ok: false, error: "This link has expired or isn't valid. Please ask for a new one on the website." });
 
   const t = encodeURIComponent(url.searchParams.get("t"));
   const photos = PHOTOS.map(([f, caption, alt]) => ({ src: "/api/inside-photo?f=" + f + "&t=" + t, caption, alt }));
 
-  if (url.searchParams.get("first") === "1") {
+  if (url.searchParams.get("first") === "1" && !data.fam) {
     try {
       const rows = [["Name", data.n], ["Email", data.e], ["Phone", data.p || "—"], ["Position", data.s || "—"]];
       await sendEmail({
@@ -51,6 +64,5 @@ module.exports = async (req, res) => {
       });
     } catch (e) { console.error("inside notify failed:", e.message); }
   }
-  res.setHeader("X-Robots-Tag", "noindex");
   return json(res, 200, { ok: true, name: data.n.split(/\s+/)[0], photos });
 };

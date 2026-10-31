@@ -28,6 +28,14 @@
    (re-run Resend's Vercel integration to make a fresh key, then delete
    the old "Vercel Integration" key in Resend).
 
+## Done 31 Oct 2026
+- Family shortcut into the inside photos: magazinemews.co.uk/inside?k=…
+  opens all 22 photos with no sign-up and sends no email. The link was
+  given to Mark in chat; it isn't written down here. To change it, make a
+  new key and update FAMILY_KEY_SHA256 in magazine-mews/api/_inside.js.
+- The family's number, 07984 111375, "call or text": under "Viewings and
+  enquiries", on the inside photos page, and in the buyer's link email.
+
 ## Done 22 Oct 2026
 - The top photo loads first: it's now in the page itself (it used to wait
   for the scripts), with 92KB and 203KB WebP copies for phones and
@@ -53,9 +61,7 @@
   viewings@magazinemews.co.uk forwards to the family inbox.
 
 ## Updated
-11 Oct 2026 — email sending switched on; "See inside" and the enquiry form
-are live and tested. Walking times now sit on their own line under each
-nearby photo, lined up across the row. Phone number is now required on
-both forms (See inside and Arrange a viewing). (Vercel is slow to pick up pushes
-right now; if a push doesn't show within a few minutes, use Deployments →
-… → Create Deployment on the branch.)
+31 Oct 2026 — family shortcut into the inside photos, and the family's
+number added to the site and the buyer email. (If Vercel doesn't pick up
+a push within a few minutes, use Deployments → … → Create Deployment on
+the branch.)

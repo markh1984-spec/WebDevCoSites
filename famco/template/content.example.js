@@ -159,6 +159,8 @@ window.HOUSE = {
   // With a sign-up form (needs the house's own api/see-inside.js):
   // insideGate: { …, endpoint: "/api/see-inside", note: "…", phoneRequired: true },
   // enquiries also takes endpoint and phoneRequired: true.
+  // A private seller can show a number under "Viewings and enquiries":
+  // enquiries: { …, phone: "07700 900000", phoneLabel: "Call or text" }
 
   photos: [
     // { src: "photos/01-front.jpg",   alt: "Front of the house", caption: "" },

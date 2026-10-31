@@ -17,6 +17,18 @@ function key() {
 
 const b64 = (buf) => Buffer.from(buf).toString("base64url");
 
+// The family's own shortcut into the inside photos (31 Oct 2026), so they
+// don't have to sign up each time: magazinemews.co.uk/inside?k=<family key>.
+// Only this fingerprint of the key is kept here (the repo is public); the
+// key itself lives in the family's link. To change the link, make a new key
+// and put the sha256 of "magazine-mews-family-v1|<key>" here.
+const FAMILY_KEY_SHA256 = "a1a0f7a9d86ba802286e6573d0a71eb54fd77c5635c6487533f9c7f88f787202";
+function familyOk(k) {
+  if (typeof k !== "string" || k.length < 16 || k.length > 64) return false;
+  const got = crypto.createHash("sha256").update("magazine-mews-family-v1|" + k).digest();
+  return crypto.timingSafeEqual(got, Buffer.from(FAMILY_KEY_SHA256, "hex"));
+}
+
 function sign(data) {
   const k = key();
   if (!k) throw new Error("not configured");
@@ -84,4 +96,7 @@ ${inner}
 </div></body></html>`;
 }
 
-module.exports = { SITE, FROM, INBOX, DAYS, sign, verify, sendEmail, esc, clean, isEmail, readBody, json, wrap };
+// The number buyers can call or text (the family's, from 31 Oct 2026).
+const PHONE = "07984 111375";
+
+module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, sendEmail, esc, clean, isEmail, readBody, json, wrap };
