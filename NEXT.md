@@ -43,6 +43,10 @@
   first, with tap-to-call/email, a status and notes she can save, search,
   and a spreadsheet download. Page parts are named "cx-", not "ad-",
   because ad blockers hide "ad-…".
+- Contacts are grouped by status (New first) with a sort choice; each card
+  has "Remove this contact", which deletes that person's files for good.
+  "Enquiry" is shown as "Asked to arrange a viewing" (the form at the
+  bottom of the main page).
 - Every sign-up, first photo open and enquiry is now also saved in the
   private Blob store (leads/ folder, one small file each). Status and notes
   changes are saved the same way. api/admin.js reads them.
