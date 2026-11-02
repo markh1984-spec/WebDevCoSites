@@ -1,9 +1,6 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
-- **Add ADMIN_PASSWORD in Vercel** (since 2 Nov 2026): 1magazinemews →
-  Settings → Environment Variables, then redeploy. Until then the
-  contacts page says it isn't switched on yet.
 - **Room sizes still to come from Mom** (since 31 Oct 2026): entrance
   hallway, second bedroom and WC. They go in ROOMS (and under the matching
   photos) in magazine-mews/api/inside.js.
@@ -38,8 +35,9 @@
    the old "Vercel Integration" key in Resend).
 
 ## Done 2 Nov 2026
-- Contacts page for Mom: magazinemews.co.uk/admin, password only. The
-  password is the ADMIN_PASSWORD environment variable in Vercel (not in
+- Contacts page for Mom: magazinemews.co.uk/admin, password only (live and
+  checked 2 Nov). The password is the ADMIN_PASSWORD environment variable
+  in Vercel, Production, Secret (not in
   this public repo); any capitals work. It lists everyone who asked for
   the photos, opened them or sent an enquiry, grouped by email, newest
   first, with tap-to-call/email, a status and notes she can save, search,
