@@ -23,22 +23,16 @@ const b64 = (buf) => Buffer.from(buf).toString("base64url");
 // key itself lives in the family's link. To change the link, make a new key
 // and put the sha256 of "magazine-mews-family-v1|<key>" here.
 const FAMILY_KEY_SHA256 = "a1a0f7a9d86ba802286e6573d0a71eb54fd77c5635c6487533f9c7f88f787202";
-// Mom's contacts page (magazinemews.co.uk/admin?k=<admin key>, 2 Nov 2026).
-// Same idea as the family key: only the fingerprint is kept here.
-const ADMIN_KEY_SHA256 = "f7a3d8aab85b034d96aecc19f2ba10319ffff6aaa0db4f242ba73c7777d0177b";
-function adminOk(k) {
-  if (typeof k !== "string" || k.length < 16 || k.length > 64) return false;
-  const got = crypto.createHash("sha256").update("magazine-mews-admin-v1|" + k).digest();
-  return crypto.timingSafeEqual(got, Buffer.from(ADMIN_KEY_SHA256, "hex"));
-}
-// Plus a simple password (2 Nov 2026, any capitals). Its fingerprint is mixed
-// with the link key, which isn't in this repo, so it can't be guessed from
-// here. To change it: sha256 of "magazine-mews-admin-pw-v1|<key>|<password in lower case>".
-const ADMIN_PW_SHA256 = "5a43b0c1a1f81fba39f34babd21395dfbe598510a0fd87d45c135302c3e895ba";
-function adminPasswordOk(k, pw) {
-  if (!adminOk(k) || typeof pw !== "string" || pw.length > 100) return false;
-  const got = crypto.createHash("sha256").update("magazine-mews-admin-pw-v1|" + k + "|" + pw.trim().toLowerCase()).digest();
-  return crypto.timingSafeEqual(got, Buffer.from(ADMIN_PW_SHA256, "hex"));
+// The contacts page's password (2 Nov 2026): set as ADMIN_PASSWORD in the
+// Vercel project's environment variables, never in this public repo. Any
+// capitals work. Returns null if it hasn't been set up yet.
+function adminPasswordOk(pw) {
+  const want = String(process.env.ADMIN_PASSWORD || "").trim().toLowerCase();
+  if (!want) return null;
+  if (typeof pw !== "string" || pw.length > 100) return false;
+  const a = crypto.createHash("sha256").update(pw.trim().toLowerCase()).digest();
+  const b = crypto.createHash("sha256").update(want).digest();
+  return crypto.timingSafeEqual(a, b);
 }
 
 function familyOk(k) {
@@ -146,4 +140,4 @@ async function saveLead(req, ev) {
 // The number buyers can call or text (the family's, from 31 Oct 2026).
 const PHONE = "07984 111375";
 
-module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, adminOk, adminPasswordOk, blobSdk, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap };
+module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, adminPasswordOk, blobSdk, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap };

@@ -79,8 +79,8 @@
   <div class="cx-msgbox" id="cx-loading"><p>Loading the contacts…</p></div>
 
   <div class="cx-msgbox" id="cx-error" hidden>
-    <h1>This page needs your link</h1>
-    <p id="cx-error-text">Open the contacts link Mark sent you. After that, this device remembers it.</p>
+    <h1>Contacts</h1>
+    <p id="cx-error-text">Couldn't load the contacts just now. Please try again in a minute.</p>
   </div>
 
   <form class="cx-msgbox cx-login" id="cx-login" hidden>
@@ -106,24 +106,17 @@
     <ul class="cx-list" id="cx-list"></ul>
     <p class="cx-empty" id="cx-empty" hidden>Nobody matches that.</p>
     <p class="cx-foot">Everyone who asks for the photos, opens them or sends an enquiry appears here, newest first.
-      <button type="button" id="cx-forget">Forget this device</button></p>
+      <button type="button" id="cx-forget">Sign out</button></p>
   </div>
 </main>
 
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var STORE = "mm-admin-k";
-  var q = new URLSearchParams(location.search);
-  var k = q.get("k") || "";
-  // Remember the key on this device and take it out of the address bar.
-  if (k) {
-    try { localStorage.setItem(STORE, k); } catch (e) {}
-    history.replaceState(null, "", location.pathname);
-  } else {
-    try { k = localStorage.getItem(STORE) || ""; } catch (e) {}
-  }
-  var api = "/api/admin?k=" + encodeURIComponent(k);
+  // Old links carried a key; it isn't needed any more, so tidy it away.
+  try { localStorage.removeItem("mm-admin-k"); } catch (e) {}
+  if (location.search) history.replaceState(null, "", location.pathname);
+  var api = "/api/admin";
   var contacts = [], statuses = [], loaded = false;
   // The password is kept only for this browser session.
   var PW = "mm-admin-pw", pw = "";
@@ -144,7 +137,6 @@
     ["cx-loading", "cx-error", "cx-content", "cx-login"].forEach(function (id) { $(id).hidden = id !== which; });
   }
   function fail(msg) { if (msg) $("cx-error-text").textContent = msg; show("cx-error"); }
-  if (!k) return fail();
 
   function when(s) {
     if (!s) return "";
@@ -253,7 +245,6 @@
       })
       .catch(function (e) {
         if (e && e.status === 401) { pw = ""; try { sessionStorage.removeItem(PW); } catch (x) {} return askPassword("That password isn't right."); }
-        if (e && e.status === 403) { try { localStorage.removeItem(STORE); } catch (x) {} return fail("This link isn't right. Please open the contacts link Mark sent you."); }
         fail((e && e.message) || "Couldn't load the contacts just now. Please try again in a minute.");
       });
   }
@@ -262,12 +253,12 @@
   $("cx-filter").addEventListener("change", render);
   $("cx-refresh").addEventListener("click", load);
   $("cx-forget").addEventListener("click", function () {
-    try { localStorage.removeItem(STORE); sessionStorage.removeItem(PW); } catch (e) {}
+    try { sessionStorage.removeItem(PW); } catch (e) {}
     location.replace("/");
   });
   $("cx-csv").addEventListener("click", function () {
     var b = $("cx-csv"); b.disabled = true;
-    fetch(api + "&format=csv", { cache: "no-store", headers: headers() })
+    fetch(api + "?format=csv", { cache: "no-store", headers: headers() })
       .then(function (r) { if (!r.ok) throw new Error(); return r.blob(); })
       .then(function (blob) {
         var a = document.createElement("a");

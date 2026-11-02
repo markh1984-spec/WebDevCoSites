@@ -1,6 +1,9 @@
 # NEXT — Magazine Mews (magazine-mews/ on this branch)
 
 ## Waiting on Mark
+- **Add ADMIN_PASSWORD in Vercel** (since 2 Nov 2026): 1magazinemews →
+  Settings → Environment Variables, then redeploy. Until then the
+  contacts page says it isn't switched on yet.
 - **Room sizes still to come from Mom** (since 31 Oct 2026): entrance
   hallway, second bedroom and WC. They go in ROOMS (and under the matching
   photos) in magazine-mews/api/inside.js.
@@ -35,17 +38,13 @@
    the old "Vercel Integration" key in Resend).
 
 ## Done 2 Nov 2026
-- Contacts page for Mom: magazinemews.co.uk/admin?k=… (the link was given
-  to Mark in chat; it isn't written down here). It lists everyone who asked
-  for the photos, opened them or sent an enquiry, grouped by email, newest
+- Contacts page for Mom: magazinemews.co.uk/admin, password only. The
+  password is the ADMIN_PASSWORD environment variable in Vercel (not in
+  this public repo); any capitals work. It lists everyone who asked for
+  the photos, opened them or sent an enquiry, grouped by email, newest
   first, with tap-to-call/email, a status and notes she can save, search,
-  and a spreadsheet download. The device remembers the link after the
-  first visit. To change the link, make a new key and update
-  ADMIN_KEY_SHA256 in magazine-mews/api/_inside.js.
-- The contacts page also asks for a password (given to Mark in chat; not
-  written here), once per browser session. Its fingerprint is mixed with
-  the link key: ADMIN_PW_SHA256 in api/_inside.js. Page parts are named
-  "cx-", not "ad-", because ad blockers hide "ad-…".
+  and a spreadsheet download. Page parts are named "cx-", not "ad-",
+  because ad blockers hide "ad-…".
 - Every sign-up, first photo open and enquiry is now also saved in the
   private Blob store (leads/ folder, one small file each). Status and notes
   changes are saved the same way. api/admin.js reads them.

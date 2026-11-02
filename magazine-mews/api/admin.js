@@ -1,13 +1,14 @@
 // The contacts page's data (magazinemews.co.uk/admin), 2 Nov 2026.
-// Every request needs the link key and the password (header x-admin-password).
-//   GET  /api/admin?k=<admin key>             { ok, contacts, statuses }
-//   GET  /api/admin?k=<admin key>&format=csv  a spreadsheet of the same
-//   POST /api/admin?k=<admin key>  { action: "status", email, status, notes }
-//   POST /api/admin?k=<admin key>  { action: "import", events: [...] }
+// Every request needs the password (header x-admin-password), which is the
+// ADMIN_PASSWORD environment variable in Vercel.
+//   GET  /api/admin                 { ok, contacts, statuses }
+//   GET  /api/admin?format=csv      a spreadsheet of the same
+//   POST /api/admin  { action: "status", email, status, notes }
+//   POST /api/admin  { action: "import", events: [...] }
 // Everything comes from the private store's leads/ folder: one small file
 // per sign-up, photo open, enquiry or status change. Contacts are those
 // events grouped by email address, newest activity first.
-const { adminOk, adminPasswordOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("./_inside");
+const { adminPasswordOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("./_inside");
 
 const STATUSES = ["New", "Contacted", "Viewing booked", "Viewed", "Offer made", "Not interested", "Test / ignore"];
 const TYPES = ["signup", "opened", "enquiry"];
@@ -101,10 +102,11 @@ function isoTime(s) {
 module.exports = async (req, res) => {
   res.setHeader("X-Robots-Tag", "noindex");
   const url = new URL(req.url, "http://x");
-  if (!adminOk(url.searchParams.get("k"))) return json(res, 403, { ok: false, error: "This link isn't right." });
   // The password travels in a header, never in the address.
-  if (!adminPasswordOk(url.searchParams.get("k"), String(req.headers["x-admin-password"] || ""))) {
-    await new Promise((r) => setTimeout(r, 700)); // slow down guessing
+  const pwOk = adminPasswordOk(String(req.headers["x-admin-password"] || ""));
+  if (pwOk === null) return json(res, 503, { ok: false, error: "The contacts page isn't switched on yet." });
+  if (!pwOk) {
+    await new Promise((r) => setTimeout(r, 1000)); // slow down guessing
     return json(res, 401, { ok: false, needPassword: true, error: "That password isn't right." });
   }
 
