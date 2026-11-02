@@ -11,9 +11,11 @@ const { adminOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("
 const STATUSES = ["New", "Contacted", "Viewing booked", "Viewed", "Offer made", "Not interested", "Test / ignore"];
 const TYPES = ["signup", "opened", "enquiry"];
 
-async function readAll(req) {
+async function readAll(req, diag) {
   const { list, get } = await blobSdk(req);
   const names = [];
+  diag = diag || {};
+  diag.errors = [];
   let cursor;
   do {
     const page = await list({ prefix: "leads/", limit: 1000, cursor });
@@ -24,13 +26,16 @@ async function readAll(req) {
   for (let i = 0; i < names.length; i += 16) {
     const batch = await Promise.all(names.slice(i, i + 16).map(async (n) => {
       try {
-        const r = await get(n, { access: "private" });
-        if (!r || r.statusCode !== 200) return null;
+        const r = await get(n, { access: "private", useCache: false });
+        if (!r || r.statusCode !== 200) { diag.errors.push(n + ": " + (r ? r.statusCode : "not found")); return null; }
         return JSON.parse(await new Response(r.stream).text());
-      } catch (e) { console.error("admin read failed:", n, e.message); return null; }
+      } catch (e) { console.error("admin read failed:", n, e.message); diag.errors.push(n + ": " + e.message); return null; }
     }));
     for (const e of batch) if (e) events.push(e);
   }
+  diag.listed = names.length;
+  diag.read = events.length;
+  diag.errors = diag.errors.slice(0, 5);
   return events;
 }
 
@@ -93,7 +98,8 @@ module.exports = async (req, res) => {
 
   try {
     if (req.method === "GET") {
-      const contacts = contactsFrom(await readAll(req));
+      const diag = {};
+      const contacts = contactsFrom(await readAll(req, diag));
       if (url.searchParams.get("format") === "csv") {
         res.statusCode = 200;
         res.setHeader("Content-Type", "text/csv; charset=utf-8");
@@ -101,7 +107,7 @@ module.exports = async (req, res) => {
         res.setHeader("Cache-Control", "no-store");
         return res.end(csv(contacts));
       }
-      return json(res, 200, { ok: true, contacts, statuses: STATUSES });
+      return json(res, 200, { ok: true, contacts, statuses: STATUSES, diag });
     }
 
     if (req.method === "POST") {
