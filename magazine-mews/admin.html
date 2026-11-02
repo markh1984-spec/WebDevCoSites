@@ -55,6 +55,9 @@
   .cx-msgbox { padding: 3rem 0; max-width: 34rem; }
   .cx-msgbox h1 { font-family: var(--font-display); color: var(--green-900); }
   .cx-empty { color: var(--muted); padding: 1rem 0 3rem; }
+  .cx-group { list-style: none; font: 600 .78rem/1.2 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--brick); margin: 1rem 0 -.2rem; }
+  .cx-group:first-child { margin-top: 0; }
+  .cx-group span { color: var(--muted); letter-spacing: 0; text-transform: none; font-weight: 500; }
   .cx-login label { display: block; font-weight: 600; margin: 1rem 0 .4rem; }
   .cx-login-row { display: flex; gap: 8px; }
   .cx-login input { flex: 1; min-width: 0; font: inherit; padding: .65rem .9rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); }
@@ -101,6 +104,11 @@
     <div class="cx-tools">
       <input type="search" id="cx-search" autocomplete="off" placeholder="Search names, emails, phone numbers, notes" aria-label="Search">
       <select id="cx-filter" aria-label="Show" autocomplete="off"><option value="">Everyone</option></select>
+      <select id="cx-sort" aria-label="Sort" autocomplete="off">
+        <option value="status">Sort: by status</option>
+        <option value="newest">Sort: newest first</option>
+        <option value="name">Sort: name A–Z</option>
+      </select>
       <button class="cx-btn" type="button" id="cx-csv">Download spreadsheet</button>
     </div>
     <ul class="cx-list" id="cx-list"></ul>
@@ -210,16 +218,42 @@
       (fresh ? " · " + fresh + " still marked New" : "");
   }
 
+  // Status groups in the order she works through them: people waiting to be
+  // contacted first, finished ones last. Newest first inside each group.
+  var ORDER = ["New", "Contacted", "Viewing booked", "Viewed", "Offer made", "Not interested", "Test / ignore"];
+  var LABEL = { "New": "New – to contact" };
+  function sorted(list, how) {
+    var byNewest = function (a, b) { return a.lastSeen < b.lastSeen ? 1 : a.lastSeen > b.lastSeen ? -1 : 0; };
+    var copy = list.slice();
+    if (how === "name") return copy.sort(function (a, b) { return (a.name || a.email).localeCompare(b.name || b.email, "en-GB", { sensitivity: "base" }); });
+    if (how === "newest") return copy.sort(byNewest);
+    return copy.sort(function (a, b) {
+      var d = ORDER.indexOf(a.status) - ORDER.indexOf(b.status);
+      return d || byNewest(a, b);
+    });
+  }
+
   function render() {
     var term = $("cx-search").value.trim().toLowerCase();
     var only = $("cx-filter").value;
+    var how = $("cx-sort").value;
     var list = $("cx-list"); list.textContent = "";
-    var shown = 0;
-    contacts.forEach(function (c) {
-      if (only && c.status !== only) return;
+    var shown = 0, group = null;
+    var match = sorted(contacts, how).filter(function (c) {
+      if (only && c.status !== only) return false;
       if (term) {
         var hay = [c.name, c.email, c.phone, c.notes, c.position, c.enquiries.map(function (q) { return q.message; }).join(" ")].join(" ").toLowerCase();
-        if (hay.indexOf(term) === -1 && hay.replace(/\s/g, "").indexOf(term.replace(/\s/g, "")) === -1) return;
+        if (hay.indexOf(term) === -1 && hay.replace(/\s/g, "").indexOf(term.replace(/\s/g, "")) === -1) return false;
+      }
+      return true;
+    });
+    match.forEach(function (c) {
+      if (how === "status" && c.status !== group) {
+        group = c.status;
+        var n = match.filter(function (x) { return x.status === group; }).length;
+        var h = el("li", "cx-group", LABEL[group] || group);
+        h.appendChild(el("span", null, " · " + n));
+        list.appendChild(h);
       }
       list.appendChild(card(c)); shown += 1;
     });
@@ -251,6 +285,7 @@
 
   $("cx-search").addEventListener("input", render);
   $("cx-filter").addEventListener("change", render);
+  $("cx-sort").addEventListener("change", render);
   $("cx-refresh").addEventListener("click", load);
   $("cx-forget").addEventListener("click", function () {
     try { sessionStorage.removeItem(PW); } catch (e) {}
