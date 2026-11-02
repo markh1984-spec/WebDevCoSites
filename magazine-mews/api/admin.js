@@ -88,7 +88,7 @@ function csv(contacts) {
     if (/^[=+\-@]/.test(s)) s = "'" + s; // stop spreadsheets treating it as a formula
     return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
   };
-  const rows = [["Name", "Email", "Phone", "Position", "Heard about it via", "Status", "Notes", "Asked for the photos", "Opened the photos", "Enquiries", "Last activity"]];
+  const rows = [["Name", "Email", "Phone", "Position", "Heard about it via", "Status", "Notes", "Asked for the photos", "Opened the photos", "Viewing requests (Arrange a viewing form)", "Last activity"]];
   for (const c of contacts) {
     rows.push([c.name, c.email, c.phone, c.position, c.heardVia, c.status, c.notes, day(c.signedUp), day(c.openedFirst),
       c.enquiries.map((q) => day(q.at) + ": " + q.message).join("\n"), day(c.lastSeen)]);

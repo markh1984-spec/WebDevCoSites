@@ -115,7 +115,7 @@
     </div>
     <ul class="cx-list" id="cx-list"></ul>
     <p class="cx-empty" id="cx-empty" hidden>Nobody matches that.</p>
-    <p class="cx-foot">Everyone who asks for the photos, opens them or sends an enquiry appears here, newest first.
+    <p class="cx-foot">Everyone who asks for the photos, opens them, or fills in the Arrange a viewing form appears here.
       <button type="button" id="cx-forget">Sign out</button></p>
   </div>
 </main>
@@ -171,14 +171,14 @@
     var bits = [];
     if (c.signedUp) bits.push("Asked for the photos " + when(c.signedUp));
     if (c.opens) bits.push("Opened them " + when(c.openedLast) + (c.opens > 1 ? " (" + c.opens + " times)" : ""));
-    if (c.enquiries.length) bits.push(c.enquiries.length === 1 ? "Sent an enquiry" : "Sent " + c.enquiries.length + " enquiries");
+    if (c.enquiries.length) bits.push(c.enquiries.length === 1 ? "Asked to arrange a viewing" : "Asked to arrange a viewing (" + c.enquiries.length + " messages)");
     if (c.position) bits.push(c.position);
     if (c.heardVia) bits.push("Heard via " + c.heardVia);
     if (bits.length) li.appendChild(el("p", "cx-meta", bits.join(" · ")));
 
     c.enquiries.forEach(function (q) {
       var box = el("div", "cx-msg");
-      box.appendChild(el("small", null, "Enquiry, " + when(q.at)));
+      box.appendChild(el("small", null, "Their message from the Arrange a viewing form, " + when(q.at)));
       box.appendChild(document.createTextNode(q.message || "(no message)"));
       li.appendChild(box);
     });
@@ -230,7 +230,7 @@
     var enq = contacts.filter(function (c) { return c.enquiries.length; }).length;
     var fresh = contacts.filter(function (c) { return c.status === "New"; }).length;
     $("cx-sum").textContent = contacts.length + (contacts.length === 1 ? " person" : " people") +
-      " · " + asked + " asked for the photos · " + opened + " opened them · " + enq + " sent an enquiry" +
+      " · " + asked + " asked for the photos · " + opened + " opened them · " + enq + " asked to arrange a viewing" +
       (fresh ? " · " + fresh + " still marked New" : "");
   }
 
