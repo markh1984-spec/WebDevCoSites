@@ -42,6 +42,10 @@
   and a spreadsheet download. The device remembers the link after the
   first visit. To change the link, make a new key and update
   ADMIN_KEY_SHA256 in magazine-mews/api/_inside.js.
+- The contacts page also asks for a password (given to Mark in chat; not
+  written here), once per browser session. Its fingerprint is mixed with
+  the link key: ADMIN_PW_SHA256 in api/_inside.js. Page parts are named
+  "cx-", not "ad-", because ad blockers hide "ad-…".
 - Every sign-up, first photo open and enquiry is now also saved in the
   private Blob store (leads/ folder, one small file each). Status and notes
   changes are saved the same way. api/admin.js reads them.

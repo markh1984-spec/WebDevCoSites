@@ -31,6 +31,15 @@ function adminOk(k) {
   const got = crypto.createHash("sha256").update("magazine-mews-admin-v1|" + k).digest();
   return crypto.timingSafeEqual(got, Buffer.from(ADMIN_KEY_SHA256, "hex"));
 }
+// Plus a simple password (2 Nov 2026, any capitals). Its fingerprint is mixed
+// with the link key, which isn't in this repo, so it can't be guessed from
+// here. To change it: sha256 of "magazine-mews-admin-pw-v1|<key>|<password in lower case>".
+const ADMIN_PW_SHA256 = "5a43b0c1a1f81fba39f34babd21395dfbe598510a0fd87d45c135302c3e895ba";
+function adminPasswordOk(k, pw) {
+  if (!adminOk(k) || typeof pw !== "string" || pw.length > 100) return false;
+  const got = crypto.createHash("sha256").update("magazine-mews-admin-pw-v1|" + k + "|" + pw.trim().toLowerCase()).digest();
+  return crypto.timingSafeEqual(got, Buffer.from(ADMIN_PW_SHA256, "hex"));
+}
 
 function familyOk(k) {
   if (typeof k !== "string" || k.length < 16 || k.length > 64) return false;
@@ -137,4 +146,4 @@ async function saveLead(req, ev) {
 // The number buyers can call or text (the family's, from 31 Oct 2026).
 const PHONE = "07984 111375";
 
-module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, adminOk, blobSdk, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap };
+module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, adminOk, adminPasswordOk, blobSdk, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap };

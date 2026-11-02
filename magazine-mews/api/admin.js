@@ -1,4 +1,5 @@
 // The contacts page's data (magazinemews.co.uk/admin), 2 Nov 2026.
+// Every request needs the link key and the password (header x-admin-password).
 //   GET  /api/admin?k=<admin key>             { ok, contacts, statuses }
 //   GET  /api/admin?k=<admin key>&format=csv  a spreadsheet of the same
 //   POST /api/admin?k=<admin key>  { action: "status", email, status, notes }
@@ -6,7 +7,7 @@
 // Everything comes from the private store's leads/ folder: one small file
 // per sign-up, photo open, enquiry or status change. Contacts are those
 // events grouped by email address, newest activity first.
-const { adminOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("./_inside");
+const { adminOk, adminPasswordOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("./_inside");
 
 const STATUSES = ["New", "Contacted", "Viewing booked", "Viewed", "Offer made", "Not interested", "Test / ignore"];
 const TYPES = ["signup", "opened", "enquiry"];
@@ -101,6 +102,11 @@ module.exports = async (req, res) => {
   res.setHeader("X-Robots-Tag", "noindex");
   const url = new URL(req.url, "http://x");
   if (!adminOk(url.searchParams.get("k"))) return json(res, 403, { ok: false, error: "This link isn't right." });
+  // The password travels in a header, never in the address.
+  if (!adminPasswordOk(url.searchParams.get("k"), String(req.headers["x-admin-password"] || ""))) {
+    await new Promise((r) => setTimeout(r, 700)); // slow down guessing
+    return json(res, 401, { ok: false, needPassword: true, error: "That password isn't right." });
+  }
 
   try {
     if (req.method === "GET") {

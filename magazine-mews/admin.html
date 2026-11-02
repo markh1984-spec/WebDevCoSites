@@ -55,6 +55,9 @@
   .cx-msgbox { padding: 3rem 0; max-width: 34rem; }
   .cx-msgbox h1 { font-family: var(--font-display); color: var(--green-900); }
   .cx-empty { color: var(--muted); padding: 1rem 0 3rem; }
+  .cx-login label { display: block; font-weight: 600; margin: 1rem 0 .4rem; }
+  .cx-login-row { display: flex; gap: 8px; }
+  .cx-login input { flex: 1; min-width: 0; font: inherit; padding: .65rem .9rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); }
   .cx-foot { color: var(--muted); font-size: .85rem; margin: 0 0 3rem; }
   .cx-foot button { all: unset; cursor: pointer; text-decoration: underline; }
   @media (max-width: 640px) {
@@ -79,6 +82,16 @@
     <h1>This page needs your link</h1>
     <p id="cx-error-text">Open the contacts link Mark sent you. After that, this device remembers it.</p>
   </div>
+
+  <form class="cx-msgbox cx-login" id="cx-login" hidden>
+    <h1>Contacts</h1>
+    <label for="cx-pw">Password</label>
+    <div class="cx-login-row">
+      <input type="password" id="cx-pw" autocomplete="current-password" required>
+      <button class="cx-btn primary" type="submit" id="cx-pw-go">Open</button>
+    </div>
+    <p class="cx-saved err" id="cx-pw-msg"></p>
+  </form>
 
   <div id="cx-content" hidden>
     <div class="cx-head">
@@ -112,9 +125,23 @@
   }
   var api = "/api/admin?k=" + encodeURIComponent(k);
   var contacts = [], statuses = [], loaded = false;
+  // The password is kept only for this browser session.
+  var PW = "mm-admin-pw", pw = "";
+  try { pw = sessionStorage.getItem(PW) || ""; } catch (e) {}
+  function headers(extra) { var h = { "X-Admin-Password": pw }; for (var n in (extra || {})) h[n] = extra[n]; return h; }
+  function askPassword(msg) {
+    $("cx-pw-msg").textContent = msg || "";
+    show("cx-login"); $("cx-pw").value = ""; $("cx-pw").focus();
+  }
+  $("cx-login").addEventListener("submit", function (e) {
+    e.preventDefault();
+    pw = $("cx-pw").value.trim();
+    try { sessionStorage.setItem(PW, pw); } catch (x) {}
+    load();
+  });
 
   function show(which) {
-    ["cx-loading", "cx-error", "cx-content"].forEach(function (id) { $(id).hidden = id !== which; });
+    ["cx-loading", "cx-error", "cx-content", "cx-login"].forEach(function (id) { $(id).hidden = id !== which; });
   }
   function fail(msg) { if (msg) $("cx-error-text").textContent = msg; show("cx-error"); }
   if (!k) return fail();
@@ -166,7 +193,7 @@
 
     save.addEventListener("click", function () {
       save.disabled = true; saved.className = "cx-saved"; saved.textContent = "Saving…";
-      fetch(api, { method: "POST", headers: { "Content-Type": "application/json" },
+      fetch(api, { method: "POST", headers: headers({ "Content-Type": "application/json" }),
         body: JSON.stringify({ action: "status", email: c.email, status: sel.value, notes: notes.value }) })
         .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || ""); }); })
         .then(function () {
@@ -209,8 +236,9 @@
   }
 
   function load() {
+    if (!pw) return askPassword();
     show("cx-loading");
-    fetch(api, { cache: "no-store" })
+    fetch(api, { cache: "no-store", headers: headers() })
       .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) { var e = new Error(j.error || ""); e.status = r.status; throw e; } return j; }); })
       .then(function (j) {
         contacts = j.contacts || []; statuses = j.statuses || [];
@@ -224,6 +252,7 @@
         summary(); render(); show("cx-content");
       })
       .catch(function (e) {
+        if (e && e.status === 401) { pw = ""; try { sessionStorage.removeItem(PW); } catch (x) {} return askPassword("That password isn't right."); }
         if (e && e.status === 403) { try { localStorage.removeItem(STORE); } catch (x) {} return fail("This link isn't right. Please open the contacts link Mark sent you."); }
         fail((e && e.message) || "Couldn't load the contacts just now. Please try again in a minute.");
       });
@@ -233,12 +262,12 @@
   $("cx-filter").addEventListener("change", render);
   $("cx-refresh").addEventListener("click", load);
   $("cx-forget").addEventListener("click", function () {
-    try { localStorage.removeItem(STORE); } catch (e) {}
+    try { localStorage.removeItem(STORE); sessionStorage.removeItem(PW); } catch (e) {}
     location.replace("/");
   });
   $("cx-csv").addEventListener("click", function () {
     var b = $("cx-csv"); b.disabled = true;
-    fetch(api + "&format=csv", { cache: "no-store" })
+    fetch(api + "&format=csv", { cache: "no-store", headers: headers() })
       .then(function (r) { if (!r.ok) throw new Error(); return r.blob(); })
       .then(function (blob) {
         var a = document.createElement("a");
