@@ -13,20 +13,26 @@ const TYPES = ["signup", "opened", "enquiry"];
 
 async function readAll(req, diag) {
   const { list, get } = await blobSdk(req);
-  const names = [];
   diag = diag || {};
   diag.errors = [];
-  let cursor;
-  do {
-    const page = await list({ prefix: "leads/", limit: 1000, cursor });
-    for (const b of page.blobs) if (b.pathname.endsWith(".json")) names.push(b.pathname);
-    cursor = page.hasMore ? page.cursor : undefined;
-  } while (cursor);
+  // The store's listing can very occasionally come back a file short just
+  // after a write, so list twice and use everything either pass found.
+  const seen = new Set();
+  for (let pass = 0; pass < 2; pass++) {
+    let cursor;
+    do {
+      const page = await list({ prefix: "leads/", limit: 1000, cursor });
+      for (const b of page.blobs) if (b.pathname.endsWith(".json")) seen.add(b.pathname);
+      cursor = page.hasMore ? page.cursor : undefined;
+    } while (cursor);
+  }
+  const names = [...seen];
   const events = [];
   for (let i = 0; i < names.length; i += 16) {
     const batch = await Promise.all(names.slice(i, i + 16).map(async (n) => {
       try {
-        const r = await get(n, { access: "private", useCache: false });
+        let r = await get(n, { access: "private", useCache: false });
+        if (!r || r.statusCode !== 200) r = await get(n, { access: "private", useCache: false }); // one retry
         if (!r || r.statusCode !== 200) { diag.errors.push(n + ": " + (r ? r.statusCode : "not found")); return null; }
         return JSON.parse(await new Response(r.stream).text());
       } catch (e) { console.error("admin read failed:", n, e.message); diag.errors.push(n + ": " + e.message); return null; }
