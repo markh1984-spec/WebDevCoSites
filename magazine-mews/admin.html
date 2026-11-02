@@ -85,8 +85,8 @@
       <p class="ad-sum" id="ad-sum"></p>
     </div>
     <div class="ad-tools">
-      <input type="search" id="ad-search" placeholder="Search names, emails, phone numbers, notes" aria-label="Search">
-      <select id="ad-filter" aria-label="Show"><option value="">Everyone</option></select>
+      <input type="search" id="ad-search" autocomplete="off" placeholder="Search names, emails, phone numbers, notes" aria-label="Search">
+      <select id="ad-filter" aria-label="Show" autocomplete="off"><option value="">Everyone</option></select>
       <button class="ad-btn" type="button" id="ad-csv">Download spreadsheet</button>
     </div>
     <ul class="ad-list" id="ad-list"></ul>
@@ -110,7 +110,7 @@
     try { k = localStorage.getItem(STORE) || ""; } catch (e) {}
   }
   var api = "/api/admin?k=" + encodeURIComponent(k);
-  var contacts = [], statuses = [];
+  var contacts = [], statuses = [], loaded = false;
 
   function show(which) {
     ["ad-loading", "ad-error", "ad-content"].forEach(function (id) { $(id).hidden = id !== which; });
@@ -213,10 +213,13 @@
       .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) { var e = new Error(j.error || ""); e.status = r.status; throw e; } return j; }); })
       .then(function (j) {
         contacts = j.contacts || []; statuses = j.statuses || [];
-        var f = $("ad-filter"), keep = f.value;
+        // Always open on Everyone; a Refresh keeps whatever is picked.
+        var f = $("ad-filter"), keep = loaded ? f.value : "";
         f.textContent = ""; f.appendChild(el("option", null, "Everyone")).value = "";
         statuses.forEach(function (s) { var o = el("option", null, s); o.value = s; f.appendChild(o); });
         f.value = keep;
+        if (!loaded) $("ad-search").value = "";
+        loaded = true;
         summary(); render(); show("ad-content");
       })
       .catch(function (e) {
