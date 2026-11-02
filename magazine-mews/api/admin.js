@@ -5,6 +5,7 @@
 //   GET  /api/admin?format=csv      a spreadsheet of the same
 //   POST /api/admin  { action: "status", email, status, notes }
 //   POST /api/admin  { action: "import", events: [...] }
+//   POST /api/admin  { action: "remove", email }   deletes that person for good
 // Everything comes from the private store's leads/ folder: one small file
 // per sign-up, photo open, enquiry or status change. Contacts are those
 // events grouped by email address, newest activity first.
@@ -20,11 +21,12 @@ async function readAll(req, diag) {
   // The store's listing can very occasionally come back a file short just
   // after a write, so list twice and use everything either pass found.
   const seen = new Set();
+  const urls = new Map();
   for (let pass = 0; pass < 2; pass++) {
     let cursor;
     do {
       const page = await list({ prefix: "leads/", limit: 1000, cursor });
-      for (const b of page.blobs) if (b.pathname.endsWith(".json")) seen.add(b.pathname);
+      for (const b of page.blobs) if (b.pathname.endsWith(".json")) { seen.add(b.pathname); urls.set(b.pathname, b.url); }
       cursor = page.hasMore ? page.cursor : undefined;
     } while (cursor);
   }
@@ -36,7 +38,9 @@ async function readAll(req, diag) {
         let r = await get(n, { access: "private", useCache: false });
         if (!r || r.statusCode !== 200) r = await get(n, { access: "private", useCache: false }); // one retry
         if (!r || r.statusCode !== 200) { diag.errors.push(n + ": " + (r ? r.statusCode : "not found")); return null; }
-        return JSON.parse(await new Response(r.stream).text());
+        const ev = JSON.parse(await new Response(r.stream).text());
+        Object.defineProperty(ev, "_file", { value: urls.get(n) || n, enumerable: false });
+        return ev;
       } catch (e) { console.error("admin read failed:", n, e.message); diag.errors.push(n + ": " + e.message); return null; }
     }));
     for (const e of batch) if (e) events.push(e);
@@ -132,7 +136,15 @@ module.exports = async (req, res) => {
         const ok = await saveLead(req, { type: "status", email, status: b.status, notes: String(b.notes || "").slice(0, 4000) });
         return ok ? json(res, 200, { ok: true }) : json(res, 502, { ok: false, error: "That didn't save. Please try again." });
       }
-      if (b.action === "import" && Array.isArray(b.events) && b.events.length <= 500) {
+      if (b.action === "remove") {
+        // Deletes everything kept about one person, for good.
+        const email = clean(b.email, 200).toLowerCase();
+        if (!isEmail(email)) return json(res, 400, { ok: false, error: "That didn't remove. Please try again." });
+        const files = (await readAll(req)).filter((e) => String(e.email || "").trim().toLowerCase() === email).map((e) => e._file);
+        if (files.length) { const { del } = await blobSdk(req); await del(files); }
+        return json(res, 200, { ok: true, removed: files.length });
+      }
+            if (b.action === "import" && Array.isArray(b.events) && b.events.length <= 500) {
         let saved = 0;
         for (const e of b.events) {
           const at = isoTime(e.at), email = clean(e.email, 200).toLowerCase();

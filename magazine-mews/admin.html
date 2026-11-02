@@ -55,6 +55,8 @@
   .cx-msgbox { padding: 3rem 0; max-width: 34rem; }
   .cx-msgbox h1 { font-family: var(--font-display); color: var(--green-900); }
   .cx-empty { color: var(--muted); padding: 1rem 0 3rem; }
+  .cx-remove { all: unset; cursor: pointer; font-size: .82rem; color: var(--muted); text-decoration: underline; margin-top: .4rem; }
+  .cx-remove:hover { color: #A3262A; }
   .cx-group { list-style: none; font: 600 .78rem/1.2 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--brick); margin: 1rem 0 -.2rem; }
   .cx-group:first-child { margin-top: 0; }
   .cx-group span { color: var(--muted); letter-spacing: 0; text-transform: none; font-weight: 500; }
@@ -190,6 +192,20 @@
     li.appendChild(edit);
     var saved = el("p", "cx-saved");
     li.appendChild(saved);
+    var rm = el("button", "cx-remove", "Remove this contact"); rm.type = "button";
+    li.appendChild(rm);
+    rm.addEventListener("click", function () {
+      if (!confirm("Remove " + (c.name || c.email) + " from the list for good? This can't be undone.")) return;
+      rm.disabled = true; saved.className = "cx-saved"; saved.textContent = "Removing…";
+      fetch(api, { method: "POST", headers: headers({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ action: "remove", email: c.email }) })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || ""); }); })
+        .then(function () {
+          contacts = contacts.filter(function (x) { return x !== c; });
+          summary(); render();
+        })
+        .catch(function (e) { rm.disabled = false; saved.className = "cx-saved err"; saved.textContent = (e && e.message) || "That didn't remove. Please try again."; });
+    });
 
     save.addEventListener("click", function () {
       save.disabled = true; saved.className = "cx-saved"; saved.textContent = "Saving…";
