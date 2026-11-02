@@ -1,6 +1,6 @@
 // POST /api/enquiry  { name, email, phone, position?, heard_via?, message?, _gotcha? }
 // Sends the enquiry to viewings@, with Reply-To set to the person asking.
-const { INBOX, sendEmail, esc, clean, isEmail, readBody, json, wrap } = require("./_inside");
+const { INBOX, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap } = require("./_inside");
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") return json(res, 405, { ok: false, error: "POST only" });
@@ -17,6 +17,8 @@ module.exports = async (req, res) => {
   const message = String(b.message || "").trim().slice(0, 4000);
   const rows = [["Name", name], ["Email", email], ["Phone", phone],
     ["Position", clean(b.position, 80) || "—"], ["Heard about it via", clean(b.heard_via, 80) || "—"]];
+  // Keep it for the contacts page, then email it to the family.
+  await saveLead(req, { type: "enquiry", name, email, phone, position: clean(b.position, 80), heard_via: clean(b.heard_via, 80), message });
   try {
     await sendEmail({
       to: INBOX,

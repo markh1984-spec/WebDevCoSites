@@ -1,8 +1,8 @@
 // POST /api/see-inside  { name, email, phone, position?, _gotcha? }
 // Emails the buyer a link that opens the inside photos once they've
-// confirmed their address. Nothing is stored: the link carries the details,
-// signed so they can't be altered.
-const { SITE, DAYS, PHONE, sign, sendEmail, esc, clean, isEmail, readBody, json, wrap } = require("./_inside");
+// confirmed their address. The link carries the details, signed so they
+// can't be altered; a copy is kept in the private store for the contacts page.
+const { SITE, DAYS, PHONE, sign, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap } = require("./_inside");
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") return json(res, 405, { ok: false, error: "POST only" });
@@ -18,6 +18,8 @@ module.exports = async (req, res) => {
   const digits = phone.replace(/\D/g, "").length;
   if (digits < 10 || digits > 15) return json(res, 400, { ok: false, error: "Please add your phone number so the family can arrange a viewing." });
 
+  // Keep their details for the contacts page, then send the link.
+  await saveLead(req, { type: "signup", name, email, phone, position });
   const token = sign({ n: name, e: email, p: phone, s: position, x: Date.now() + DAYS * 864e5 });
   const link = SITE + "/inside?t=" + encodeURIComponent(token);
   const first = name.split(/\s+/)[0];

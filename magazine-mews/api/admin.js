@@ -1,0 +1,133 @@
+// The contacts page's data (magazinemews.co.uk/admin), 2 Nov 2026.
+//   GET  /api/admin?k=<admin key>             { ok, contacts, statuses }
+//   GET  /api/admin?k=<admin key>&format=csv  a spreadsheet of the same
+//   POST /api/admin?k=<admin key>  { action: "status", email, status, notes }
+//   POST /api/admin?k=<admin key>  { action: "import", events: [...] }
+// Everything comes from the private store's leads/ folder: one small file
+// per sign-up, photo open, enquiry or status change. Contacts are those
+// events grouped by email address, newest activity first.
+const { adminOk, blobSdk, saveLead, clean, isEmail, readBody, json } = require("./_inside");
+
+const STATUSES = ["New", "Contacted", "Viewing booked", "Viewed", "Offer made", "Not interested", "Test / ignore"];
+const TYPES = ["signup", "opened", "enquiry"];
+
+async function readAll(req) {
+  const { list, get } = await blobSdk(req);
+  const names = [];
+  let cursor;
+  do {
+    const page = await list({ prefix: "leads/", limit: 1000, cursor });
+    for (const b of page.blobs) if (b.pathname.endsWith(".json")) names.push(b.pathname);
+    cursor = page.hasMore ? page.cursor : undefined;
+  } while (cursor);
+  const events = [];
+  for (let i = 0; i < names.length; i += 16) {
+    const batch = await Promise.all(names.slice(i, i + 16).map(async (n) => {
+      try {
+        const r = await get(n, { access: "private" });
+        if (!r || r.statusCode !== 200) return null;
+        return JSON.parse(await new Response(r.stream).text());
+      } catch (e) { console.error("admin read failed:", n, e.message); return null; }
+    }));
+    for (const e of batch) if (e) events.push(e);
+  }
+  return events;
+}
+
+function contactsFrom(events) {
+  events.sort((a, b) => (a.at < b.at ? -1 : a.at > b.at ? 1 : 0));
+  const by = new Map();
+  for (const e of events) {
+    const key = String(e.email || "").trim().toLowerCase();
+    if (!key) continue;
+    let c = by.get(key);
+    if (!c) {
+      c = { email: key, name: "", phone: "", position: "", heardVia: "", firstSeen: e.at, lastSeen: e.at,
+        signedUp: "", openedFirst: "", openedLast: "", opens: 0, enquiries: [], status: "New", notes: "", statusAt: "" };
+      by.set(key, c);
+    }
+    if (e.type === "status") {
+      if (STATUSES.includes(e.status)) c.status = e.status;
+      if (typeof e.notes === "string") c.notes = e.notes;
+      c.statusAt = e.at;
+      continue;
+    }
+    c.lastSeen = e.at;
+    if (e.name) c.name = e.name;
+    if (e.phone) c.phone = e.phone;
+    if (e.position) c.position = e.position;
+    if (e.heard_via) c.heardVia = e.heard_via;
+    if (e.type === "signup" && !c.signedUp) c.signedUp = e.at;
+    if (e.type === "opened") { c.opens += 1; if (!c.openedFirst) c.openedFirst = e.at; c.openedLast = e.at; }
+    if (e.type === "enquiry") c.enquiries.push({ at: e.at, message: e.message || "" });
+  }
+  return [...by.values()].sort((a, b) => (a.lastSeen < b.lastSeen ? 1 : a.lastSeen > b.lastSeen ? -1 : 0));
+}
+
+function csv(contacts) {
+  const day = (s) => (s ? new Date(s).toLocaleString("en-GB", { timeZone: "Europe/London", dateStyle: "medium", timeStyle: "short" }) : "");
+  const cell = (v) => {
+    let s = String(v == null ? "" : v);
+    if (/^[=+\-@]/.test(s)) s = "'" + s; // stop spreadsheets treating it as a formula
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const rows = [["Name", "Email", "Phone", "Position", "Heard about it via", "Status", "Notes", "Asked for the photos", "Opened the photos", "Enquiries", "Last activity"]];
+  for (const c of contacts) {
+    rows.push([c.name, c.email, c.phone, c.position, c.heardVia, c.status, c.notes, day(c.signedUp), day(c.openedFirst),
+      c.enquiries.map((q) => day(q.at) + ": " + q.message).join("\n"), day(c.lastSeen)]);
+  }
+  return "﻿" + rows.map((r) => r.map(cell).join(",")).join("\r\n") + "\r\n";
+}
+
+// "2026-11-02 16:56:43" or ISO -> ISO, or "" if it isn't a date.
+function isoTime(s) {
+  const t = String(s || "").trim().replace(" ", "T");
+  const d = new Date(/Z|[+-]\d\d:?\d\d$/.test(t) ? t : t + "Z");
+  return isNaN(d) ? "" : d.toISOString();
+}
+
+module.exports = async (req, res) => {
+  res.setHeader("X-Robots-Tag", "noindex");
+  const url = new URL(req.url, "http://x");
+  if (!adminOk(url.searchParams.get("k"))) return json(res, 403, { ok: false, error: "This link isn't right." });
+
+  try {
+    if (req.method === "GET") {
+      const contacts = contactsFrom(await readAll(req));
+      if (url.searchParams.get("format") === "csv") {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "text/csv; charset=utf-8");
+        res.setHeader("Content-Disposition", 'attachment; filename="magazine-mews-contacts.csv"');
+        res.setHeader("Cache-Control", "no-store");
+        return res.end(csv(contacts));
+      }
+      return json(res, 200, { ok: true, contacts, statuses: STATUSES });
+    }
+
+    if (req.method === "POST") {
+      const b = await readBody(req);
+      if (b.action === "status") {
+        const email = clean(b.email, 200).toLowerCase();
+        if (!isEmail(email) || !STATUSES.includes(b.status)) return json(res, 400, { ok: false, error: "That didn't save. Please try again." });
+        const ok = await saveLead(req, { type: "status", email, status: b.status, notes: String(b.notes || "").slice(0, 4000) });
+        return ok ? json(res, 200, { ok: true }) : json(res, 502, { ok: false, error: "That didn't save. Please try again." });
+      }
+      if (b.action === "import" && Array.isArray(b.events) && b.events.length <= 500) {
+        let saved = 0;
+        for (const e of b.events) {
+          const at = isoTime(e.at), email = clean(e.email, 200).toLowerCase();
+          if (!TYPES.includes(e.type) || !at || !isEmail(email)) continue;
+          const ev = { type: e.type, at, name: clean(e.name, 80), email, phone: clean(e.phone, 40), position: clean(e.position, 80), imported: true };
+          if (e.type === "enquiry") { ev.heard_via = clean(e.heard_via, 80); ev.message = String(e.message || "").slice(0, 4000); }
+          if (await saveLead(req, ev)) saved += 1;
+        }
+        return json(res, 200, { ok: true, saved });
+      }
+      return json(res, 400, { ok: false, error: "Unknown request." });
+    }
+    return json(res, 405, { ok: false, error: "GET or POST only" });
+  } catch (e) {
+    console.error("admin failed:", e.message);
+    return json(res, 502, { ok: false, error: "Couldn't load the contacts just now. Please try again in a minute." });
+  }
+};

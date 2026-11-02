@@ -23,6 +23,15 @@ const b64 = (buf) => Buffer.from(buf).toString("base64url");
 // key itself lives in the family's link. To change the link, make a new key
 // and put the sha256 of "magazine-mews-family-v1|<key>" here.
 const FAMILY_KEY_SHA256 = "a1a0f7a9d86ba802286e6573d0a71eb54fd77c5635c6487533f9c7f88f787202";
+// Mom's contacts page (magazinemews.co.uk/admin?k=<admin key>, 2 Nov 2026).
+// Same idea as the family key: only the fingerprint is kept here.
+const ADMIN_KEY_SHA256 = "f7a3d8aab85b034d96aecc19f2ba10319ffff6aaa0db4f242ba73c7777d0177b";
+function adminOk(k) {
+  if (typeof k !== "string" || k.length < 16 || k.length > 64) return false;
+  const got = crypto.createHash("sha256").update("magazine-mews-admin-v1|" + k).digest();
+  return crypto.timingSafeEqual(got, Buffer.from(ADMIN_KEY_SHA256, "hex"));
+}
+
 function familyOk(k) {
   if (typeof k !== "string" || k.length < 16 || k.length > 64) return false;
   const got = crypto.createHash("sha256").update("magazine-mews-family-v1|" + k).digest();
@@ -96,7 +105,36 @@ ${inner}
 </div></body></html>`;
 }
 
+// The private Blob store, signed in with the project's OIDC token. The token
+// comes fresh on every request, so always take the latest one.
+async function blobSdk(req) {
+  const oidc = req && req.headers && req.headers["x-vercel-oidc-token"];
+  if (oidc) process.env.VERCEL_OIDC_TOKEN = oidc;
+  return import("@vercel/blob");
+}
+
+// Keep one contact event (signup, opened, enquiry, or a status/notes change
+// from the contacts page) in the private store under leads/. Each event is
+// its own file, named from its time, type and email, so nothing is ever
+// overwritten by something else and saving the same event twice is harmless.
+// Never throws: a storage hiccup mustn't stop the email going.
+async function saveLead(req, ev) {
+  try {
+    const { put } = await blobSdk(req);
+    const at = ev.at || new Date().toISOString();
+    const id = crypto.createHash("sha256").update([ev.type, String(ev.email || "").toLowerCase(), at].join("|")).digest("hex").slice(0, 12);
+    const name = "leads/" + at.replace(/[^0-9]/g, "").slice(0, 14) + "-" + ev.type + "-" + id + ".json";
+    await put(name, JSON.stringify(Object.assign({}, ev, { at })), {
+      access: "private", contentType: "application/json", addRandomSuffix: false, allowOverwrite: true,
+    });
+    return true;
+  } catch (e) {
+    console.error("saveLead failed:", e.message);
+    return false;
+  }
+}
+
 // The number buyers can call or text (the family's, from 31 Oct 2026).
 const PHONE = "07984 111375";
 
-module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, sendEmail, esc, clean, isEmail, readBody, json, wrap };
+module.exports = { SITE, FROM, INBOX, DAYS, PHONE, sign, verify, familyOk, adminOk, blobSdk, saveLead, sendEmail, esc, clean, isEmail, readBody, json, wrap };

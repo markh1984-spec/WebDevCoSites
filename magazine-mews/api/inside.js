@@ -3,7 +3,7 @@
 // returns the list of private photos (each served by /api/inside-photo). On the first open (first=1) it tells the
 // family who has confirmed. The family's own key opens the same photos with
 // no email sent, using a fresh one-day token for the photo links.
-const { INBOX, sign, verify, familyOk, sendEmail, esc, json, wrap } = require("./_inside");
+const { INBOX, sign, verify, familyOk, saveLead, sendEmail, esc, json, wrap } = require("./_inside");
 // Captions, descriptions and (where we have them) room sizes, keyed by
 // file name in the private photo store. Sizes from Mom, 31 Oct 2026.
 // Photo 15 (laundry room) and 22 (the mews) taken out at her request, 31 Oct;
@@ -60,6 +60,7 @@ module.exports = async (req, res) => {
   const photos = PHOTOS.map(([f, caption, alt, size]) => ({ src: "/api/inside-photo?f=" + f + "&t=" + t, caption, alt, size: size || "" }));
 
   if (url.searchParams.get("first") === "1" && !data.fam) {
+    await saveLead(req, { type: "opened", name: data.n, email: data.e, phone: data.p || "", position: data.s || "" });
     try {
       const rows = [["Name", data.n], ["Email", data.e], ["Phone", data.p || "—"], ["Position", data.s || "—"]];
       await sendEmail({

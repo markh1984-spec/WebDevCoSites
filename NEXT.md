@@ -34,6 +34,20 @@
    (re-run Resend's Vercel integration to make a fresh key, then delete
    the old "Vercel Integration" key in Resend).
 
+## Done 2 Nov 2026
+- Contacts page for Mom: magazinemews.co.uk/admin?k=… (the link was given
+  to Mark in chat; it isn't written down here). It lists everyone who asked
+  for the photos, opened them or sent an enquiry, grouped by email, newest
+  first, with tap-to-call/email, a status and notes she can save, search,
+  and a spreadsheet download. The device remembers the link after the
+  first visit. To change the link, make a new key and update
+  ADMIN_KEY_SHA256 in magazine-mews/api/_inside.js.
+- Every sign-up, first photo open and enquiry is now also saved in the
+  private Blob store (leads/ folder, one small file each). Status and notes
+  changes are saved the same way. api/admin.js reads them.
+- Contacts from 21 Oct to 2 Nov brought in from Resend's email log (that's
+  as far back as the log goes; anything earlier is only in the family inbox).
+
 ## Done 31 Oct 2026
 - Photos 2, 3, 4, 5 and 9 (living room x2, kitchen, bedroom, guest
   bedroom) softened a lot, at Mom's request: colour cut, brightness and
@@ -81,8 +95,6 @@
   viewings@magazinemews.co.uk forwards to the family inbox.
 
 ## Updated
-31 Oct 2026 — Mom's edits: softer colours on five inside photos, two
-photos out, room sizes, new text about the build and the community, plus
-the family shortcut and the family's number. (If Vercel doesn't pick up a
-push within a few minutes, use Deployments → … → Create Deployment on the
-branch.)
+2 Nov 2026 — contacts page (CRM) for Mom, with past contacts brought in.
+(If Vercel doesn't pick up a push within a few minutes, use Deployments →
+… → Create Deployment on the branch.)

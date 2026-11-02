@@ -2,7 +2,7 @@
 // Streams one photo from the private Blob store, but only with a valid
 // "see inside" link. The store itself can't be read without Vercel's token.
 const { Readable } = require("stream");
-const { verify } = require("./_inside");
+const { verify, blobSdk } = require("./_inside");
 
 const NAME = /^[0-2][0-9]-[a-z-]{2,40}$/;
 
@@ -12,11 +12,9 @@ module.exports = async (req, res) => {
   if (!NAME.test(f) || !verify(url.searchParams.get("t"))) {
     res.statusCode = 403; return res.end("Not allowed");
   }
-  // On Vercel the Blob SDK signs in with the project's OIDC token.
-  const oidc = req.headers["x-vercel-oidc-token"];
-  if (oidc && !process.env.VERCEL_OIDC_TOKEN) process.env.VERCEL_OIDC_TOKEN = oidc;
   try {
-    const { get } = await import("@vercel/blob");
+    // On Vercel the Blob SDK signs in with the project's OIDC token.
+    const { get } = await blobSdk(req);
     const result = await get("inside/" + f + ".jpg", {
       access: "private",
       ifNoneMatch: req.headers["if-none-match"] || undefined,
