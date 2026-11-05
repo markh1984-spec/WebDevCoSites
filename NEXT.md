@@ -99,7 +99,12 @@
   on www.magazinemews.co.uk (the bare domain redirects there).
   viewings@magazinemews.co.uk forwards to the family inbox.
 
+## Done 5 Nov 2026
+- Checked for new contacts: two photo sign-ups on 3 Nov (both opened the
+  photos), no new viewing requests. Saving straight from the live forms
+  works. (Resend was signed out, so its email log wasn't checked.)
+
 ## Updated
-2 Nov 2026 — contacts page (CRM) for Mom, with past contacts brought in.
+5 Nov 2026 — checked for new enquiries.
 (If Vercel doesn't pick up a push within a few minutes, use Deployments →
 … → Create Deployment on the branch.)
